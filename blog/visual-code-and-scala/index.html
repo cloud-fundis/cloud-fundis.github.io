@@ -1,150 +1,406 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    
-    <title>Visual Code Studio and Scala | because there are just too many things to remember</title>
-    <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="generator" content="Hugo 0.57.2" />
-    
-    
-      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
-    
+<html><head>
+<title>Visual Code Studio and Scala</title>
 
-    
-    
-      <link href="/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
-    
-
-    
-
-    
-      
-    
-
-    
-    
-    <meta property="og:title" content="Visual Code Studio and Scala" />
-<meta property="og:description" content="This week I am setting up my new laptop - moving off Mac finally and back onto Linux - YAY.
-So one of the things I&rsquo;m getting working is Visual Code Studio and Scala. Sounds easy doesn&rsquo;t it?
-Step 2 Scalameta is the extension for Scala on vscode. Install it; but wait, that&rsquo;s not all - there&rsquo;s more.
-Of course you went for Step 1 which was &ldquo;aaah, this is easy, just download the extension and you&rsquo;re done." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://cloud-fundis.github.io/blog/visual-code-and-scala/" />
-<meta property="article:published_time" content="2020-04-29T08:01:37+02:00" />
-<meta property="article:modified_time" content="2020-04-29T08:01:37+02:00" />
-<meta itemprop="name" content="Visual Code Studio and Scala">
-<meta itemprop="description" content="This week I am setting up my new laptop - moving off Mac finally and back onto Linux - YAY.
-So one of the things I&rsquo;m getting working is Visual Code Studio and Scala. Sounds easy doesn&rsquo;t it?
-Step 2 Scalameta is the extension for Scala on vscode. Install it; but wait, that&rsquo;s not all - there&rsquo;s more.
-Of course you went for Step 1 which was &ldquo;aaah, this is easy, just download the extension and you&rsquo;re done.">
-
-
-<meta itemprop="datePublished" content="2020-04-29T08:01:37&#43;02:00" />
-<meta itemprop="dateModified" content="2020-04-29T08:01:37&#43;02:00" />
-<meta itemprop="wordCount" content="500">
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
 
 
 
-<meta itemprop="keywords" content="" />
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Visual Code Studio and Scala"/>
-<meta name="twitter:description" content="This week I am setting up my new laptop - moving off Mac finally and back onto Linux - YAY.
-So one of the things I&rsquo;m getting working is Visual Code Studio and Scala. Sounds easy doesn&rsquo;t it?
-Step 2 Scalameta is the extension for Scala on vscode. Install it; but wait, that&rsquo;s not all - there&rsquo;s more.
-Of course you went for Step 1 which was &ldquo;aaah, this is easy, just download the extension and you&rsquo;re done."/>
 
-  </head>
+<script src="/vendor/js/jquery.min.js" ></script>
+<script src="/vendor/js/popper.min.js" ></script>
+<script src="/vendor/js/bootstrap.min.js" ></script>
+<script src="/vendor/js/smooth-scroll.polyfills.min.js" ></script>
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<script src="/vendor/js/vue.min.js" ></script>
 
-  <body class="ma0 avenir bg-near-white">
 
+
+
+<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/journal.min.56b67b8b01d7cd1015ed14414fd2fc33ebfb2e8413dcbc47c5cd734544c92cd7.css" integrity="sha256-VrZ7iwHXzRAV7RRBT9L8M&#43;v7LoQT3LxHxc1zRUTJLNc=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/dark-mode.min.588bcae26a454daa76882866d3ccdf4ca1c9a0c7ce2159ac69108792f0aa8422.css" integrity="sha256-WIvK4mpFTap2iChm08zfTKHJoMfOIVmsaRCHkvCqhCI=" media="screen">
+
+
+<script src="https://cloud-fundis.github.io//js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Noto+Serif+SC|Material+Icons");
+</script>
+
+<script src="https://cloud-fundis.github.io//js/table.js"></script>
+
+
+
+
+<script src="https://cloud-fundis.github.io//js/toc.js"></script>
+
+
+
+
+
+
+
+
+</head><body>
+    	<div id="app"><div ref="sideContainer" class="side-container">
     
-   
-  
-
-  <header>
-    <div class="bg-black">
-      <nav class="pv3 ph3 ph4-ns" role="navigation">
-  <div class="flex-l justify-between items-center center">
-    <a href="https://cloud-fundis.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
-      because there are just too many things to remember
+    <a class="a-block nav-head false" href="https://cloud-fundis.github.io/">
+    
+        <div class="nav-title">
+            because there are just too many things to remember
+        </div>
+        
     </a>
-    <div class="flex-l items-center">
-      
 
-      
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <div class="nav-link-list">
+        
+        
     </div>
-  </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 because there are just too many things to remember
+	
+    </div>
+    
+</div><div ref="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#step-2" v-on:click="closeDrawer" id="step-2-nav">
+										 Step 2
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#step-3" v-on:click="closeDrawer" id="step-3-nav">
+										 Step 3
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#step-4" v-on:click="closeDrawer" id="step-4-nav">
+										 Step 4
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#final-step" v-on:click="closeDrawer" id="final-step-nav">
+										 Final step
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a class="pagination-action" v-on:click="toggleDarkMode">
+            <i class="material-icons pagination-action-icon" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons pagination-action-icon" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </a>
+        
+        
+    </div>
+</div><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#step-2" v-on:click="closeDrawer" id="step-2-nav">
+										 Step 2
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#step-3" v-on:click="closeDrawer" id="step-3-nav">
+										 Step 3
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#step-4" v-on:click="closeDrawer" id="step-4-nav">
+										 Step 4
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#final-step" v-on:click="closeDrawer" id="final-step-nav">
+										 Final step
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="https://cloud-fundis.github.io/">
+            because there are just too many things to remember
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" v-on:click="toggleDarkMode">
+            <i class="material-icons" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </button>
+        
+    </div>
 </nav>
-
-    </div>
-  </header>
-
-
-
-    <main class="pb7" role="main">
-      
-  
-  <article class="flex-l flex-wrap justify-between mw8 center ph3">
-    <header class="mt4 w-100">
-      <aside class="instapaper_ignoref b helvetica tracked">
-          
-        BLOGS
-      </aside>
-      
-
-
-
-
-  <div id="sharing" class="mt3">
-
-    
-    <a href="https://www.facebook.com/sharer.php?u=https://cloud-fundis.github.io/blog/visual-code-and-scala/" class="facebook no-underline" aria-label="share on Facebook">
-      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://cloud-fundis.github.io/">
+        <div class="single-column-header-title">because there are just too many things to remember</div>
+        
 
     </a>
+</div>
+            <div id="content">
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
 
-    
-    
-    <a href="https://twitter.com/share?url=https://cloud-fundis.github.io/blog/visual-code-and-scala/&amp;text=Visual%20Code%20Studio%20and%20Scala" class="twitter no-underline" aria-label="share on Twitter">
-      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+            <div class="post-head-wrapper-text-only"
+                 style="background-image: url('https://cloud-fundis.github.io/')">
+                <div class="post-title">
+                    Visual Code Studio and Scala
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020-04-29 08:01
+                        </time>
+                        
 
-    </a>
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[visual code studio extension scala]</a>
+                                &nbsp;
+                        
 
-    
-    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://cloud-fundis.github.io/blog/visual-code-and-scala/&amp;title=Visual%20Code%20Studio%20and%20Scala" class="linkedin no-underline" aria-label="share on LinkedIn">
-      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
-</svg>
-
-    </a>
-  </div>
-
-      <h1 class="f1 athelas mt3 mb1">Visual Code Studio and Scala</h1>
-      
-      
-      <time class="f6 mv4 dib tracked" datetime="2020-04-29T08:01:37&#43;02:00">April 29, 2020</time>
-
-      
-      
-    </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l">
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                <div class="post-body">
+                    
 
 <p>This week I am setting up my new laptop - moving off Mac finally and back onto Linux - YAY.</p>
 
@@ -253,52 +509,53 @@ INFO  [error]   not found: <a href="https://repo1.maven.org/maven2/org/apache/sp
 <p>Test by writing some Scala and autocomplete should work.</p>
 
 <p>Time spent figuring this out: half-a-day + 2 hours</p>
-<ul class="pa0">
-  
-</ul>
-<div class="mt6 instapaper_ignoref">
-      
-      
-      </div>
+
+                    
+                    <HR width="100%" id="EOF">
+                    <p style="color:#777;">Last modified on 2020-04-29</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/">
+                    Next<br>New blog posts ... tjoef tjaf
+                </a>
+                
+                
+                
+                <a class="older-posts">
+                    Previous<br>No older posts.
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+            </div>
+        </div>
     </div>
-
-    <aside class="w-30-l mt6-l">
-
-
-
-
-</aside>
-
-  </article>
-
-    </main>
-    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
-  <div class="flex justify-between">
-  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://cloud-fundis.github.io/" >
-    &copy;  because there are just too many things to remember 2020 
-  </a>
-    <div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
-  </div>
-</footer>
 
-    
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
 
-  <script src="/dist/js/app.3fc0f988d21662902933.js"></script>
-
-
-  </body>
+&copy;
+	
+	2020 because there are just too many things to remember
+	</div>
+    	</div>
+    <script src="https://cloud-fundis.github.io//js/journal.js"></script>
+    </body>
 </html>

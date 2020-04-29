@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>because there are just too many things to remember</title>
@@ -8,40 +7,213 @@
     <language>en-us</language>
     <lastBuildDate>Wed, 29 Apr 2020 13:09:58 +0200</lastBuildDate>
     
-	<atom:link href="https://cloud-fundis.github.io/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://cloud-fundis.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
-    <item>
-      <title>About</title>
-      <link>https://cloud-fundis.github.io/about/</link>
-      <pubDate>Wed, 29 Apr 2020 13:09:58 +0200</pubDate>
-      
-      <guid>https://cloud-fundis.github.io/about/</guid>
-      <description>This is a site for my blog posts</description>
-    </item>
     
-    <item>
-      <title>New blog posts ... tjoef tjaf</title>
-      <link>https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/</link>
-      <pubDate>Wed, 29 Apr 2020 11:33:32 +0200</pubDate>
-      
-      <guid>https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/</guid>
-      <description>Yup, don&amp;rsquo;t have time to muck around. Need to be able to blog about things I learn so that I can use them later.
-I think tjoef-tjaf is an Afrikaans expression meaning roughly, quick-quick. Here on Wikipedia are other &amp;lsquo;real Souf-Afrikan&amp;rsquo; words in common use - like ja-nee
-Assumptions  Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/ If not, then you can use hugo to create a new site in ~/somedir as follows  In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.</description>
-    </item>
+        <item>
+        <title>About</title>
+        <link>https://cloud-fundis.github.io/about/</link>
+        <pubDate>Wed, 29 Apr 2020 13:09:58 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/about/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/about/ -&lt;p&gt;This is a site for my blog posts&lt;/p&gt;
+- https://cloud-fundis.github.io/about/ - </description>
+        </item>
     
-    <item>
-      <title>Visual Code Studio and Scala</title>
-      <link>https://cloud-fundis.github.io/blog/visual-code-and-scala/</link>
-      <pubDate>Wed, 29 Apr 2020 08:01:37 +0200</pubDate>
-      
-      <guid>https://cloud-fundis.github.io/blog/visual-code-and-scala/</guid>
-      <description>This week I am setting up my new laptop - moving off Mac finally and back onto Linux - YAY.
-So one of the things I&amp;rsquo;m getting working is Visual Code Studio and Scala. Sounds easy doesn&amp;rsquo;t it?
-Step 2 Scalameta is the extension for Scala on vscode. Install it; but wait, that&amp;rsquo;s not all - there&amp;rsquo;s more.
-Of course you went for Step 1 which was &amp;ldquo;aaah, this is easy, just download the extension and you&amp;rsquo;re done.</description>
-    </item>
+    
+    
+        <item>
+        <title>New blog posts ... tjoef tjaf</title>
+        <link>https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/</link>
+        <pubDate>Wed, 29 Apr 2020 11:33:32 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/ -
+
+&lt;p&gt;Yup, don&amp;rsquo;t have time to muck around. Need to be able to blog about things I learn so that I can use them later.&lt;/p&gt;
+
+&lt;p&gt;I think &lt;em&gt;tjoef-tjaf&lt;/em&gt; is an Afrikaans expression meaning roughly, quick-quick. Here on &lt;a href=&#34;https://en.wikipedia.org/wiki/List_of_South_African_slang_words&#34;&gt;Wikipedia&lt;/a&gt; are other &amp;lsquo;real Souf-Afrikan&amp;rsquo; words in common use - like &lt;em&gt;ja-nee&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;assumptions&#34;&gt;Assumptions&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/
+If not, then you can use hugo to create a new site in ~/somedir as follows&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.github.io - I&amp;rsquo;ll be pushing from here to github&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;somedir $ hugo new site blog&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Set up an alias in ~/.bash_aliases to make uploading and deployment easier:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;alias buildblog=&amp;lsquo;(cd ~/WorkDocs/cloudfundis/myBlog/; hugo -D -d ../cloud-fundis.github.io/); (cd ~/WorkDocs/cloudfundis/cloud-fundis.github.io/ &amp;amp;&amp;amp; git add -A &amp;amp;&amp;amp; git commit -m &amp;ldquo;Blog update&amp;rdquo; &amp;amp;&amp;amp; git push)&amp;rsquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;.bash_aliases is read by .bashrc, so re-sourcing .bashrc sets this up.&lt;/p&gt;
+
+&lt;ol start=&#34;2&#34;&gt;
+2. You&#39;ve set up your ssh-keys for github. If not, I&#39;ll post a future post about this elsewhere.
+&lt;/ol&gt;
+
+&lt;p&gt;Now, it&amp;rsquo;s time to write a post:&lt;/p&gt;
+
+&lt;h3 id=&#34;step-1&#34;&gt;Step 1&lt;/h3&gt;
+
+&lt;p&gt;Assuming you&amp;rsquo;re in the &lt;strong&gt;myBlog&lt;/strong&gt; directory on your local machine:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;hugo new post blog/tjoef-tjaf.md&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Creates the page (in content/blog/tjoef-tjaf.md) [I want tjoef-tjaf to be a new &lt;strong&gt;blog&lt;/strong&gt; post on the site]. Edit tjoef-tjaf.md.&lt;/p&gt;
+
+&lt;h3 id=&#34;step-2&#34;&gt;Step 2&lt;/h3&gt;
+
+&lt;p&gt;Save it and then, using your alias, rebuild the website using hugo and deploy to github with commit and push&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;$ buildblog&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Visit the site at cloud-fundis.github.io (actually, visit your own github pages site).&lt;/p&gt;
+
+&lt;h2 id=&#34;postscript&#34;&gt;Postscript&lt;/h2&gt;
+
+&lt;p&gt;What can happen is that, because you&amp;rsquo;re pushing new changes to the git regularly, old stuff that you may not still want there, will continue to linger. These problems are difficult to diagnose. As a result, you might just want to scrub everything on your github pagess site and start again. Do this with caution!&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;git rm -rf &lt;br/&gt;
+git commit -m &amp;ldquo;Clean everything with bleach&amp;rdquo;&lt;br/&gt;
+git push&lt;br/&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+- https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Visual Code Studio and Scala</title>
+        <link>https://cloud-fundis.github.io/blog/visual-code-and-scala/</link>
+        <pubDate>Wed, 29 Apr 2020 08:01:37 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/blog/visual-code-and-scala/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/blog/visual-code-and-scala/ -
+
+&lt;p&gt;This week I am setting up my new laptop - moving off Mac finally and back onto Linux - YAY.&lt;/p&gt;
+
+&lt;p&gt;So one of the things I&amp;rsquo;m getting working is Visual Code Studio and Scala. Sounds easy doesn&amp;rsquo;t it?&lt;/p&gt;
+
+&lt;h3 id=&#34;step-2&#34;&gt;Step 2&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://scalameta.org/metals/&#34;&gt;Scalameta&lt;/a&gt; is the extension for Scala on vscode. Install it; but wait, that&amp;rsquo;s not all - there&amp;rsquo;s more.&lt;/p&gt;
+
+&lt;p&gt;Of course you went for &lt;em&gt;Step 1&lt;/em&gt; which was &amp;ldquo;aaah, this is easy, just download the extension and you&amp;rsquo;re done. How hard is that?&amp;rdquo;. It didn&amp;rsquo;t work, but at least you&amp;rsquo;ve completed Step 1. We&amp;rsquo;re starting at Step 2 because step 1 was a fail.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Have you got the correct verion of Java installed?
+I installed Java from the Ubuntu repo and while it was 11.0.7-10, it seemed it was giving issues. Despite futsing around with various Metal options, it seemed to not be loading Bloop.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Bloop. To the layman (yup, that&amp;rsquo;s me), this is another thing that flummoxed me. It seems it&amp;rsquo;s job is to automagically download the libraries from Maven.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;step-3&#34;&gt;Step 3&lt;/h2&gt;
+
+&lt;p&gt;Uninstall java from the Ubuntu repo&amp;rsquo;s and install it via &lt;a href=&#34;https://sdkman.io/&#34;&gt;SdkMan&lt;/a&gt;. That&amp;rsquo;s what the sbt recommends. Do it:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;install sdkman&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;curl -s &amp;ldquo;&lt;a href=&#34;https://get.sdkman.io&amp;quot;&#34;&gt;https://get.sdkman.io&amp;quot;&lt;/a&gt; | bash&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Install Java&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;What I don&amp;rsquo;t understand is that this installs as your user, not system-wide; which I can see is going to bite me later!&lt;/li&gt;
+&lt;li&gt;sdk list java&lt;/li&gt;
+&lt;li&gt;sdk install java 11.0.7.hs-adpt (no, I don&amp;rsquo;t know what these (&lt;em&gt;adpt&lt;/em&gt; and &lt;em&gt;hs&lt;/em&gt;) things mean yet)&lt;/li&gt;
+&lt;li&gt;Test java: java -version&lt;/li&gt;
+&lt;li&gt;Add JAVA_HOME to your .bashrc&lt;/li&gt;
+&lt;li&gt;Remember to re-run your .bashrc (. ~/.bashrc)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;step-4&#34;&gt;Step 4&lt;/h2&gt;
+
+&lt;p&gt;When you open your .scala or .sbt files, Metal should create two directories namely .bloop and .metals. If .bloop is not created, my experience was that this is a Java problem and bloop is not starting up.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Check by running:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;ps -elf|grep bloop.Server|sed &amp;rsquo;s/-classpath [^ ]*//g&amp;rsquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Yeah, that classpath stuff just complicates life.&lt;/p&gt;
+
+&lt;p&gt;If bloop is not running, revisit the Java version. For this tut, I installed java 11.0.7.hs-adpt as above.&lt;/p&gt;
+
+&lt;h2 id=&#34;final-step&#34;&gt;Final step&lt;/h2&gt;
+
+&lt;p&gt;Now bloop is running, you&amp;rsquo;re still getting this error:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;INFO  [error] sbt.librarymanagement.ResolveException: Error downloading org.apache.spark:spark-graphx:2.4.4&lt;br/&gt;
+INFO  [error]   Not found&lt;br/&gt;
+INFO  [error]   Not found&lt;br/&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;What I found is that copying the sbt path from Maven didn&amp;rsquo;t work. What Maven suggested I put in my build.sbt was this (snippet):&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;libraryDependencies += &amp;ldquo;org.apache.spark&amp;rdquo; % &amp;ldquo;spark-core&amp;rdquo; % &amp;ldquo;2.4.4&amp;rdquo;,&lt;br/&gt;
+  libraryDependencies += &amp;ldquo;org.apache.spark&amp;rdquo; % &amp;ldquo;spark-sql&amp;rdquo; % &amp;ldquo;2.4.4&amp;rdquo;&lt;br/&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Which is not a path because it&amp;rsquo;s being searched for here:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;INFO  [error]   not found: /home/hamish/.ivy2/local/org.apache.spark/spark-sql/2.4.4/ivys/ivy.xml&lt;br/&gt;
+INFO  [error]   not found: &lt;a href=&#34;https://repo1.maven.org/maven2/org/apache/spark/spark-sql/2.4.4/spark-sql-2.4.4.pom&#34;&gt;https://repo1.maven.org/maven2/org/apache/spark/spark-sql/2.4.4/spark-sql-2.4.4.pom&lt;/a&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Which, as you can see, is not found.&lt;/p&gt;
+
+&lt;p&gt;A bit of _curl_ing did the trick:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;curl &lt;a href=&#34;https://repo1.maven.org/maven2/org/apache/spark&#34;&gt;https://repo1.maven.org/maven2/org/apache/spark&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;showed me that the path was in fact not as I&amp;rsquo;ve put it in the dependencies, but rather&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;a href=&amp;quot;spark-core_2.10/&amp;quot; title=&amp;quot;spark-core_2.10/&amp;quot;&amp;gt;spark-core_2.10/&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;quot;spark-core_2.11/&amp;quot; title=&amp;quot;spark-core_2.11/&amp;quot;&amp;gt;spark-core_2.11/&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;quot;spark-core_2.12/&amp;quot; title=&amp;quot;spark-core_2.12/&amp;quot;&amp;gt;spark-core_2.12/&amp;lt;/a&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So changing the path in the build.sbt to:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;libraryDependencies += &amp;ldquo;org.apache.spark&amp;rdquo; % &amp;ldquo;spark-core_2.12&amp;rdquo; % &amp;ldquo;2.4.4&amp;rdquo;,&lt;br/&gt;
+  libraryDependencies += &amp;ldquo;org.apache.spark&amp;rdquo; % &amp;ldquo;spark-sql_2.12&amp;rdquo; % &amp;ldquo;2.4.4&amp;rdquo;&lt;br/&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;fixed this.&lt;/p&gt;
+
+&lt;p&gt;Test by writing some Scala and autocomplete should work.&lt;/p&gt;
+
+&lt;p&gt;Time spent figuring this out: half-a-day + 2 hours&lt;/p&gt;
+- https://cloud-fundis.github.io/blog/visual-code-and-scala/ - </description>
+        </item>
+    
     
   </channel>
-</rss>
+</rss> 
