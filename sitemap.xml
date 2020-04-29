@@ -3,27 +3,27 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/about/</loc>
+    <lastmod>2020-04-29T13:09:58+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/</loc>
+    <lastmod>2020-04-29T13:09:58+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/blog-recipe-tjoef-tjaf/</loc>
     <lastmod>2020-04-29T11:33:32+02:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog-recipe/</loc>
+    <loc>/blog/</loc>
     <lastmod>2020-04-29T11:33:32+02:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog-recipe/tjoef-tjaf/</loc>
-    <lastmod>2020-04-29T11:33:32+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/visualcode/visual-code-and-scala/</loc>
-    <lastmod>2020-04-29T08:01:37+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/visualcode/</loc>
+    <loc>/blog/visual-code-and-scala/</loc>
     <lastmod>2020-04-29T08:01:37+02:00</lastmod>
   </url>
   
