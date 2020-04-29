@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Because there are 1000&#39;s of things to remember</title>
-    <link>https://cloud-fundis.github.io/</link>
+    <link>/</link>
     <description>Recent content on Because there are 1000&#39;s of things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 29 Apr 2020 11:33:32 +0200</lastBuildDate>
     
-	<atom:link href="https://cloud-fundis.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Tjoef Tjaf</title>
-      <link>https://cloud-fundis.github.io/blog-recipe/tjoef-tjaf/</link>
+      <link>/blog-recipe/tjoef-tjaf/</link>
       <pubDate>Wed, 29 Apr 2020 11:33:32 +0200</pubDate>
       
-      <guid>https://cloud-fundis.github.io/blog-recipe/tjoef-tjaf/</guid>
+      <guid>/blog-recipe/tjoef-tjaf/</guid>
       <description>Yup, don&amp;rsquo;t have time to muck around. Need to be able to blog about things I learn so that I can use them later.
 Assumptions  Your blog Hugo metadata and all that junk lives in ~/somedir/blog/ If not, then you can use hugo to create a new site in ~/somedir as follows  In what follows, all my blogs live in ~/WorkDocs/cloudfundis/blog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.</description>
     </item>
     
     <item>
       <title>Visual Code Studio and Scala</title>
-      <link>https://cloud-fundis.github.io/visualcode/visual-code-and-scala/</link>
+      <link>/visualcode/visual-code-and-scala/</link>
       <pubDate>Wed, 29 Apr 2020 08:01:37 +0200</pubDate>
       
-      <guid>https://cloud-fundis.github.io/visualcode/visual-code-and-scala/</guid>
+      <guid>/visualcode/visual-code-and-scala/</guid>
       <description>This week I am setting up my new laptop - moving off Mac finally and back onto Linux - YAY.
 So one of the things I&amp;rsquo;m getting working is Visual Code Studio and Scala. Sounds easy doesn&amp;rsquo;t it?
 Step 2 Scalameta is the extension for Scala on vscode. Install it; but wait, that&amp;rsquo;s not all - there&amp;rsquo;s more.

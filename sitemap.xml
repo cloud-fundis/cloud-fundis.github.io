@@ -3,36 +3,36 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://cloud-fundis.github.io/</loc>
+    <loc>/</loc>
     <lastmod>2020-04-29T11:33:32+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cloud-fundis.github.io/blog-recipe/</loc>
+    <loc>/blog-recipe/</loc>
     <lastmod>2020-04-29T11:33:32+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cloud-fundis.github.io/blog-recipe/tjoef-tjaf/</loc>
+    <loc>/blog-recipe/tjoef-tjaf/</loc>
     <lastmod>2020-04-29T11:33:32+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cloud-fundis.github.io/visualcode/visual-code-and-scala/</loc>
+    <loc>/visualcode/visual-code-and-scala/</loc>
     <lastmod>2020-04-29T08:01:37+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cloud-fundis.github.io/visualcode/</loc>
+    <loc>/visualcode/</loc>
     <lastmod>2020-04-29T08:01:37+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cloud-fundis.github.io/categories/</loc>
+    <loc>/categories/</loc>
   </url>
   
   <url>
-    <loc>https://cloud-fundis.github.io/tags/</loc>
+    <loc>/tags/</loc>
   </url>
   
 </urlset>
