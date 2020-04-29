@@ -27,6 +27,7 @@
       
       <guid>https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/</guid>
       <description>Yup, don&amp;rsquo;t have time to muck around. Need to be able to blog about things I learn so that I can use them later.
+I think tjoef-tjaf is an Afrikaans expression meaning, roughly, quick-quick.
 Assumptions  Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/ If not, then you can use hugo to create a new site in ~/somedir as follows  In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.</description>
     </item>
     
