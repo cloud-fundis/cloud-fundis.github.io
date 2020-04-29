@@ -27,19 +27,19 @@
     
     <meta property="og:title" content="New blog posts ... tjoef tjaf" />
 <meta property="og:description" content="Yup, don&rsquo;t have time to muck around. Need to be able to blog about things I learn so that I can use them later.
-Assumptions  Your blog Hugo metadata and all that junk lives in ~/somedir/blog/ If not, then you can use hugo to create a new site in ~/somedir as follows  In what follows, all my blogs live in ~/WorkDocs/cloudfundis/blog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis." />
+Assumptions  Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/ If not, then you can use hugo to create a new site in ~/somedir as follows  In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/" />
 <meta property="article:published_time" content="2020-04-29T11:33:32+02:00" />
 <meta property="article:modified_time" content="2020-04-29T11:33:32+02:00" />
 <meta itemprop="name" content="New blog posts ... tjoef tjaf">
 <meta itemprop="description" content="Yup, don&rsquo;t have time to muck around. Need to be able to blog about things I learn so that I can use them later.
-Assumptions  Your blog Hugo metadata and all that junk lives in ~/somedir/blog/ If not, then you can use hugo to create a new site in ~/somedir as follows  In what follows, all my blogs live in ~/WorkDocs/cloudfundis/blog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.">
+Assumptions  Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/ If not, then you can use hugo to create a new site in ~/somedir as follows  In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.">
 
 
 <meta itemprop="datePublished" content="2020-04-29T11:33:32&#43;02:00" />
 <meta itemprop="dateModified" content="2020-04-29T11:33:32&#43;02:00" />
-<meta itemprop="wordCount" content="276">
+<meta itemprop="wordCount" content="294">
 
 
 
@@ -47,7 +47,7 @@ Assumptions  Your blog Hugo metadata and all that junk lives in ~/somedir/blog/ 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="New blog posts ... tjoef tjaf"/>
 <meta name="twitter:description" content="Yup, don&rsquo;t have time to muck around. Need to be able to blog about things I learn so that I can use them later.
-Assumptions  Your blog Hugo metadata and all that junk lives in ~/somedir/blog/ If not, then you can use hugo to create a new site in ~/somedir as follows  In what follows, all my blogs live in ~/WorkDocs/cloudfundis/blog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis."/>
+Assumptions  Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/ If not, then you can use hugo to create a new site in ~/somedir as follows  In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis."/>
 
   </head>
 
@@ -145,11 +145,11 @@ Assumptions  Your blog Hugo metadata and all that junk lives in ~/somedir/blog/ 
 <h2 id="assumptions">Assumptions</h2>
 
 <ol>
-<li>Your blog Hugo metadata and all that junk lives in ~/somedir/blog/
+<li>Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/
 If not, then you can use hugo to create a new site in ~/somedir as follows</li>
 </ol>
 
-<p>In what follows, all my blogs live in ~/WorkDocs/cloudfundis/blog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.github.io - I&rsquo;ll be pushing from here to github</p>
+<p>In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.github.io - I&rsquo;ll be pushing from here to github</p>
 
 <blockquote>
 <p>somedir $ hugo new site blog</p>
@@ -158,7 +158,7 @@ If not, then you can use hugo to create a new site in ~/somedir as follows</li>
 <p>Set up an alias in ~/.bash_aliases to make uploading and deployment easier:</p>
 
 <blockquote>
-<p>alias blog=&lsquo;(cd ~/WorkDocs/cloudfundis/blog/; hugo -D -d ../cloud-fundis.github.io/); (cd ~/WorkDocs/cloudfundis/cloud-fundis.github.io/ &amp;&amp; git add -A &amp;&amp; git commit -m &ldquo;Blog update&rdquo; &amp;&amp; git push)&rsquo;</p>
+<p>alias buildblog=&lsquo;(cd ~/WorkDocs/cloudfundis/myBlog/; hugo -D -d ../cloud-fundis.github.io/); (cd ~/WorkDocs/cloudfundis/cloud-fundis.github.io/ &amp;&amp; git add -A &amp;&amp; git commit -m &ldquo;Blog update&rdquo; &amp;&amp; git push)&rsquo;</p>
 </blockquote>
 
 <p>.bash_aliases is read by .bashrc, so re-sourcing .bashrc sets this up.</p>
@@ -171,20 +171,20 @@ If not, then you can use hugo to create a new site in ~/somedir as follows</li>
 
 <h3 id="step-1">Step 1</h3>
 
-<p>Assuming you&rsquo;re in the <strong>blog</strong> directory</p>
+<p>Assuming you&rsquo;re in the <strong>myBlog</strong> directory on your local machine:</p>
 
 <blockquote>
-<p>hugo new post blog-recipe/tjoef-tjaf.md</p>
+<p>hugo new post blog/tjoef-tjaf.md</p>
 </blockquote>
 
-<p>Creates the page. Edit it.</p>
+<p>Creates the page (in content/blog/tjoef-tjaf.md) [I want tjoef-tjaf to be a new <strong>blog</strong> post on the site]. Edit tjoef-tjaf.md.</p>
 
 <h3 id="step-2">Step 2</h3>
 
 <p>Save it and then, using your alias, rebuild the website using hugo and deploy to github with commit and push</p>
 
 <blockquote>
-<p>$ blog</p>
+<p>$ buildblog</p>
 </blockquote>
 
 <p>Visit the site at cloud-fundis.github.io (actually, visit your own github pages site).</p>
