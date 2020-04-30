@@ -5,9 +5,25 @@
     <description>Recent content on because there are just too many things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Apr 2020 13:09:58 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 29 Apr 2020 18:40:05 +0200</lastBuildDate>
     
         <atom:link href="https://cloud-fundis.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>You Cant Take It With You</title>
+        <link>https://cloud-fundis.github.io/blog/you-cant-take-it-with-you/</link>
+        <pubDate>Wed, 29 Apr 2020 18:40:05 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/blog/you-cant-take-it-with-you/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/blog/you-cant-take-it-with-you/ -&lt;p&gt;S3 is a loverly beast. Store anything for as long as you like at virtually 0 cost.&lt;/p&gt;
+
+&lt;p&gt;There&amp;rsquo;s one thing I came across recently though that&amp;rsquo;s a real bind: object times are not transferrable.&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s right, if you write an object now and tomorrow you want to move that object somewhere else, the time on the object cannot be transferred elsewhere.&lt;/p&gt;
+- https://cloud-fundis.github.io/blog/you-cant-take-it-with-you/ - </description>
+        </item>
     
     
     
@@ -17,7 +33,13 @@
         <pubDate>Wed, 29 Apr 2020 13:09:58 +0200</pubDate>
         
         <guid>https://cloud-fundis.github.io/about/</guid>
-        <description>because there are just too many things to remember https://cloud-fundis.github.io/about/ -&lt;p&gt;This is a site for my blog posts&lt;/p&gt;
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/about/ -&lt;p&gt;This is a site for my blog posts. Mostly it&amp;rsquo;s because I simply forget stuff. I&amp;rsquo;m not at nimble as I once was. Granted, even then I forgot things.&lt;/p&gt;
+
+&lt;p&gt;The Cloud-Fundis website is &lt;a href=&#34;https://www.cloud-fundis.co.za&#34;&gt;https://www.cloud-fundis.co.za&lt;/a&gt;, but this is a companion site (hosted on GithubPages as you can see) and it&amp;rsquo;s mostly for me. However if you find anything here that&amp;rsquo;s wrong, don&amp;rsquo;t hesitate to contact the Cloud-Fundis people on info AT cloud-fundis dot coza.&lt;/p&gt;
+
+&lt;p&gt;Of course, I&amp;rsquo;m prepared to do other posts, so email us if there&amp;rsquo;s something you think may be especially helpful and we&amp;rsquo;ll see what time we have to do a post about it.&lt;/p&gt;
+
+&lt;p&gt;Happy dev-ops-sing&lt;/p&gt;
 - https://cloud-fundis.github.io/about/ - </description>
         </item>
     

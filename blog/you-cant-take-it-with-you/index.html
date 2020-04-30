@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>Blogs</title>
+<title>You Cant Take It With You</title>
 
 <meta charset="utf-8">
 <meta name="X-UA-Compatible" content="IE=edge">
@@ -41,11 +41,7 @@
 
 
 
-<style>
-  .toc{
-    display: none !important;
-  }
-</style>
+<script src="https://cloud-fundis.github.io//js/toc.js"></script>
 
 
 
@@ -88,6 +84,11 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div><div ref="extraContainer" class="extra-container">
     
     
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+</div>
+    
     <div class="pagination">
         <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
             <i class="material-icons pagination-action-icon">
@@ -105,8 +106,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
         </a>
         
         
-        
-        
     </div>
 </div><div class="single-column-drawer-container" ref="drawer"
      v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
@@ -115,6 +114,11 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             
             
             
+            
+            <div class="toc">
+
+
+</div>
             
         </div>
     </div>
@@ -156,81 +160,74 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <div id="content">
 <div ref="streamContainer" class="stream-container">
     <div class="post-list-container post-list-container-shadow">
-        
-            <a class="a-block">
-                <div class="post-item-wrapper post-item-wrapper-no-hover">
-                    <div class="post-item post-item-no-gaps">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title post-item-title-small year">
-                                2020
-                            </div>
-                        </div>
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                 style="background-image: url('https://cloud-fundis.github.io/')">
+                <div class="post-title">
+                    You Cant Take It With You
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020-04-29 18:40
+                        </time>
+                        
+
+                        
+
+                        
                     </div>
                 </div>
-            </a>
+            </div>
             
-            <a href="/blog/you-cant-take-it-with-you/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-gaps">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                You Cant Take It With You
-                            </div>
-                            <div class="post-item-meta">
-                                Apr 29, 2020
-    
-                                
-                                <span class="draft-label">DRAFT</span>
-                                
-                            </div>
-                        </div>
-                    </div>
+            <div class="post-body-wrapper">
+                <div class="post-body">
+                    <p>S3 is a loverly beast. Store anything for as long as you like at virtually 0 cost.</p>
+
+<p>There&rsquo;s one thing I came across recently though that&rsquo;s a real bind: object times are not transferrable.</p>
+
+<p>That&rsquo;s right, if you write an object now and tomorrow you want to move that object somewhere else, the time on the object cannot be transferred elsewhere.</p>
+
+                    
+                    <HR width="100%" id="EOF">
+                    <p style="color:#777;">Last modified on 2020-04-29</p>
+                    
                 </div>
-            </a>
+            </div>
             
-            <a href="/blog/blog-recipe-tjoef-tjaf/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-gaps">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                New blog posts ... tjoef tjaf
-                            </div>
-                            <div class="post-item-meta">
-                                Apr 29, 2020
-    
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
             
-            <a href="/blog/visual-code-and-scala/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-gaps">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                Visual Code Studio and Scala
-                            </div>
-                            <div class="post-item-meta">
-                                Apr 29, 2020
-    
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            
-        
-    </div>
-</div>
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+                    Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://cloud-fundis.github.io/about/">
+                    Previous<br>About
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
 
 
             </div>
+        </div>
+    </div>
+</div>
 
-
-<div id="single-column-footer">
+            </div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
