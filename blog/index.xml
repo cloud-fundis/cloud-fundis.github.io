@@ -6,21 +6,10 @@
     <description>Recent content in Blogs on because there are just too many things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Apr 2020 18:40:05 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 29 Apr 2020 11:33:32 +0200</lastBuildDate>
     
 	<atom:link href="https://cloud-fundis.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>You Cant Take It With You</title>
-      <link>https://cloud-fundis.github.io/blog/you-cant-take-it-with-you/</link>
-      <pubDate>Wed, 29 Apr 2020 18:40:05 +0200</pubDate>
-      
-      <guid>https://cloud-fundis.github.io/blog/you-cant-take-it-with-you/</guid>
-      <description>S3 is a loverly beast. Store anything for as long as you like at virtually 0 cost.
-There&amp;rsquo;s one thing I came across recently though that&amp;rsquo;s a real bind: object times are not transferrable.
-That&amp;rsquo;s right, if you write an object now and tomorrow you want to move that object somewhere else, the time on the object cannot be transferred elsewhere.</description>
-    </item>
     
     <item>
       <title>New blog posts ... tjoef tjaf</title>
