@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lessons on because there are just too many things to remember</title>
+    <link>https://cloud-fundis.github.io/lessons/</link>
+    <description>Recent content in Lessons on because there are just too many things to remember</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 04 May 2020 11:32:20 +0200</lastBuildDate>
+    
+	<atom:link href="https://cloud-fundis.github.io/lessons/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>jq - a journey worth taking</title>
+      <link>https://cloud-fundis.github.io/lessons/jq1/</link>
+      <pubDate>Mon, 04 May 2020 11:32:20 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/lessons/jq1/</guid>
+      <description>When I started at AWS in 2016, I&amp;rsquo;d never heard of JQ (jq from here on out) before. Of course, I&amp;rsquo;d not been exposed to a lot of JSON either, so it&amp;rsquo;s not surprising I didn&amp;rsquo;t know it or how unbelievably powerful it is.
+This is a series of indefinite length that focusts on jq. Bascially, the man page is way too concise to be terribly helpful. This series will aim to fulfil two roles:</description>
+    </item>
+    
+  </channel>
+</rss>

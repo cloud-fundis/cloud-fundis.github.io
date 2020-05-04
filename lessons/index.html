@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>About</title>
+<title>Lessons</title>
 
 <meta charset="utf-8">
 <meta name="X-UA-Compatible" content="IE=edge">
@@ -41,7 +41,11 @@
 
 
 
-<script src="https://cloud-fundis.github.io//js/toc.js"></script>
+<style>
+  .toc{
+    display: none !important;
+  }
+</style>
 
 
 
@@ -84,11 +88,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div><div ref="extraContainer" class="extra-container">
     
     
-    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
-
-
-</div>
-    
     <div class="pagination">
         <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
             <i class="material-icons pagination-action-icon">
@@ -106,6 +105,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
         </a>
         
         
+        
+        
     </div>
 </div><div class="single-column-drawer-container" ref="drawer"
      v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
@@ -114,11 +115,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             
             
             
-            
-            <div class="toc">
-
-
-</div>
             
         </div>
     </div>
@@ -160,76 +156,45 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <div id="content">
 <div ref="streamContainer" class="stream-container">
     <div class="post-list-container post-list-container-shadow">
-        <div class="post">
-            
-            
-            
-
-            <div class="post-head-wrapper-text-only"
-                 style="background-image: url('https://cloud-fundis.github.io/')">
-                <div class="post-title">
-                    About
-                    
-                    <div class="post-meta">
-                        
-                        <time itemprop="datePublished">
-                            2020-04-29 13:09
-                        </time>
-                        
-
-                        
-
-                        
+        
+            <a class="a-block">
+                <div class="post-item-wrapper post-item-wrapper-no-hover">
+                    <div class="post-item post-item-no-gaps">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title post-item-title-small year">
+                                2020
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
             
-            <div class="post-body-wrapper">
-                <div class="post-body">
-                    <p>This is a site for our blog posts. Started mostly it&rsquo;s because I simply forget stuff. I&rsquo;m not at nimble as I once was. Granted, even then I forgot things.</p>
-
-<p>The official <a href="https://www.cloud-fundis.co.za">Cloud-Fundis website</a> is elsewhere, but this is a companion site (hosted on GithubPages as you can see) and it&rsquo;s mostly for me. However if you find anything here that&rsquo;s wrong, don&rsquo;t hesitate to contact the Cloud-Fundis people on info AT cloud-fundis dot coza.</p>
-
-<p>Of course, we&rsquo;re prepared to do other posts, so email us if there&rsquo;s something you think may be especially helpful and we&rsquo;ll see what time we have to do a post about it.</p>
-
-<p>Happy dev-ops-sing</p>
-
-                    
-                    <HR width="100%" id="EOF">
-                    <p style="color:#777;">Last modified on 2020-04-29</p>
-                    
+            <a href="/lessons/jq1/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-gaps">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                jq - a journey worth taking
+                            </div>
+                            <div class="post-item-meta">
+                                May 4, 2020
+    
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </a>
             
-            
-            <nav class="post-pagination">
-
-                
-                <a class="newer-posts" href="https://cloud-fundis.github.io/lessons/jq1/">
-                    Next<br>jq - a journey worth taking
-                </a>
-                
-                
-                
-                <a class="older-posts" href="https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/">
-                    Previous<br>New blog posts ... tjoef tjaf
-                </a>
-                
-            </nav>
-            <div class="post-comment-wrapper">
-                
-
-
-
-
-
-
-            </div>
-        </div>
+        
     </div>
 </div>
 
-            </div><div id="single-column-footer">
+
+            </div>
+
+
+<div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>

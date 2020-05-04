@@ -5,9 +5,173 @@
     <description>Recent content on because there are just too many things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Apr 2020 13:09:58 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 04 May 2020 11:32:20 +0200</lastBuildDate>
     
         <atom:link href="https://cloud-fundis.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>jq - a journey worth taking</title>
+        <link>https://cloud-fundis.github.io/lessons/jq1/</link>
+        <pubDate>Mon, 04 May 2020 11:32:20 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/lessons/jq1/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq1/ -
+
+&lt;p&gt;When I started at AWS in 2016, I&amp;rsquo;d never heard of JQ (jq from here on out) before. Of course, I&amp;rsquo;d not been exposed to a lot of JSON either, so it&amp;rsquo;s not surprising I didn&amp;rsquo;t know it or how unbelievably powerful it is.&lt;/p&gt;
+
+&lt;p&gt;This is a series of indefinite length that focusts on jq. Bascially, the man page is way too concise to be terribly helpful. This series will aim to fulfil two roles:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;To give practical examples of using jq,&lt;/li&gt;
+&lt;li&gt;To act as a bit of a cookbook for &amp;lsquo;common&amp;rsquo; usecases.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We hope you find this useful.&lt;/p&gt;
+
+&lt;p&gt;What is jq?
+It&amp;rsquo;s a tool that allows us to manipulate JSON documents.&lt;/p&gt;
+
+&lt;p&gt;Why is that so important?
+JSON seems to have been universally adopted by many to define configuration files, output to API calls among other uses.&lt;/p&gt;
+
+&lt;p&gt;jq is a swiss-army knife for dealing with JSON. The better you know it, the easier your JSON life will be.&lt;/p&gt;
+
+&lt;p&gt;For the rest of this series, I&amp;rsquo;m going to be delving into the return information from the AWS CLI. If your CLI config files isn&amp;rsquo;t set to return JSON (instead it returns YAML or something else), then change that. You should use any JSON file you have on hand.&lt;/p&gt;
+
+&lt;p&gt;This is only for Linux. What about Windoze?
+I don&amp;rsquo;t care about Windoze. If you want to run jq on Windoze, Google it.&lt;/p&gt;
+
+&lt;h3 id=&#34;lesson-1&#34;&gt;Lesson 1:&lt;/h3&gt;
+
+&lt;p&gt;jq can be used on a file or part of a pipe.&lt;/p&gt;
+
+&lt;p&gt;jq to pretty-print your JSON. The period ( . ) is the selector of all fields. In the example, this selects from the highest level of the JSON document.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This produces the instances in your account. Not terribly helpful because, of course if there are many of them, there is a lot of JSON returned.&lt;/p&gt;
+
+&lt;p&gt;It did (or should have), coloured your output - which is pretty if nothing else.&lt;/p&gt;
+
+&lt;h3 id=&#34;lesson-2&#34;&gt;Lesson 2:&lt;/h3&gt;
+
+&lt;p&gt;Finding the keys.&lt;/p&gt;
+
+&lt;p&gt;The JSON documnet is a set of key:value pairs. In our instances, if we want to find the keys, we could:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;keys&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;which will return:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[
+    &amp;quot;Reservations&amp;quot;
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s telling me I have instances that are &amp;ldquo;reserved&amp;rdquo; for my use.&lt;/p&gt;
+
+&lt;p&gt;Of course, the converse is the values associated with the &amp;ldquo;Reservations&amp;rdquo; key and are the values (my instances).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;values&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Still pretty useless, but at least it&amp;rsquo;s something.&lt;/p&gt;
+
+&lt;p&gt;What about using the key?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;returns the same results (pretty much) as &amp;lsquo;values&amp;rsquo; above. But now we&amp;rsquo;re getting the hang of this, what about the &amp;lsquo;next&amp;rsquo; key (i.e. .Reservations.&lt;keys&gt;)?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations | keys&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here the pipe character does what you expect it to do in the shell. It&amp;rsquo;s piping the output of .Reservations to the keys keyword. Interestingly, we get this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[
+    0
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What does that mean?&lt;/p&gt;
+
+&lt;p&gt;.Reservations is a zero indexed array and in this case, there&amp;rsquo;s only a single element - 0.&lt;/p&gt;
+
+&lt;p&gt;jq understands the index, but it ALSO understands an empty array to mean every element in the array as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[0] | keys&#39;
+
+aws ec2 describe-instances | jq &#39;.Reservations[] | keys&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This means the zero&amp;rsquo;th element (in this case the .Reservations array only has a single element), or the empty brackets which means every element in the array. Both of these produce the same outcome:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[
+    &amp;quot;Groups&amp;quot;,
+    &amp;quot;Instances&amp;quot;,
+    &amp;quot;OwnerId&amp;quot;,
+    &amp;quot;ReservationId&amp;quot;
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There are four sub-keys under .Reservations, namely Groups, Instances, OwnerId and ReservationId.&lt;/p&gt;
+
+&lt;p&gt;Taking a flying guess here, I&amp;rsquo;m going to go with the Instances like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[].Instances&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This produces:&lt;/p&gt;
+
+&lt;p&gt;[source, json]
+&lt;code&gt;
+[
+  {
+    &amp;quot;AmiLaunchIndex&amp;quot;: 0,
+    &amp;quot;ImageId&amp;quot;: &amp;quot;ami-02df9ea15c1778c9c&amp;quot;,
+    &amp;quot;InstanceId&amp;quot;: &amp;quot;i-0b3dde7ff8612d7b5&amp;quot;,
+    &amp;quot;InstanceType&amp;quot;: &amp;quot;t2.micro&amp;quot;,
+    &amp;quot;KeyName&amp;quot;: &amp;quot;hamish-cloudfundis-keypair&amp;quot;,
+    &amp;quot;LaunchTime&amp;quot;: &amp;quot;2020-01-02T13:47:08.000Z&amp;quot;,
+    &amp;quot;Monitoring&amp;quot;: {
+      &amp;quot;State&amp;quot;: &amp;quot;disabled&amp;quot;
+    },
+    &amp;quot;Placement&amp;quot;: {
+      &amp;quot;AvailabilityZone&amp;quot;: &amp;quot;eu-west-1c&amp;quot;,
+      &amp;quot;GroupName&amp;quot;: &amp;quot;&amp;quot;,
+      &amp;quot;Tenancy&amp;quot;: &amp;quot;default&amp;quot;
+      ...
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The square bracket ( [ ) as the first line gives us a clue that this too (Instances) is an array. How many elements are in this array? That&amp;rsquo;s right, in my case, 0. Let&amp;rsquo;s try that trick from before&amp;hellip;where we used the keys keyword:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[].Instances[] | keys&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And bingo we get something useful finally&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+    [
+      &amp;quot;AmiLaunchIndex&amp;quot;,
+      &amp;quot;Architecture&amp;quot;,
+      &amp;quot;BlockDeviceMappings&amp;quot;,
+      &amp;quot;CapacityReservationSpecification&amp;quot;,
+      &amp;quot;ClientToken&amp;quot;,
+      &amp;quot;CpuOptions&amp;quot;,
+      &amp;quot;EbsOptimized&amp;quot;,
+      &amp;quot;EnaSupport&amp;quot;,
+      &amp;quot;HibernationOptions&amp;quot;,
+      ...
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;I don&amp;rsquo;t have more time today, so that&amp;rsquo;s it for now. Next time, we look at getting values for these things.&lt;/p&gt;
+- https://cloud-fundis.github.io/lessons/jq1/ - </description>
+        </item>
     
     
     
