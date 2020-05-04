@@ -12,16 +12,16 @@
     
     
         <item>
-        <title>jq - a journey worth taking</title>
+        <title>jq - first steps: a journey worth taking</title>
         <link>https://cloud-fundis.github.io/lessons/jq1/</link>
         <pubDate>Mon, 04 May 2020 11:32:20 +0200</pubDate>
         
         <guid>https://cloud-fundis.github.io/lessons/jq1/</guid>
         <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq1/ -
 
-&lt;p&gt;When I started at AWS in 2016, I&amp;rsquo;d never heard of JQ (jq from here on out) before. Of course, I&amp;rsquo;d not been exposed to a lot of JSON either, so it&amp;rsquo;s not surprising I didn&amp;rsquo;t know it or how unbelievably powerful it is.&lt;/p&gt;
+&lt;p&gt;When I started at AWS, I&amp;rsquo;d never heard of &lt;em&gt;jq&lt;/em&gt; before. Of course, I&amp;rsquo;d not been exposed to a lot of JSON either, so it&amp;rsquo;s not surprising I didn&amp;rsquo;t know it or how unbelievably powerful it is.&lt;/p&gt;
 
-&lt;p&gt;This is a series of indefinite length that focusts on jq. Bascially, the man page is way too concise to be terribly helpful. This series will aim to fulfil two roles:&lt;/p&gt;
+&lt;p&gt;This is a series of indefinite length that focusts on &lt;em&gt;jq&lt;/em&gt;. Bascially, the man page is way too concise to be terribly helpful. This series will aim to fulfil two roles:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;To give practical examples of using jq,&lt;/li&gt;
@@ -30,24 +30,26 @@
 
 &lt;p&gt;We hope you find this useful.&lt;/p&gt;
 
-&lt;p&gt;What is jq?
-It&amp;rsquo;s a tool that allows us to manipulate JSON documents.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What is &lt;em&gt;jq&lt;/em&gt;?&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;Why is that so important?
-JSON seems to have been universally adopted by many to define configuration files, output to API calls among other uses.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s a tool that allows us to manipulate JSON documents.&lt;/p&gt;
 
-&lt;p&gt;jq is a swiss-army knife for dealing with JSON. The better you know it, the easier your JSON life will be.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why is that so important?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;JSON seems to have been universally adopted by many to define configuration files, output to API calls among other uses.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;jq&lt;/em&gt; is a swiss-army knife for dealing with JSON. The better you know it, the easier your JSON life will be.&lt;/p&gt;
 
 &lt;p&gt;For the rest of this series, I&amp;rsquo;m going to be delving into the return information from the AWS CLI. If your CLI config files isn&amp;rsquo;t set to return JSON (instead it returns YAML or something else), then change that. You should use any JSON file you have on hand.&lt;/p&gt;
 
 &lt;p&gt;This is only for Linux. What about Windoze?
-I don&amp;rsquo;t care about Windoze. If you want to run jq on Windoze, Google it.&lt;/p&gt;
+I don&amp;rsquo;t care about Windoze. If you want to run &lt;em&gt;jq&lt;/em&gt; on Windoze, Google it.&lt;/p&gt;
 
 &lt;h3 id=&#34;lesson-1&#34;&gt;Lesson 1:&lt;/h3&gt;
 
-&lt;p&gt;jq can be used on a file or part of a pipe.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;jq&lt;/em&gt; can be used on a file or part of a pipe.&lt;/p&gt;
 
-&lt;p&gt;jq to pretty-print your JSON. The period ( . ) is the selector of all fields. In the example, this selects from the highest level of the JSON document.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;jq&lt;/em&gt; to pretty-print your JSON. The period ( . ) is the selector of all fields. In the example, this selects from the highest level of the JSON document.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.&#39;
 &lt;/code&gt;&lt;/pre&gt;
@@ -102,11 +104,11 @@ I don&amp;rsquo;t care about Windoze. If you want to run jq on Windoze, Google i
 
 &lt;p&gt;.Reservations is a zero indexed array and in this case, there&amp;rsquo;s only a single element - 0.&lt;/p&gt;
 
-&lt;p&gt;jq understands the index, but it ALSO understands an empty array to mean every element in the array as follows:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;jq&lt;/em&gt; understands the index, but it ALSO understands an empty array to mean every element in the array as follows:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[0] | keys&#39;
 
-aws ec2 describe-instances | jq &#39;.Reservations[] | keys&#39;
+aws ec2 describe-instances |_jq_&#39;.Reservations[] | keys&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This means the zero&amp;rsquo;th element (in this case the .Reservations array only has a single element), or the empty brackets which means every element in the array. Both of these produce the same outcome:&lt;/p&gt;
@@ -128,8 +130,7 @@ aws ec2 describe-instances | jq &#39;.Reservations[] | keys&#39;
 
 &lt;p&gt;This produces:&lt;/p&gt;
 
-&lt;p&gt;[source, json]
-&lt;code&gt;
+&lt;p&gt;&lt;code&gt;
 [
   {
     &amp;quot;AmiLaunchIndex&amp;quot;: 0,

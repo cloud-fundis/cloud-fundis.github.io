@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>jq - a journey worth taking</title>
+<title>jq - first steps: a journey worth taking</title>
 
 <meta charset="utf-8">
 <meta name="X-UA-Compatible" content="IE=edge">
@@ -63,6 +63,28 @@
 
     <div class="nav-link-list">
         
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/blog">
+                Blogs
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/lessons">
+                Lessons
+            </a>
+            
         
     </div>
 
@@ -176,6 +198,28 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
         <div class="drawer-menu">
             
             
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/blog">
+                    Blogs
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/lessons">
+                    Lessons
+                </a>
+                
             
             
             <div class="toc">
@@ -294,7 +338,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <div class="post-head-wrapper-text-only"
                  style="background-image: url('https://cloud-fundis.github.io/')">
                 <div class="post-title">
-                    jq - a journey worth taking
+                    jq - first steps: a journey worth taking
                     
                     <div class="post-meta">
                         
@@ -314,9 +358,9 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 <div class="post-body">
                     
 
-<p>When I started at AWS in 2016, I&rsquo;d never heard of JQ (jq from here on out) before. Of course, I&rsquo;d not been exposed to a lot of JSON either, so it&rsquo;s not surprising I didn&rsquo;t know it or how unbelievably powerful it is.</p>
+<p>When I started at AWS, I&rsquo;d never heard of <em>jq</em> before. Of course, I&rsquo;d not been exposed to a lot of JSON either, so it&rsquo;s not surprising I didn&rsquo;t know it or how unbelievably powerful it is.</p>
 
-<p>This is a series of indefinite length that focusts on jq. Bascially, the man page is way too concise to be terribly helpful. This series will aim to fulfil two roles:</p>
+<p>This is a series of indefinite length that focusts on <em>jq</em>. Bascially, the man page is way too concise to be terribly helpful. This series will aim to fulfil two roles:</p>
 
 <ul>
 <li>To give practical examples of using jq,</li>
@@ -325,24 +369,26 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
 <p>We hope you find this useful.</p>
 
-<p>What is jq?
-It&rsquo;s a tool that allows us to manipulate JSON documents.</p>
+<p><strong>What is <em>jq</em>?</strong></p>
 
-<p>Why is that so important?
-JSON seems to have been universally adopted by many to define configuration files, output to API calls among other uses.</p>
+<p>It&rsquo;s a tool that allows us to manipulate JSON documents.</p>
 
-<p>jq is a swiss-army knife for dealing with JSON. The better you know it, the easier your JSON life will be.</p>
+<p><strong>Why is that so important?</strong></p>
+
+<p>JSON seems to have been universally adopted by many to define configuration files, output to API calls among other uses.</p>
+
+<p><em>jq</em> is a swiss-army knife for dealing with JSON. The better you know it, the easier your JSON life will be.</p>
 
 <p>For the rest of this series, I&rsquo;m going to be delving into the return information from the AWS CLI. If your CLI config files isn&rsquo;t set to return JSON (instead it returns YAML or something else), then change that. You should use any JSON file you have on hand.</p>
 
 <p>This is only for Linux. What about Windoze?
-I don&rsquo;t care about Windoze. If you want to run jq on Windoze, Google it.</p>
+I don&rsquo;t care about Windoze. If you want to run <em>jq</em> on Windoze, Google it.</p>
 
 <h3 id="lesson-1">Lesson 1:</h3>
 
-<p>jq can be used on a file or part of a pipe.</p>
+<p><em>jq</em> can be used on a file or part of a pipe.</p>
 
-<p>jq to pretty-print your JSON. The period ( . ) is the selector of all fields. In the example, this selects from the highest level of the JSON document.</p>
+<p><em>jq</em> to pretty-print your JSON. The period ( . ) is the selector of all fields. In the example, this selects from the highest level of the JSON document.</p>
 
 <pre><code>aws ec2 describe-instances | jq '.'
 </code></pre>
@@ -397,11 +443,11 @@ I don&rsquo;t care about Windoze. If you want to run jq on Windoze, Google it.</
 
 <p>.Reservations is a zero indexed array and in this case, there&rsquo;s only a single element - 0.</p>
 
-<p>jq understands the index, but it ALSO understands an empty array to mean every element in the array as follows:</p>
+<p><em>jq</em> understands the index, but it ALSO understands an empty array to mean every element in the array as follows:</p>
 
 <pre><code>aws ec2 describe-instances | jq '.Reservations[0] | keys'
 
-aws ec2 describe-instances | jq '.Reservations[] | keys'
+aws ec2 describe-instances |_jq_'.Reservations[] | keys'
 </code></pre>
 
 <p>This means the zero&rsquo;th element (in this case the .Reservations array only has a single element), or the empty brackets which means every element in the array. Both of these produce the same outcome:</p>
@@ -423,8 +469,7 @@ aws ec2 describe-instances | jq '.Reservations[] | keys'
 
 <p>This produces:</p>
 
-<p>[source, json]
-<code>
+<p><code>
 [
   {
     &quot;AmiLaunchIndex&quot;: 0,
