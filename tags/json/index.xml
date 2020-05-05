@@ -6,10 +6,22 @@
     <description>Recent content in json on because there are just too many things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 05 May 2020 12:55:16 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 05 May 2020 14:41:29 +0200</lastBuildDate>
     
 	<atom:link href="https://cloud-fundis.github.io/tags/json/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>jq - lessons 3 to 6</title>
+      <link>https://cloud-fundis.github.io/lessons/jq/jq2/</link>
+      <pubDate>Tue, 05 May 2020 14:41:29 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/lessons/jq/jq2/</guid>
+      <description>Previously on jq &amp;hellip; aws ec2 describe-instances | jq &#39;.Reservations[].Instances[] | keys&#39;  shows us all the keys for all the Reservations for all the Instances I have launched in AWS.
+Perhaps we wish to know what the state of the instances are?
+I see there&amp;rsquo;s a State in the resulting keys. Perhaps that has the state of all instances.
+Lesson 3 JSON is case sensitive JSON is case sensitive, so</description>
+    </item>
     
     <item>
       <title>jq - Lesson N - the N&#39;d game</title>
