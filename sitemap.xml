@@ -3,17 +3,38 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://cloud-fundis.github.io/lessons/jq/</loc>
+    <lastmod>2020-05-04T11:32:20+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://cloud-fundis.github.io/</loc>
     <lastmod>2020-05-04T11:32:20+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cloud-fundis.github.io/lessons/jq1/</loc>
+    <loc>https://cloud-fundis.github.io/tags/jq/</loc>
     <lastmod>2020-05-04T11:32:20+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cloud-fundis.github.io/lessons/</loc>
+    <loc>https://cloud-fundis.github.io/lessons/jq/jq1/</loc>
+    <lastmod>2020-05-04T11:32:20+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/json/</loc>
+    <lastmod>2020-05-04T11:32:20+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/shell/</loc>
+    <lastmod>2020-05-04T11:32:20+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/</loc>
     <lastmod>2020-05-04T11:32:20+02:00</lastmod>
   </url>
   
@@ -58,7 +79,7 @@
   </url>
   
   <url>
-    <loc>https://cloud-fundis.github.io/tags/</loc>
+    <loc>https://cloud-fundis.github.io/lessons/</loc>
   </url>
   
 </urlset>

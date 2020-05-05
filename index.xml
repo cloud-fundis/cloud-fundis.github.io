@@ -13,11 +13,11 @@
     
         <item>
         <title>jq - first steps: a journey worth taking</title>
-        <link>https://cloud-fundis.github.io/lessons/jq1/</link>
+        <link>https://cloud-fundis.github.io/lessons/jq/jq1/</link>
         <pubDate>Mon, 04 May 2020 11:32:20 +0200</pubDate>
         
-        <guid>https://cloud-fundis.github.io/lessons/jq1/</guid>
-        <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq1/ -
+        <guid>https://cloud-fundis.github.io/lessons/jq/jq1/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq/jq1/ -
 
 &lt;p&gt;When I started at AWS, I&amp;rsquo;d never heard of &lt;em&gt;jq&lt;/em&gt; before. Of course, I&amp;rsquo;d not been exposed to a lot of JSON either, so it&amp;rsquo;s not surprising I didn&amp;rsquo;t know it or how unbelievably powerful it is.&lt;/p&gt;
 
@@ -62,7 +62,7 @@ I don&amp;rsquo;t care about Windoze. If you want to run &lt;em&gt;jq&lt;/em&gt;
 
 &lt;p&gt;Finding the keys.&lt;/p&gt;
 
-&lt;p&gt;The JSON documnet is a set of key:value pairs. In our instances, if we want to find the keys, we could:&lt;/p&gt;
+&lt;p&gt;The JSON document is a set of key:value pairs. In our case, if we want to find the keys, we could:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;keys&#39;
 &lt;/code&gt;&lt;/pre&gt;
@@ -83,7 +83,7 @@ I don&amp;rsquo;t care about Windoze. If you want to run &lt;em&gt;jq&lt;/em&gt;
 
 &lt;p&gt;Still pretty useless, but at least it&amp;rsquo;s something.&lt;/p&gt;
 
-&lt;p&gt;What about using the key?&lt;/p&gt;
+&lt;p&gt;What about using the Reservations key?&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations&#39;
 &lt;/code&gt;&lt;/pre&gt;
@@ -130,8 +130,7 @@ aws ec2 describe-instances |_jq_&#39;.Reservations[] | keys&#39;
 
 &lt;p&gt;This produces:&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-[
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;[
   {
     &amp;quot;AmiLaunchIndex&amp;quot;: 0,
     &amp;quot;ImageId&amp;quot;: &amp;quot;ami-02df9ea15c1778c9c&amp;quot;,
@@ -147,7 +146,7 @@ aws ec2 describe-instances |_jq_&#39;.Reservations[] | keys&#39;
       &amp;quot;GroupName&amp;quot;: &amp;quot;&amp;quot;,
       &amp;quot;Tenancy&amp;quot;: &amp;quot;default&amp;quot;
       ...
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The square bracket ( [ ) as the first line gives us a clue that this too (Instances) is an array. How many elements are in this array? That&amp;rsquo;s right, in my case, 0. Let&amp;rsquo;s try that trick from before&amp;hellip;where we used the keys keyword:&lt;/p&gt;
 
@@ -156,8 +155,7 @@ aws ec2 describe-instances |_jq_&#39;.Reservations[] | keys&#39;
 
 &lt;p&gt;And bingo we get something useful finally&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-    [
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;    [
       &amp;quot;AmiLaunchIndex&amp;quot;,
       &amp;quot;Architecture&amp;quot;,
       &amp;quot;BlockDeviceMappings&amp;quot;,
@@ -168,10 +166,10 @@ aws ec2 describe-instances |_jq_&#39;.Reservations[] | keys&#39;
       &amp;quot;EnaSupport&amp;quot;,
       &amp;quot;HibernationOptions&amp;quot;,
       ...
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;I don&amp;rsquo;t have more time today, so that&amp;rsquo;s it for now. Next time, we look at getting values for these things.&lt;/p&gt;
-- https://cloud-fundis.github.io/lessons/jq1/ - </description>
+- https://cloud-fundis.github.io/lessons/jq/jq1/ - </description>
         </item>
     
     

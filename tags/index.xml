@@ -6,9 +6,37 @@
     <description>Recent content in Tags on because there are just too many things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Mon, 04 May 2020 11:32:20 +0200</lastBuildDate>
     
 	<atom:link href="https://cloud-fundis.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>jq</title>
+      <link>https://cloud-fundis.github.io/tags/jq/</link>
+      <pubDate>Mon, 04 May 2020 11:32:20 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/jq/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>json</title>
+      <link>https://cloud-fundis.github.io/tags/json/</link>
+      <pubDate>Mon, 04 May 2020 11:32:20 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/json/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>shell</title>
+      <link>https://cloud-fundis.github.io/tags/shell/</link>
+      <pubDate>Mon, 04 May 2020 11:32:20 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/shell/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>

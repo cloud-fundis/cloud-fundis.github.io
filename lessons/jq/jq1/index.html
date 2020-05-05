@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>New blog posts ... tjoef tjaf</title>
+<title>jq - first steps: a journey worth taking</title>
 
 <meta charset="utf-8">
 <meta name="X-UA-Compatible" content="IE=edge">
@@ -67,11 +67,9 @@
             
             
             
-                
             
             
-            
-            <a class="a-block nav-link-item active" href="/blog">
+            <a class="a-block nav-link-item false" href="/blog">
                 Blogs
             </a>
             
@@ -138,35 +136,12 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 							<ul>
 						
-						
-								<li>
-				 					<a href="#assumptions" v-on:click="closeDrawer" id="assumptions-nav">
-										 Assumptions
-									</a>
-								</li>
-						
-							</ul>
-						
-							</ul>
-						
-					
-				
-			
-				
-				
-					
-						
-						
-							<ul>
-						
-							<ul>
-						
 							<ul>
 						
 						
 								<li>
-				 					<a href="#step-1" v-on:click="closeDrawer" id="step-1-nav">
-										 Step 1
+				 					<a href="#lesson-1" v-on:click="closeDrawer" id="lesson-1-nav">
+										 Lesson 1:
 									</a>
 								</li>
 						
@@ -192,35 +167,12 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 								<li>
-				 					<a href="#step-2" v-on:click="closeDrawer" id="step-2-nav">
-										 Step 2
+				 					<a href="#lesson-2" v-on:click="closeDrawer" id="lesson-2-nav">
+										 Lesson 2:
 									</a>
 								</li>
 						
 							</ul>
-						
-							</ul>
-						
-							</ul>
-						
-					
-				
-			
-				
-				
-					
-						
-						
-							<ul>
-						
-							<ul>
-						
-						
-								<li>
-				 					<a href="#postscript" v-on:click="closeDrawer" id="postscript-nav">
-										 Postscript
-									</a>
-								</li>
 						
 							</ul>
 						
@@ -261,11 +213,9 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                 
                 
-                    
                 
                 
-                
-                <a class="a-block drawer-menu-item active" href="/blog">
+                <a class="a-block drawer-menu-item false" href="/blog">
                     Blogs
                 </a>
                 
@@ -313,35 +263,12 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 							<ul>
 						
-						
-								<li>
-				 					<a href="#assumptions" v-on:click="closeDrawer" id="assumptions-nav">
-										 Assumptions
-									</a>
-								</li>
-						
-							</ul>
-						
-							</ul>
-						
-					
-				
-			
-				
-				
-					
-						
-						
-							<ul>
-						
-							<ul>
-						
 							<ul>
 						
 						
 								<li>
-				 					<a href="#step-1" v-on:click="closeDrawer" id="step-1-nav">
-										 Step 1
+				 					<a href="#lesson-1" v-on:click="closeDrawer" id="lesson-1-nav">
+										 Lesson 1:
 									</a>
 								</li>
 						
@@ -367,35 +294,12 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 								<li>
-				 					<a href="#step-2" v-on:click="closeDrawer" id="step-2-nav">
-										 Step 2
+				 					<a href="#lesson-2" v-on:click="closeDrawer" id="lesson-2-nav">
+										 Lesson 2:
 									</a>
 								</li>
 						
 							</ul>
-						
-							</ul>
-						
-							</ul>
-						
-					
-				
-			
-				
-				
-					
-						
-						
-							<ul>
-						
-							<ul>
-						
-						
-								<li>
-				 					<a href="#postscript" v-on:click="closeDrawer" id="postscript-nav">
-										 Postscript
-									</a>
-								</li>
 						
 							</ul>
 						
@@ -456,17 +360,29 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <div class="post-head-wrapper-text-only"
                  style="background-image: url('https://cloud-fundis.github.io/')">
                 <div class="post-title">
-                    New blog posts ... tjoef tjaf
+                    jq - first steps: a journey worth taking
                     
                     <div class="post-meta">
                         
                         <time itemprop="datePublished">
-                            2020-04-29 11:33
+                            2020-05-04 11:32
                         </time>
                         
 
                         
 
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/json">json</a>
+                                &nbsp;
+                            
+                                <a href="/tags/jq">jq</a>
+                                &nbsp;
+                            
+                                <a href="/tags/shell">shell</a>
+                                &nbsp;
+                            
                         
                     </div>
                 </div>
@@ -476,70 +392,160 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 <div class="post-body">
                     
 
-<p>Yup, don&rsquo;t have time to muck around. Need to be able to blog about things I learn so that I can use them later.</p>
+<p>When I started at AWS, I&rsquo;d never heard of <em>jq</em> before. Of course, I&rsquo;d not been exposed to a lot of JSON either, so it&rsquo;s not surprising I didn&rsquo;t know it or how unbelievably powerful it is.</p>
 
-<p>I think <em>tjoef-tjaf</em> is an Afrikaans expression meaning roughly, quick-quick. Here on <a href="https://en.wikipedia.org/wiki/List_of_South_African_slang_words">Wikipedia</a> are other &lsquo;real Souf-Afrikan&rsquo; words in common use - like <em>ja-nee</em></p>
+<p>This is a series of indefinite length that focusts on <em>jq</em>. Bascially, the man page is way too concise to be terribly helpful. This series will aim to fulfil two roles:</p>
 
-<h2 id="assumptions">Assumptions</h2>
+<ul>
+<li>To give practical examples of using jq,</li>
+<li>To act as a bit of a cookbook for &lsquo;common&rsquo; usecases.</li>
+</ul>
 
-<ol>
-<li>Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/
-If not, then you can use hugo to create a new site in ~/somedir as follows</li>
-</ol>
+<p>We hope you find this useful.</p>
 
-<p>In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.github.io - I&rsquo;ll be pushing from here to github</p>
+<p><strong>What is <em>jq</em>?</strong></p>
 
-<blockquote>
-<p>somedir $ hugo new site blog</p>
-</blockquote>
+<p>It&rsquo;s a tool that allows us to manipulate JSON documents.</p>
 
-<p>Set up an alias in ~/.bash_aliases to make uploading and deployment easier:</p>
+<p><strong>Why is that so important?</strong></p>
 
-<blockquote>
-<p>alias buildblog=&lsquo;(cd ~/WorkDocs/cloudfundis/myBlog/; hugo -D -d ../cloud-fundis.github.io/); (cd ~/WorkDocs/cloudfundis/cloud-fundis.github.io/ &amp;&amp; git add -A &amp;&amp; git commit -m &ldquo;Blog update&rdquo; &amp;&amp; git push)&rsquo;</p>
-</blockquote>
+<p>JSON seems to have been universally adopted by many to define configuration files, output to API calls among other uses.</p>
 
-<p>.bash_aliases is read by .bashrc, so re-sourcing .bashrc sets this up.</p>
+<p><em>jq</em> is a swiss-army knife for dealing with JSON. The better you know it, the easier your JSON life will be.</p>
 
-<ol start="2">
-2. You've set up your ssh-keys for github. If not, I'll post a future post about this elsewhere.
-</ol>
+<p>For the rest of this series, I&rsquo;m going to be delving into the return information from the AWS CLI. If your CLI config files isn&rsquo;t set to return JSON (instead it returns YAML or something else), then change that. You should use any JSON file you have on hand.</p>
 
-<p>Now, it&rsquo;s time to write a post:</p>
+<p>This is only for Linux. What about Windoze?
+I don&rsquo;t care about Windoze. If you want to run <em>jq</em> on Windoze, Google it.</p>
 
-<h3 id="step-1">Step 1</h3>
+<h3 id="lesson-1">Lesson 1:</h3>
 
-<p>Assuming you&rsquo;re in the <strong>myBlog</strong> directory on your local machine:</p>
+<p><em>jq</em> can be used on a file or part of a pipe.</p>
 
-<blockquote>
-<p>hugo new post blog/tjoef-tjaf.md</p>
-</blockquote>
+<p><em>jq</em> to pretty-print your JSON. The period ( . ) is the selector of all fields. In the example, this selects from the highest level of the JSON document.</p>
 
-<p>Creates the page (in content/blog/tjoef-tjaf.md) [I want tjoef-tjaf to be a new <strong>blog</strong> post on the site]. Edit tjoef-tjaf.md.</p>
+<pre><code>aws ec2 describe-instances | jq '.'
+</code></pre>
 
-<h3 id="step-2">Step 2</h3>
+<p>This produces the instances in your account. Not terribly helpful because, of course if there are many of them, there is a lot of JSON returned.</p>
 
-<p>Save it and then, using your alias, rebuild the website using hugo and deploy to github with commit and push</p>
+<p>It did (or should have), coloured your output - which is pretty if nothing else.</p>
 
-<blockquote>
-<p>$ buildblog</p>
-</blockquote>
+<h3 id="lesson-2">Lesson 2:</h3>
 
-<p>Visit the site at cloud-fundis.github.io (actually, visit your own github pages site).</p>
+<p>Finding the keys.</p>
 
-<h2 id="postscript">Postscript</h2>
+<p>The JSON document is a set of key:value pairs. In our case, if we want to find the keys, we could:</p>
 
-<p>What can happen is that, because you&rsquo;re pushing new changes to the git regularly, old stuff that you may not still want there, will continue to linger. These problems are difficult to diagnose. As a result, you might just want to scrub everything on your github pagess site and start again. Do this with caution!</p>
+<pre><code>aws ec2 describe-instances | jq 'keys'
+</code></pre>
 
-<blockquote>
-<p>git rm -rf <br/>
-git commit -m &ldquo;Clean everything with bleach&rdquo;<br/>
-git push<br/></p>
-</blockquote>
+<p>which will return:</p>
+
+<pre><code>[
+    &quot;Reservations&quot;
+]
+</code></pre>
+
+<p>That&rsquo;s telling me I have instances that are &ldquo;reserved&rdquo; for my use.</p>
+
+<p>Of course, the converse is the values associated with the &ldquo;Reservations&rdquo; key and are the values (my instances).</p>
+
+<pre><code>aws ec2 describe-instances | jq 'values'
+</code></pre>
+
+<p>Still pretty useless, but at least it&rsquo;s something.</p>
+
+<p>What about using the Reservations key?</p>
+
+<pre><code>aws ec2 describe-instances | jq '.Reservations'
+</code></pre>
+
+<p>returns the same results (pretty much) as &lsquo;values&rsquo; above. But now we&rsquo;re getting the hang of this, what about the &lsquo;next&rsquo; key (i.e. .Reservations.<keys>)?</p>
+
+<pre><code>aws ec2 describe-instances | jq '.Reservations | keys'
+</code></pre>
+
+<p>Here the pipe character does what you expect it to do in the shell. It&rsquo;s piping the output of .Reservations to the keys keyword. Interestingly, we get this:</p>
+
+<pre><code>[
+    0
+]
+</code></pre>
+
+<p>What does that mean?</p>
+
+<p>.Reservations is a zero indexed array and in this case, there&rsquo;s only a single element - 0.</p>
+
+<p><em>jq</em> understands the index, but it ALSO understands an empty array to mean every element in the array as follows:</p>
+
+<pre><code>aws ec2 describe-instances | jq '.Reservations[0] | keys'
+
+aws ec2 describe-instances |_jq_'.Reservations[] | keys'
+</code></pre>
+
+<p>This means the zero&rsquo;th element (in this case the .Reservations array only has a single element), or the empty brackets which means every element in the array. Both of these produce the same outcome:</p>
+
+<pre><code>[
+    &quot;Groups&quot;,
+    &quot;Instances&quot;,
+    &quot;OwnerId&quot;,
+    &quot;ReservationId&quot;
+]
+</code></pre>
+
+<p>There are four sub-keys under .Reservations, namely Groups, Instances, OwnerId and ReservationId.</p>
+
+<p>Taking a flying guess here, I&rsquo;m going to go with the Instances like so:</p>
+
+<pre><code>aws ec2 describe-instances | jq '.Reservations[].Instances'
+</code></pre>
+
+<p>This produces:</p>
+
+<pre><code class="language-json">[
+  {
+    &quot;AmiLaunchIndex&quot;: 0,
+    &quot;ImageId&quot;: &quot;ami-02df9ea15c1778c9c&quot;,
+    &quot;InstanceId&quot;: &quot;i-0b3dde7ff8612d7b5&quot;,
+    &quot;InstanceType&quot;: &quot;t2.micro&quot;,
+    &quot;KeyName&quot;: &quot;hamish-cloudfundis-keypair&quot;,
+    &quot;LaunchTime&quot;: &quot;2020-01-02T13:47:08.000Z&quot;,
+    &quot;Monitoring&quot;: {
+      &quot;State&quot;: &quot;disabled&quot;
+    },
+    &quot;Placement&quot;: {
+      &quot;AvailabilityZone&quot;: &quot;eu-west-1c&quot;,
+      &quot;GroupName&quot;: &quot;&quot;,
+      &quot;Tenancy&quot;: &quot;default&quot;
+      ...
+</code></pre>
+
+<p>The square bracket ( [ ) as the first line gives us a clue that this too (Instances) is an array. How many elements are in this array? That&rsquo;s right, in my case, 0. Let&rsquo;s try that trick from before&hellip;where we used the keys keyword:</p>
+
+<pre><code>aws ec2 describe-instances | jq '.Reservations[].Instances[] | keys'
+</code></pre>
+
+<p>And bingo we get something useful finally</p>
+
+<pre><code class="language-json">    [
+      &quot;AmiLaunchIndex&quot;,
+      &quot;Architecture&quot;,
+      &quot;BlockDeviceMappings&quot;,
+      &quot;CapacityReservationSpecification&quot;,
+      &quot;ClientToken&quot;,
+      &quot;CpuOptions&quot;,
+      &quot;EbsOptimized&quot;,
+      &quot;EnaSupport&quot;,
+      &quot;HibernationOptions&quot;,
+      ...
+</code></pre>
+
+<p>I don&rsquo;t have more time today, so that&rsquo;s it for now. Next time, we look at getting values for these things.</p>
 
                     
                     <HR width="100%" id="EOF">
-                    <p style="color:#777;">Last modified on 2020-04-29</p>
+                    <p style="color:#777;">Last modified on 2020-05-04</p>
                     
                 </div>
             </div>
@@ -548,14 +554,14 @@ git push<br/></p>
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://cloud-fundis.github.io/about/">
-                    Next<br>About
+                <a class="newer-posts">
+                    Next<br>No newer posts.
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://cloud-fundis.github.io/blog/visual-code-and-scala/">
-                    Previous<br>Visual Code Studio and Scala
+                <a class="older-posts" href="https://cloud-fundis.github.io/about/">
+                    Previous<br>About
                 </a>
                 
             </nav>
