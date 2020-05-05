@@ -434,7 +434,7 @@ aws ec2 describe-instances |_jq_&#39;.Reservations[] | keys&#39;
 &lt;p&gt;If not, then you can use hugo to create a new site in ~/somedir as follows&lt;/p&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;somedir $ hugo new site blog&lt;/p&gt;
+&lt;p&gt;somedir $ hugo new site myBlog&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;Set up an alias in ~/.bash_aliases to make uploading and deployment easier:&lt;/p&gt;
