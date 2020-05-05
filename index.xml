@@ -52,7 +52,7 @@
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Ok. Cool. I only have once instance launched here, so this shows only one instance in a stopped state.&lt;/p&gt;
+&lt;p&gt;Ok. Cool. I only have one instance launched here, so this shows only one instance in a stopped state.&lt;/p&gt;
 
 &lt;p&gt;In &lt;em&gt;jq&lt;/em&gt; terminology, we&amp;rsquo;re applied a filter to this data. First we applied a filter of all Reservations, then all Instances and finally a filter of &lt;em&gt;State&lt;/em&gt;.&lt;/p&gt;
 
