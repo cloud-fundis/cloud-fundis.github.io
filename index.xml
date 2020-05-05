@@ -54,7 +54,7 @@
 
 &lt;p&gt;Ok. Cool. I only have one instance launched here, so this shows only one instance in a stopped state.&lt;/p&gt;
 
-&lt;p&gt;In &lt;em&gt;jq&lt;/em&gt; terminology, we&amp;rsquo;re applied a filter to this data. First we applied a filter of all Reservations, then all Instances and finally a filter of &lt;em&gt;State&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;In &lt;em&gt;jq&lt;/em&gt; terminology, we&amp;rsquo;ve applied a filter to this data. First we applied a filter of all Reservations, then all Instances and finally a filter of &lt;em&gt;State&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;If I look in an account of one of our customers, then I see&lt;/p&gt;
 
@@ -82,11 +82,13 @@
 
 &lt;h3 id=&#34;retriving-more-than-a-single-key-at-once&#34;&gt;Retriving more than a single key at once&lt;/h3&gt;
 
-&lt;p&gt;We could loop through this and do the aws call multiple times, retrieving the instanceId first and then&amp;hellip;.BARF&amp;hellip;Urgh, just writing that sentence make me sick. Is there another way?&lt;/p&gt;
+&lt;p&gt;We could loop through this and do the aws call multiple times, retrieving the instanceId first and then&amp;hellip;.BARF&amp;hellip;Urgh, just writing that sentence make me sick.&lt;/p&gt;
 
-&lt;p&gt;Indeed. If we pipe ( | ) the output of the .Reservations[].Instances[] and &amp;lsquo;grab&amp;rsquo; the keys we&amp;rsquo;re interested in, then that would work:&lt;/p&gt;
+&lt;p&gt;There &lt;strong&gt;MUST&lt;/strong&gt; be a better way?&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances --profile cust1 --region eu-west-1| jq &#39;.Reservations[].Instances[]|.InstanceId,.State&#39;
+&lt;p&gt;Indeed. If we pipe ( | ) [we saw this used in an earlier lesson right?] the output of the &lt;em&gt;.Reservations[].Instances[]&lt;/em&gt; and &amp;lsquo;grab&amp;rsquo; the keys we&amp;rsquo;re interested in, then that would work:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[].Instances[] | .InstanceId,.State&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;results in:&lt;/p&gt;
@@ -101,11 +103,12 @@
   &amp;quot;Code&amp;quot;: 16,
   &amp;quot;Name&amp;quot;: &amp;quot;running&amp;quot;
 }
+...
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Now we&amp;rsquo;re cooking.&lt;/p&gt;
 
-&lt;p&gt;NOTE: I&amp;rsquo;m going to leave out the aws cli command from here, since really, it&amp;rsquo;s adding no value to the learning and making the scroll-box on your terminal ugly.&lt;/p&gt;
+&lt;p&gt;NOTE: I&amp;rsquo;m going to leave out the aws cli command from here, since really, it&amp;rsquo;s adding no value to the learning and making the scroll-box on your browser ugly.&lt;/p&gt;
 
 &lt;h2 id=&#34;lesson-5&#34;&gt;Lesson 5&lt;/h2&gt;
 
@@ -113,10 +116,10 @@
 
 &lt;p&gt;Funny you should ask that. There sure is.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;jq &#39;.Reservations[].Instances[]|.InstanceId,.State.Name&#39;
+&lt;pre&gt;&lt;code&gt;jq &#39;.Reservations[].Instances[] | .InstanceId,.State.Name&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    &amp;quot;i-0a775b8c631e8ad27&amp;quot;
+&lt;pre&gt;&lt;code&gt;    &amp;quot;i-0a775b8c631e8ad27&amp;quot;
     &amp;quot;running&amp;quot;
     &amp;quot;i-061b358b9cfc20505&amp;quot;
     &amp;quot;running&amp;quot;
@@ -128,8 +131,10 @@
 
 &lt;p&gt;Using the &amp;lsquo;raw&amp;rsquo; flag ( -r ) for &lt;em&gt;jq&lt;/em&gt; solve that.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;jq -r &#39;.Reservations[1,3].Instances[]|.InstanceId,.State.Name&#39;
+&lt;pre&gt;&lt;code&gt;jq -r &#39;.Reservations[1,3].Instances[] | .InstanceId,.State.Name&#39;
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;NOTE: I slipped something into this last command I&amp;rsquo;ve not talked about. The selection of various elements of the &lt;em&gt;Reservations&lt;/em&gt; array. See it there: &lt;strong&gt;1,3&lt;/strong&gt;? That&amp;rsquo;s saying the second and the 4th elements of this array. Remember JSON arrays are indexed from 0.&lt;/p&gt;
 
 &lt;h2 id=&#34;lesson-6&#34;&gt;Lesson 6&lt;/h2&gt;
 
@@ -143,14 +148,14 @@
 
 &lt;p&gt;We could try this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[1,3].Instances[]| &amp;quot;.InstanceId, .State.Name&amp;quot;&#39;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[1,3].Instances[] | &amp;quot;.InstanceId, .State.Name&amp;quot;&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;however that produces two strings with .InstanceId, .State.Name. Not quite what we want.&lt;/p&gt;
 
 &lt;p&gt;We could use an array to combine these strings into a new array as follows:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[1,3].Instances[]| [.InstanceId, .State.Name]&#39;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[1,3].Instances[] | [.InstanceId, .State.Name]&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;which results in:&lt;/p&gt;
@@ -159,18 +164,18 @@
 [&amp;quot;i-061b358b9cfc20505&amp;quot;,&amp;quot;running&amp;quot;]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Better. But if we&amp;rsquo;re going to be doing this for some further processing, we&amp;rsquo;re THEN going to have to remove the square braces. Not ideal.&lt;/p&gt;
+&lt;p&gt;Better. However if we&amp;rsquo;re going to be generating this for some further processing, we&amp;rsquo;re THEN going to have to remove the square braces in the next stage of processing. Not ideal.&lt;/p&gt;
 
 &lt;p&gt;So we could try this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[1,3].Instances[]| &amp;quot;\(.InstanceId), \(.State.Name)&amp;quot;&#39;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[1,3].Instances[] | &amp;quot;\(.InstanceId), \(.State.Name)&amp;quot;&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This encloses our values in a string, but because we need &lt;em&gt;jq&lt;/em&gt; to see the .InstanceId, etc. we then have to place those inside round braces&amp;hellip;.but, those round braces will be &amp;lsquo;seen&amp;rsquo; by the string, so we need to escape them with a ( \ ) to force the sting not to interpolate them.&lt;/p&gt;
 
 &lt;p&gt;The above command (almost) does what we want. Why almost? Because we&amp;rsquo;ve got the double-quote back again. But we know how to solve that; with the &amp;lsquo;raw&amp;rsquo; flag.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;jq -rc &#39;.Reservations[1,3].Instances[]| &amp;quot;\(.InstanceId), \(.State.Name)&amp;quot;&#39;
+&lt;pre&gt;&lt;code&gt;jq -rc &#39;.Reservations[1,3].Instances[] | &amp;quot;\(.InstanceId), \(.State.Name)&amp;quot;&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code&gt;    i-053667d4e26795541, running
@@ -181,7 +186,7 @@
 
 &lt;p&gt;A final example to round things off for today. Say we ALSO want the private IP address of these instances, with fields separated by a colon ( : ).&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[]| &amp;quot;\(.InstanceId): \(.State.Name): \(.PrivateIpAddress)&amp;quot;&#39;
+&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | &amp;quot;\(.InstanceId): \(.State.Name): \(.PrivateIpAddress)&amp;quot;&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code&gt;i-053667d4e26795541: running: 172.16.2.26
@@ -420,12 +425,13 @@ aws ec2 describe-instances |_jq_&#39;.Reservations[] | keys&#39;
 
 &lt;h2 id=&#34;assumptions&#34;&gt;Assumptions&lt;/h2&gt;
 
+&lt;p&gt;In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.github.io - I&amp;rsquo;ll be pushing from here to github&lt;/p&gt;
+
 &lt;ol&gt;
-&lt;li&gt;Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/
-If not, then you can use hugo to create a new site in ~/somedir as follows&lt;/li&gt;
+&lt;li&gt;Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.github.io - I&amp;rsquo;ll be pushing from here to github&lt;/p&gt;
+&lt;p&gt;If not, then you can use hugo to create a new site in ~/somedir as follows&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;somedir $ hugo new site blog&lt;/p&gt;
@@ -434,7 +440,7 @@ If not, then you can use hugo to create a new site in ~/somedir as follows&lt;/l
 &lt;p&gt;Set up an alias in ~/.bash_aliases to make uploading and deployment easier:&lt;/p&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;alias buildblog=&amp;lsquo;(cd ~/WorkDocs/cloudfundis/myBlog/; hugo -D -d ../cloud-fundis.github.io/); (cd ~/WorkDocs/cloudfundis/cloud-fundis.github.io/ &amp;amp;&amp;amp; git add -A &amp;amp;&amp;amp; git commit -m &amp;ldquo;Blog update&amp;rdquo; &amp;amp;&amp;amp; git push)&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;alias buildblog=&amp;lsquo;(cd ~/WorkDocs/cloudfundis/myBlog/; hugo -d ../cloud-fundis.github.io/); (cd ~/WorkDocs/cloudfundis/cloud-fundis.github.io/ &amp;amp;&amp;amp; git add -A &amp;amp;&amp;amp; git commit -m &amp;ldquo;Blog update&amp;rdquo; &amp;amp;&amp;amp; git push)&amp;rsquo;&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;.bash_aliases is read by .bashrc, so re-sourcing .bashrc sets this up.&lt;/p&gt;

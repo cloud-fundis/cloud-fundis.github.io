@@ -482,12 +482,13 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
 <h2 id="assumptions">Assumptions</h2>
 
+<p>In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.github.io - I&rsquo;ll be pushing from here to github</p>
+
 <ol>
-<li>Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/
-If not, then you can use hugo to create a new site in ~/somedir as follows</li>
+<li>Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/</li>
 </ol>
 
-<p>In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.github.io - I&rsquo;ll be pushing from here to github</p>
+<p>If not, then you can use hugo to create a new site in ~/somedir as follows</p>
 
 <blockquote>
 <p>somedir $ hugo new site blog</p>
@@ -496,7 +497,7 @@ If not, then you can use hugo to create a new site in ~/somedir as follows</li>
 <p>Set up an alias in ~/.bash_aliases to make uploading and deployment easier:</p>
 
 <blockquote>
-<p>alias buildblog=&lsquo;(cd ~/WorkDocs/cloudfundis/myBlog/; hugo -D -d ../cloud-fundis.github.io/); (cd ~/WorkDocs/cloudfundis/cloud-fundis.github.io/ &amp;&amp; git add -A &amp;&amp; git commit -m &ldquo;Blog update&rdquo; &amp;&amp; git push)&rsquo;</p>
+<p>alias buildblog=&lsquo;(cd ~/WorkDocs/cloudfundis/myBlog/; hugo -d ../cloud-fundis.github.io/); (cd ~/WorkDocs/cloudfundis/cloud-fundis.github.io/ &amp;&amp; git add -A &amp;&amp; git commit -m &ldquo;Blog update&rdquo; &amp;&amp; git push)&rsquo;</p>
 </blockquote>
 
 <p>.bash_aliases is read by .bashrc, so re-sourcing .bashrc sets this up.</p>
