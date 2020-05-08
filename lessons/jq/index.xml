@@ -17,8 +17,8 @@
       <pubDate>Thu, 07 May 2020 15:21:37 +0200</pubDate>
       
       <guid>https://cloud-fundis.github.io/lessons/jq/jq3/</guid>
-      <description>Where were we? Last time, we created a striing from each of the outputs we were interested in using a combination of the pipe ( | ), the raw and compact flag and the escaped round braces:
-jq -cr &#39;.Reservations[].Instances[] | &amp;quot;\(.InstanceId): \(.State.Name): \(.PrivateIpAddress)&amp;quot;&#39;  Perhaps we would like to create an file array of the values. This is pretty simple because, in effect what we&amp;rsquo;re doing on the right hand side of the pipe ( | ) is to create a new structure.</description>
+      <description>Where were we? Lesson 7 Creating new structures Last time, we created a string from each of the outputs we were interested in using a combination of the pipe ( | ), the raw and compact flag and string interpolation with round braces:
+jq -cr &#39;.Reservations[].Instances[] | &amp;quot;\(.InstanceId): \(.State.Name): \(.PrivateIpAddress)&amp;quot;&#39;  Perhaps we would like to create an array of the values. This is pretty simple because, in effect what we&amp;rsquo;re doing on the right hand side of the pipe ( | ) is to create a new structure.</description>
     </item>
     
     <item>

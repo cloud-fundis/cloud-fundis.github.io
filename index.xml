@@ -21,12 +21,16 @@
 
 &lt;h1 id=&#34;where-were-we-lessons-jq-jq2&#34;&gt;&lt;a href=&#34;https://cloud-fundis.github.io/lessons/jq/jq2&#34;&gt;Where were we?&lt;/a&gt;&lt;/h1&gt;
 
-&lt;p&gt;Last time, we created a striing from each of the outputs we were interested in using a combination of the pipe ( | ), the raw and compact flag and the escaped round braces:&lt;/p&gt;
+&lt;h2 id=&#34;lesson-7&#34;&gt;Lesson 7&lt;/h2&gt;
+
+&lt;h3 id=&#34;creating-new-structures&#34;&gt;Creating new structures&lt;/h3&gt;
+
+&lt;p&gt;Last time, we created a string from each of the outputs we were interested in using a combination of the pipe ( | ), the raw and compact flag and string interpolation with round braces:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | &amp;quot;\(.InstanceId): \(.State.Name): \(.PrivateIpAddress)&amp;quot;&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Perhaps we would like to create an file array of the values. This is pretty simple because, in effect what we&amp;rsquo;re doing on the right hand side of the pipe ( | ) is to create a new structure. That structure itself could be a string like that above, or it could be an array&lt;/p&gt;
+&lt;p&gt;Perhaps we would like to create an array of the values. This is pretty simple because, in effect what we&amp;rsquo;re doing on the right hand side of the pipe ( | ) is to create a new structure. That structure itself could be a string like that above, or it could be an array&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | [.InstanceId), .State.Name, .PrivateIpAddress]&#39;
 &lt;/code&gt;&lt;/pre&gt;
@@ -39,7 +43,7 @@
 [&amp;quot;i-061b358b9cfc20505&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.1.13&amp;quot;]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;So how about creating a new object in JSON with each element taggeg with a key?&lt;/p&gt;
+&lt;p&gt;So how about creating a new object in JSON with each element tagged with a key?&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | {instance:.InstanceId), state:.State.Name, ip:.PrivateIpAddress}&#39;
 &lt;/code&gt;&lt;/pre&gt;
@@ -59,25 +63,31 @@
 jq: 1 compile error
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The reason for this error was I left out a comma betwwen the state:.State.Name and the ip.PrivateIPAddress. That results in an error in the newly created JSON.&lt;/p&gt;
+&lt;p&gt;The reason for this error was I left out a comma between the &lt;em&gt;state:.State.Name&lt;/em&gt; and the &lt;em&gt;ip.PrivateIPAddress&lt;/em&gt;. That results in an error in the newly created JSON.&lt;/p&gt;
 
-&lt;p&gt;What&amp;rsquo;s cool about this is that, say I would also like to know the state of block storage on the instances that are running&lt;/p&gt;
+&lt;p&gt;What&amp;rsquo;s cool about this is that, I may also like to know the state of block storage on the instances that are launched, and even though I&amp;rsquo;ve not unpacked the BlockDeviceMappings JSON, I can still use it prefectly:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | [.InstanceId), .State.Name, .PrivateIpAddress, .BlockDeviceMappings]&#39;
+&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | [.InstanceId, .State.Name, .PrivateIpAddress, .BlockDeviceMappings]&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;lesson-7&#34;&gt;Lesson 7&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;[&amp;quot;i-053667d4e26795541&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.26&amp;quot;,[{&amp;quot;DeviceName&amp;quot;:&amp;quot;/dev/sda1&amp;quot;,&amp;quot;Ebs&amp;quot;:{&amp;quot;AttachTime&amp;quot;:&amp;quot;2019-06-21T15:24:29.000Z&amp;quot;,&amp;quot;DeleteOnTermination&amp;quot;:true,&amp;quot;Status&amp;quot;:&amp;quot;attached&amp;quot;,&amp;quot;VolumeId&amp;quot;:&amp;quot;vol-05dec31f2e74067b0&amp;quot;}}]]
+[&amp;quot;i-0a775b8c631e8ad27&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.15&amp;quot;,[{&amp;quot;DeviceName&amp;quot;:&amp;quot;/dev/sda1&amp;quot;,&amp;quot;Ebs&amp;quot;:{&amp;quot;AttachTime&amp;quot;:&amp;quot;2019-10-11T15:18:37.000Z&amp;quot;,&amp;quot;DeleteOnTermination&amp;quot;:false,&amp;quot;Status&amp;quot;:&amp;quot;attached&amp;quot;,&amp;quot;VolumeId&amp;quot;:&amp;quot;vol-01ca741dc26d7c0f9&amp;quot;}}]]
+[&amp;quot;i-06e986e85261c838e&amp;quot;,&amp;quot;stopped&amp;quot;,&amp;quot;172.16.1.10&amp;quot;,[{&amp;quot;DeviceName&amp;quot;:&amp;quot;/dev/sda1&amp;quot;,&amp;quot;Ebs&amp;quot;:{&amp;quot;AttachTime&amp;quot;:&amp;quot;2020-03-12T08:17:14.000Z&amp;quot;,&amp;quot;DeleteOnTermination&amp;quot;:false,&amp;quot;Status&amp;quot;:&amp;quot;attached&amp;quot;,&amp;quot;VolumeId&amp;quot;:&amp;quot;vol-01a80015424546dad&amp;quot;}}]]
+[&amp;quot;i-061b358b9cfc20505&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.1.13&amp;quot;,[{&amp;quot;DeviceName&amp;quot;:&amp;quot;/dev/sda1&amp;quot;,&amp;quot;Ebs&amp;quot;:{&amp;quot;AttachTime&amp;quot;:&amp;quot;2020-03-17T10:18:13.000Z&amp;quot;,&amp;quot;DeleteOnTermination&amp;quot;:true,&amp;quot;Status&amp;quot;:&amp;quot;attached&amp;quot;,&amp;quot;VolumeId&amp;quot;:&amp;quot;vol-0610ab7fde8c71943&amp;quot;}}]]
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;selecting-only-running-instances&#34;&gt;Selecting only running instances&lt;/h3&gt;
+&lt;h2 id=&#34;lesson-8&#34;&gt;Lesson 8&lt;/h2&gt;
+
+&lt;h3 id=&#34;selecting-only-running-instances-and-changing-the-order-of-the-output&#34;&gt;Selecting only running instances and changing the order of the output&lt;/h3&gt;
 
 &lt;p&gt;I certainly would like to know what instances are running, filtering out (discarding) those that are stopped.&lt;/p&gt;
 
-&lt;p&gt;Select is the answer, with a note or two&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Select&lt;/strong&gt; is the answer.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[] | select(.State.Name == &amp;quot;running&amp;quot;) | [.LaunchTime, .InstanceId, .State.Name, .PrivateIpAddress]&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Just like in a Unix pipe, one can use select to select what you&amp;rsquo;re after and once you have it, you pipe those results to the output just as before.&lt;/p&gt;
+&lt;p&gt;Just like in a Unix pipe, one can use select to choose what you&amp;rsquo;re after and once you have it, you pipe those results to the output just as before.&lt;/p&gt;
 
 &lt;p&gt;The command above produces only the running instances:&lt;/p&gt;
 
@@ -87,6 +97,93 @@ jq: 1 compile error
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;NOTE: I know that for this customer, instances are started every morning, so adding LaunchTime as the first element of the array shows me that indeed, these instances were launched today.&lt;/p&gt;
+
+&lt;p&gt;In this example (now including the VPC ID), I want to write the output into a sentence:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[] | select(.State.Name == &amp;quot;running&amp;quot;) | &amp;quot;Instance \(.InstanceId) is \(.State.Name) and was launched at \(.LaunchTime). It has \(.PrivateIpAddress) private IP in \(.VpcId)&amp;quot;&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Instance i-053667d4e26795541 is running and was launched at 2020-05-08T03:45:33.000Z. It has 172.16.2.26 private IP in vpc-0c092d552baffc13d&amp;quot;
+&amp;quot;Instance i-0a775b8c631e8ad27 is running and was launched at 2020-05-08T03:50:44.000Z. It has 172.16.2.15 private IP in vpc-0c092d552baffc13d&amp;quot;
+&amp;quot;Instance i-061b358b9cfc20505 is running and was launched at 2020-05-08T03:50:44.000Z. It has 172.16.1.13 private IP in vpc-0c092d552baffc13d&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now that&amp;rsquo;s verbose output!&lt;/p&gt;
+
+&lt;h2 id=&#34;lesson-9&#34;&gt;Lesson 9&lt;/h2&gt;
+
+&lt;h3 id=&#34;using-functions-and-also-stopping-the-pipe&#34;&gt;Using functions (and also stopping the pipe)&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;jq&lt;/em&gt; has a number of useful functions that can be applied to your output. Functions like ascii_downcase, map, join, mktime and many others. Using them though can be a challenge. The examples in the documentation don&amp;rsquo;t help a ton.&lt;/p&gt;
+
+&lt;p&gt;Suppose I wish to change the LaunchTime into UNIX time, how would I do that.&lt;/p&gt;
+
+&lt;p&gt;Certainly it seems like this might work:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;)|.InstanceId, .LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But alas it doesn&amp;rsquo;t and produces this error:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq: error (at &amp;lt;stdin&amp;gt;:551): date &amp;quot;i-053667d4e26795541&amp;quot; does not match format &amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Of course. &lt;em&gt;jq&lt;/em&gt; is piping everything into mktime including the InstanceId; but that&amp;rsquo;s not a time. How do we stop that?&lt;/p&gt;
+
+&lt;p&gt;One way might be to enclose the time in it&amp;rsquo;s own array as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;)|.InstanceId, [.LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That does it, but it&amp;rsquo;s ugly. However it does give you a hint of what&amp;rsquo;s going on here. If you create a new field (in this case, I&amp;rsquo;ve created an array), that seems to stop the pipe in it&amp;rsquo;s tracks. Armed with that knowledge, we could try making it into a string with string interpolation as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;)|.InstanceId, &amp;quot;\(.LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime)&amp;quot;&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s right; we&amp;rsquo;re grabbing the .InstanceId, but the .LaunchTime we&amp;rsquo;re stringifying and pushing that through two functions: string-parse-time (strptime) and mktime to convert it to UNIX time.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;i-053667d4e26795541&amp;quot;
+&amp;quot;1588909533&amp;quot;
+&amp;quot;i-0a775b8c631e8ad27&amp;quot;
+&amp;quot;1588909844&amp;quot;
+&amp;quot;i-061b358b9cfc20505&amp;quot;
+&amp;quot;1588909844&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That has however caused us to lose some of our functionality that we had before (everything on one line for one instance). To solve that, we can put this back into an array as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;)|[.InstanceId, &amp;quot;\(.LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime)&amp;quot;]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Of course, we now get an array back, but this can be solved using the add function (and a further &lt;em&gt;jq&lt;/em&gt; invocation):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;)|[.InstanceId, &amp;quot;\(.LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime)&amp;quot;]&#39;|jq &#39;add&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Notice how the &lt;strong&gt;add&lt;/strong&gt; in a separate &lt;em&gt;jq&lt;/em&gt; adds the elements of the array together:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;i-053667d4e267955411588909533&amp;quot;
+&amp;quot;i-0a775b8c631e8ad271588909844&amp;quot;
+&amp;quot;i-061b358b9cfc205051588909844&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Of course, this is still not ideal because we&amp;rsquo;ve now got a long sting and we would have to work out where the InstanceId stops and the UNIX timestamp starts.&lt;/p&gt;
+
+&lt;p&gt;A final change fixes that:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;) | [.InstanceId, &amp;quot;:&amp;quot;, &amp;quot;\(.LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime)&amp;quot;]&#39; | jq &#39;add&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Including a colon ( : ) as a string in the array definition produces:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;i-053667d4e26795541:1588909533&amp;quot;
+&amp;quot;i-0a775b8c631e8ad27:1588909844&amp;quot;
+&amp;quot;i-061b358b9cfc20505:1588909844&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Adding a raw flag to the second &lt;em&gt;jq&lt;/em&gt; command fixes all the double-quotes too.&lt;/p&gt;
+
+&lt;p&gt;Until next time, happy &lt;em&gt;jq&lt;/em&gt;\ing.&lt;/p&gt;
 - https://cloud-fundis.github.io/lessons/jq/jq3/ - </description>
         </item>
     

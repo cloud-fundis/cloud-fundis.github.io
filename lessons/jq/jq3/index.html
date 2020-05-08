@@ -182,8 +182,108 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 								<li>
-				 					<a href="#selecting-only-running-instances" v-on:click="closeDrawer" id="selecting-only-running-instances-nav">
-										 Selecting only running instances
+				 					<a href="#creating-new-structures" v-on:click="closeDrawer" id="creating-new-structures-nav">
+										 Creating new structures
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-8" v-on:click="closeDrawer" id="lesson-8-nav">
+										 Lesson 8
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#selecting-only-running-instances-and-changing-the-order-of-the-output" v-on:click="closeDrawer" id="selecting-only-running-instances-and-changing-the-order-of-the-output-nav">
+										 Selecting only running instances and changing the order of the output
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-9" v-on:click="closeDrawer" id="lesson-9-nav">
+										 Lesson 9
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#using-functions-and-also-stopping-the-pipe" v-on:click="closeDrawer" id="using-functions-and-also-stopping-the-pipe-nav">
+										 Using functions (and also stopping the pipe)
 									</a>
 								</li>
 						
@@ -324,8 +424,108 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 								<li>
-				 					<a href="#selecting-only-running-instances" v-on:click="closeDrawer" id="selecting-only-running-instances-nav">
-										 Selecting only running instances
+				 					<a href="#creating-new-structures" v-on:click="closeDrawer" id="creating-new-structures-nav">
+										 Creating new structures
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-8" v-on:click="closeDrawer" id="lesson-8-nav">
+										 Lesson 8
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#selecting-only-running-instances-and-changing-the-order-of-the-output" v-on:click="closeDrawer" id="selecting-only-running-instances-and-changing-the-order-of-the-output-nav">
+										 Selecting only running instances and changing the order of the output
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-9" v-on:click="closeDrawer" id="lesson-9-nav">
+										 Lesson 9
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#using-functions-and-also-stopping-the-pipe" v-on:click="closeDrawer" id="using-functions-and-also-stopping-the-pipe-nav">
+										 Using functions (and also stopping the pipe)
 									</a>
 								</li>
 						
@@ -412,12 +612,16 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
 <h1 id="where-were-we-lessons-jq-jq2"><a href="/lessons/jq/jq2">Where were we?</a></h1>
 
-<p>Last time, we created a striing from each of the outputs we were interested in using a combination of the pipe ( | ), the raw and compact flag and the escaped round braces:</p>
+<h2 id="lesson-7">Lesson 7</h2>
+
+<h3 id="creating-new-structures">Creating new structures</h3>
+
+<p>Last time, we created a string from each of the outputs we were interested in using a combination of the pipe ( | ), the raw and compact flag and string interpolation with round braces:</p>
 
 <pre><code>jq -cr '.Reservations[].Instances[] | &quot;\(.InstanceId): \(.State.Name): \(.PrivateIpAddress)&quot;'
 </code></pre>
 
-<p>Perhaps we would like to create an file array of the values. This is pretty simple because, in effect what we&rsquo;re doing on the right hand side of the pipe ( | ) is to create a new structure. That structure itself could be a string like that above, or it could be an array</p>
+<p>Perhaps we would like to create an array of the values. This is pretty simple because, in effect what we&rsquo;re doing on the right hand side of the pipe ( | ) is to create a new structure. That structure itself could be a string like that above, or it could be an array</p>
 
 <pre><code>jq -cr '.Reservations[].Instances[] | [.InstanceId), .State.Name, .PrivateIpAddress]'
 </code></pre>
@@ -430,7 +634,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 [&quot;i-061b358b9cfc20505&quot;,&quot;running&quot;,&quot;172.16.1.13&quot;]
 </code></pre>
 
-<p>So how about creating a new object in JSON with each element taggeg with a key?</p>
+<p>So how about creating a new object in JSON with each element tagged with a key?</p>
 
 <pre><code>jq -cr '.Reservations[].Instances[] | {instance:.InstanceId), state:.State.Name, ip:.PrivateIpAddress}'
 </code></pre>
@@ -450,25 +654,31 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 jq: 1 compile error
 </code></pre>
 
-<p>The reason for this error was I left out a comma betwwen the state:.State.Name and the ip.PrivateIPAddress. That results in an error in the newly created JSON.</p>
+<p>The reason for this error was I left out a comma between the <em>state:.State.Name</em> and the <em>ip.PrivateIPAddress</em>. That results in an error in the newly created JSON.</p>
 
-<p>What&rsquo;s cool about this is that, say I would also like to know the state of block storage on the instances that are running</p>
+<p>What&rsquo;s cool about this is that, I may also like to know the state of block storage on the instances that are launched, and even though I&rsquo;ve not unpacked the BlockDeviceMappings JSON, I can still use it prefectly:</p>
 
-<pre><code>jq -cr '.Reservations[].Instances[] | [.InstanceId), .State.Name, .PrivateIpAddress, .BlockDeviceMappings]'
+<pre><code>jq -cr '.Reservations[].Instances[] | [.InstanceId, .State.Name, .PrivateIpAddress, .BlockDeviceMappings]'
 </code></pre>
 
-<h2 id="lesson-7">Lesson 7</h2>
+<pre><code>[&quot;i-053667d4e26795541&quot;,&quot;running&quot;,&quot;172.16.2.26&quot;,[{&quot;DeviceName&quot;:&quot;/dev/sda1&quot;,&quot;Ebs&quot;:{&quot;AttachTime&quot;:&quot;2019-06-21T15:24:29.000Z&quot;,&quot;DeleteOnTermination&quot;:true,&quot;Status&quot;:&quot;attached&quot;,&quot;VolumeId&quot;:&quot;vol-05dec31f2e74067b0&quot;}}]]
+[&quot;i-0a775b8c631e8ad27&quot;,&quot;running&quot;,&quot;172.16.2.15&quot;,[{&quot;DeviceName&quot;:&quot;/dev/sda1&quot;,&quot;Ebs&quot;:{&quot;AttachTime&quot;:&quot;2019-10-11T15:18:37.000Z&quot;,&quot;DeleteOnTermination&quot;:false,&quot;Status&quot;:&quot;attached&quot;,&quot;VolumeId&quot;:&quot;vol-01ca741dc26d7c0f9&quot;}}]]
+[&quot;i-06e986e85261c838e&quot;,&quot;stopped&quot;,&quot;172.16.1.10&quot;,[{&quot;DeviceName&quot;:&quot;/dev/sda1&quot;,&quot;Ebs&quot;:{&quot;AttachTime&quot;:&quot;2020-03-12T08:17:14.000Z&quot;,&quot;DeleteOnTermination&quot;:false,&quot;Status&quot;:&quot;attached&quot;,&quot;VolumeId&quot;:&quot;vol-01a80015424546dad&quot;}}]]
+[&quot;i-061b358b9cfc20505&quot;,&quot;running&quot;,&quot;172.16.1.13&quot;,[{&quot;DeviceName&quot;:&quot;/dev/sda1&quot;,&quot;Ebs&quot;:{&quot;AttachTime&quot;:&quot;2020-03-17T10:18:13.000Z&quot;,&quot;DeleteOnTermination&quot;:true,&quot;Status&quot;:&quot;attached&quot;,&quot;VolumeId&quot;:&quot;vol-0610ab7fde8c71943&quot;}}]]
+</code></pre>
 
-<h3 id="selecting-only-running-instances">Selecting only running instances</h3>
+<h2 id="lesson-8">Lesson 8</h2>
+
+<h3 id="selecting-only-running-instances-and-changing-the-order-of-the-output">Selecting only running instances and changing the order of the output</h3>
 
 <p>I certainly would like to know what instances are running, filtering out (discarding) those that are stopped.</p>
 
-<p>Select is the answer, with a note or two</p>
+<p><strong>Select</strong> is the answer.</p>
 
 <pre><code>jq -c '.Reservations[].Instances[] | select(.State.Name == &quot;running&quot;) | [.LaunchTime, .InstanceId, .State.Name, .PrivateIpAddress]'
 </code></pre>
 
-<p>Just like in a Unix pipe, one can use select to select what you&rsquo;re after and once you have it, you pipe those results to the output just as before.</p>
+<p>Just like in a Unix pipe, one can use select to choose what you&rsquo;re after and once you have it, you pipe those results to the output just as before.</p>
 
 <p>The command above produces only the running instances:</p>
 
@@ -478,6 +688,93 @@ jq: 1 compile error
 </code></pre>
 
 <p>NOTE: I know that for this customer, instances are started every morning, so adding LaunchTime as the first element of the array shows me that indeed, these instances were launched today.</p>
+
+<p>In this example (now including the VPC ID), I want to write the output into a sentence:</p>
+
+<pre><code>jq -c '.Reservations[].Instances[] | select(.State.Name == &quot;running&quot;) | &quot;Instance \(.InstanceId) is \(.State.Name) and was launched at \(.LaunchTime). It has \(.PrivateIpAddress) private IP in \(.VpcId)&quot;'
+</code></pre>
+
+<pre><code>&quot;Instance i-053667d4e26795541 is running and was launched at 2020-05-08T03:45:33.000Z. It has 172.16.2.26 private IP in vpc-0c092d552baffc13d&quot;
+&quot;Instance i-0a775b8c631e8ad27 is running and was launched at 2020-05-08T03:50:44.000Z. It has 172.16.2.15 private IP in vpc-0c092d552baffc13d&quot;
+&quot;Instance i-061b358b9cfc20505 is running and was launched at 2020-05-08T03:50:44.000Z. It has 172.16.1.13 private IP in vpc-0c092d552baffc13d&quot;
+</code></pre>
+
+<p>Now that&rsquo;s verbose output!</p>
+
+<h2 id="lesson-9">Lesson 9</h2>
+
+<h3 id="using-functions-and-also-stopping-the-pipe">Using functions (and also stopping the pipe)</h3>
+
+<p><em>jq</em> has a number of useful functions that can be applied to your output. Functions like ascii_downcase, map, join, mktime and many others. Using them though can be a challenge. The examples in the documentation don&rsquo;t help a ton.</p>
+
+<p>Suppose I wish to change the LaunchTime into UNIX time, how would I do that.</p>
+
+<p>Certainly it seems like this might work:</p>
+
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;)|.InstanceId, .LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime'
+</code></pre>
+
+<p>But alas it doesn&rsquo;t and produces this error:</p>
+
+<pre><code>jq: error (at &lt;stdin&gt;:551): date &quot;i-053667d4e26795541&quot; does not match format &quot;%Y-%m-%dT%H:%M:%S.000Z&quot;
+</code></pre>
+
+<p>Of course. <em>jq</em> is piping everything into mktime including the InstanceId; but that&rsquo;s not a time. How do we stop that?</p>
+
+<p>One way might be to enclose the time in it&rsquo;s own array as follows:</p>
+
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;)|.InstanceId, [.LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime]'
+</code></pre>
+
+<p>That does it, but it&rsquo;s ugly. However it does give you a hint of what&rsquo;s going on here. If you create a new field (in this case, I&rsquo;ve created an array), that seems to stop the pipe in it&rsquo;s tracks. Armed with that knowledge, we could try making it into a string with string interpolation as follows:</p>
+
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;)|.InstanceId, &quot;\(.LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime)&quot;'
+</code></pre>
+
+<p>That&rsquo;s right; we&rsquo;re grabbing the .InstanceId, but the .LaunchTime we&rsquo;re stringifying and pushing that through two functions: string-parse-time (strptime) and mktime to convert it to UNIX time.</p>
+
+<pre><code>&quot;i-053667d4e26795541&quot;
+&quot;1588909533&quot;
+&quot;i-0a775b8c631e8ad27&quot;
+&quot;1588909844&quot;
+&quot;i-061b358b9cfc20505&quot;
+&quot;1588909844&quot;
+</code></pre>
+
+<p>That has however caused us to lose some of our functionality that we had before (everything on one line for one instance). To solve that, we can put this back into an array as follows:</p>
+
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;)|[.InstanceId, &quot;\(.LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime)&quot;]'
+</code></pre>
+
+<p>Of course, we now get an array back, but this can be solved using the add function (and a further <em>jq</em> invocation):</p>
+
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;)|[.InstanceId, &quot;\(.LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime)&quot;]'|jq 'add'
+</code></pre>
+
+<p>Notice how the <strong>add</strong> in a separate <em>jq</em> adds the elements of the array together:</p>
+
+<pre><code>&quot;i-053667d4e267955411588909533&quot;
+&quot;i-0a775b8c631e8ad271588909844&quot;
+&quot;i-061b358b9cfc205051588909844&quot;
+</code></pre>
+
+<p>Of course, this is still not ideal because we&rsquo;ve now got a long sting and we would have to work out where the InstanceId stops and the UNIX timestamp starts.</p>
+
+<p>A final change fixes that:</p>
+
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;) | [.InstanceId, &quot;:&quot;, &quot;\(.LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime)&quot;]' | jq 'add'
+</code></pre>
+
+<p>Including a colon ( : ) as a string in the array definition produces:</p>
+
+<pre><code>&quot;i-053667d4e26795541:1588909533&quot;
+&quot;i-0a775b8c631e8ad27:1588909844&quot;
+&quot;i-061b358b9cfc20505:1588909844&quot;
+</code></pre>
+
+<p>Adding a raw flag to the second <em>jq</em> command fixes all the double-quotes too.</p>
+
+<p>Until next time, happy <em>jq</em>\ing.</p>
 
                     
                     <HR width="100%" id="EOF">
