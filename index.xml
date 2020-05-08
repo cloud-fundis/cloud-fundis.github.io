@@ -5,9 +5,90 @@
     <description>Recent content on because there are just too many things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 05 May 2020 14:41:29 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 07 May 2020 15:21:37 +0200</lastBuildDate>
     
         <atom:link href="https://cloud-fundis.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>jq getting interesting</title>
+        <link>https://cloud-fundis.github.io/lessons/jq/jq3/</link>
+        <pubDate>Thu, 07 May 2020 15:21:37 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/lessons/jq/jq3/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq/jq3/ -
+
+&lt;h1 id=&#34;where-were-we-lessons-jq-jq2&#34;&gt;&lt;a href=&#34;https://cloud-fundis.github.io/lessons/jq/jq2&#34;&gt;Where were we?&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;Last time, we created a striing from each of the outputs we were interested in using a combination of the pipe ( | ), the raw and compact flag and the escaped round braces:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | &amp;quot;\(.InstanceId): \(.State.Name): \(.PrivateIpAddress)&amp;quot;&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Perhaps we would like to create an file array of the values. This is pretty simple because, in effect what we&amp;rsquo;re doing on the right hand side of the pipe ( | ) is to create a new structure. That structure itself could be a string like that above, or it could be an array&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | [.InstanceId), .State.Name, .PrivateIpAddress]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Not when you do this, it seems to ignore the raw ( -r ) flag. That may seem strange, but in fact creating an array in JSON means that elements of the array HAVE to use double quotes ( &amp;ldquo; ) and must be separated by commas ( , ). That&amp;rsquo;s JSON.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[&amp;quot;i-053667d4e26795541&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.26&amp;quot;]
+[&amp;quot;i-0a775b8c631e8ad27&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.15&amp;quot;]
+[&amp;quot;i-06e986e85261c838e&amp;quot;,&amp;quot;stopped&amp;quot;,&amp;quot;172.16.1.10&amp;quot;]
+[&amp;quot;i-061b358b9cfc20505&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.1.13&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So how about creating a new object in JSON with each element taggeg with a key?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | {instance:.InstanceId), state:.State.Name, ip:.PrivateIpAddress}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;produces&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{&amp;quot;instance&amp;quot;:&amp;quot;i-053667d4e26795541&amp;quot;,&amp;quot;state&amp;quot;:&amp;quot;running&amp;quot;,&amp;quot;ip&amp;quot;:&amp;quot;172.16.2.26&amp;quot;}
+{&amp;quot;instance&amp;quot;:&amp;quot;i-0a775b8c631e8ad27&amp;quot;,&amp;quot;state&amp;quot;:&amp;quot;running&amp;quot;,&amp;quot;ip&amp;quot;:&amp;quot;172.16.2.15&amp;quot;}
+{&amp;quot;instance&amp;quot;:&amp;quot;i-06e986e85261c838e&amp;quot;,&amp;quot;state&amp;quot;:&amp;quot;stopped&amp;quot;,&amp;quot;ip&amp;quot;:&amp;quot;172.16.1.10&amp;quot;}
+{&amp;quot;instance&amp;quot;:&amp;quot;i-061b358b9cfc20505&amp;quot;,&amp;quot;state&amp;quot;:&amp;quot;running&amp;quot;,&amp;quot;ip&amp;quot;:&amp;quot;172.16.1.13&amp;quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;NOTE: Worth noting here is that if I leave out a comma ( , ) between each element, this produces an error because that&amp;rsquo;s invalid JSON.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq: error: syntax error, unexpected IDENT, expecting &#39;}&#39; (Unix shell quoting issues?) at &amp;lt;top-level&amp;gt;, line 1:
+.Reservations[].Instances[]|  {instance:.InstanceId,     state:.State.Name ip:.PrivateIpAddress}                                                                           
+jq: 1 compile error
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The reason for this error was I left out a comma betwwen the state:.State.Name and the ip.PrivateIPAddress. That results in an error in the newly created JSON.&lt;/p&gt;
+
+&lt;p&gt;What&amp;rsquo;s cool about this is that, say I would also like to know the state of block storage on the instances that are running&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | [.InstanceId), .State.Name, .PrivateIpAddress, .BlockDeviceMappings]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;lesson-7&#34;&gt;Lesson 7&lt;/h2&gt;
+
+&lt;h3 id=&#34;selecting-only-running-instances&#34;&gt;Selecting only running instances&lt;/h3&gt;
+
+&lt;p&gt;I certainly would like to know what instances are running, filtering out (discarding) those that are stopped.&lt;/p&gt;
+
+&lt;p&gt;Select is the answer, with a note or two&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[] | select(.State.Name == &amp;quot;running&amp;quot;) | [.LaunchTime, .InstanceId, .State.Name, .PrivateIpAddress]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Just like in a Unix pipe, one can use select to select what you&amp;rsquo;re after and once you have it, you pipe those results to the output just as before.&lt;/p&gt;
+
+&lt;p&gt;The command above produces only the running instances:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[&amp;quot;2020-05-07T03:45:33.000Z&amp;quot;,&amp;quot;i-053667d4e26795541&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.26&amp;quot;]
+[&amp;quot;2020-05-07T03:50:45.000Z&amp;quot;,&amp;quot;i-0a775b8c631e8ad27&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.15&amp;quot;]
+[&amp;quot;2020-05-07T03:50:45.000Z&amp;quot;,&amp;quot;i-061b358b9cfc20505&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.1.13&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;NOTE: I know that for this customer, instances are started every morning, so adding LaunchTime as the first element of the array shows me that indeed, these instances were launched today.&lt;/p&gt;
+- https://cloud-fundis.github.io/lessons/jq/jq3/ - </description>
+        </item>
     
     
     
@@ -171,7 +252,7 @@
 &lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[1,3].Instances[] | &amp;quot;\(.InstanceId), \(.State.Name)&amp;quot;&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This encloses our values in a string, but because we need &lt;em&gt;jq&lt;/em&gt; to see the .InstanceId, etc. we then have to place those inside round braces&amp;hellip;.but, those round braces will be &amp;lsquo;seen&amp;rsquo; by the string, so we need to escape them with a ( \ ) to force the sting not to interpolate them.&lt;/p&gt;
+&lt;p&gt;This encloses our values as a string. In &lt;em&gt;jq&lt;/em&gt; documentation, this is discussed under String interpolation. When we place our fields inside round braces, escaping the opening brace it forces &lt;em&gt;jq&lt;/em&gt; to interpolate them as a string.&lt;/p&gt;
 
 &lt;p&gt;The above command (almost) does what we want. Why almost? Because we&amp;rsquo;ve got the double-quote back again. But we know how to solve that; with the &amp;lsquo;raw&amp;rsquo; flag.&lt;/p&gt;
 
