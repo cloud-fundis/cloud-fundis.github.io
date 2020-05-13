@@ -5,14 +5,277 @@
     <description>Recent content on because there are just too many things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 07 May 2020 15:21:37 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 12 May 2020 16:20:39 +0200</lastBuildDate>
     
         <atom:link href="https://cloud-fundis.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
-        <title>jq getting interesting</title>
+        <title>lessons 10 through 12</title>
+        <link>https://cloud-fundis.github.io/lessons/jq/jq4/</link>
+        <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/lessons/jq/jq4/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq/jq4/ -
+
+&lt;h1 id=&#34;last-time-on-jq-lessons-jq-jq3&#34;&gt;&lt;a href=&#34;https://cloud-fundis.github.io/lessons/jq/jq3&#34;&gt;last time on jq&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;Another way of producing a text list of running instances may be to push the fields we want though another &lt;em&gt;jq&lt;/em&gt; function - join.&lt;/p&gt;
+
+&lt;h2 id=&#34;lesson-10&#34;&gt;Lesson 10&lt;/h2&gt;
+
+&lt;h3 id=&#34;using-functions&#34;&gt;Using functions&lt;/h3&gt;
+
+&lt;p&gt;There are a number of useful functions in &lt;em&gt;jq&lt;/em&gt; that will make life a little easier. Let&amp;rsquo;s explore some of them.&lt;/p&gt;
+
+&lt;h4 id=&#34;join&#34;&gt;join&lt;/h4&gt;
+
+&lt;p&gt;A function to join an array into a string. Whereas before we created a string using String iterpolation, we could simply use join.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;) | [.LaunchTime, .InstanceId, .State.Name, .PrivateIpAddress, .BlockDeviceMappings[].Ebs.Status, .BlockDeviceMappings[].DeviceName, .BlockDeviceMappings[].Ebs.VolumeId]| join(&amp;quot;,&amp;quot;)&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;produces a nice string as before, just a little more easily. You should note though that the fields in this example are all in a single string; not multiple strings as before.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;2020-05-13T03:45:33.000Z,i-053667d4e26795541,running,172.16.2.26,attached,/dev/sda1,vol-05dec31f2e74067b0&amp;quot;
+&amp;quot;2020-05-13T03:50:44.000Z,i-0a775b8c631e8ad27,running,172.16.2.15,attached,/dev/sda1,vol-01ca741dc26d7c0f9&amp;quot;
+&amp;quot;2020-05-13T03:50:44.000Z,i-061b358b9cfc20505,running,172.16.1.13,attached,/dev/sda1,vol-0610ab7fde8c71943&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Notice too, that in order to use join, we need to supply it with an array. Hence my fields are enclosed in square ( [ ] ) braces turning the output into an array. This array is consumed by the &lt;em&gt;join&lt;/em&gt; function.&lt;/p&gt;
+
+&lt;h4 id=&#34;contains&#34;&gt;contains&lt;/h4&gt;
+
+&lt;p&gt;To change tack slightly, we look at the events rules that have been configured. Event rules are set up in the CloudWatch console but are referred to as events in the AWS CLI.&lt;/p&gt;
+
+&lt;p&gt;Suppose I have a number of rules, and I only want to select those that contain the description &amp;ldquo;Stop&amp;rdquo;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws events list-rules | jq &#39;.Rules[]|select(.Description|contains(&amp;quot;Stop&amp;quot;))&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here we&amp;rsquo;re using two functions: &lt;em&gt;select&lt;/em&gt; and &lt;em&gt;contains&lt;/em&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;Name&amp;quot;: &amp;quot;STOP_client_servers&amp;quot;,
+  &amp;quot;Arn&amp;quot;: &amp;quot;arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/STOP_client_servers&amp;quot;,
+  &amp;quot;State&amp;quot;: &amp;quot;ENABLED&amp;quot;,
+  &amp;quot;Description&amp;quot;: &amp;quot;Stop servers that are prod for client servers: CRM, OpenVPN server&amp;quot;,
+  &amp;quot;ScheduleExpression&amp;quot;: &amp;quot;cron(30 15 ? * 2-6 *)&amp;quot;,
+  &amp;quot;EventBusName&amp;quot;: &amp;quot;default&amp;quot;
+}
+{
+  &amp;quot;Name&amp;quot;: &amp;quot;Stop_client_DC01&amp;quot;,
+  &amp;quot;Arn&amp;quot;: &amp;quot;arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/Stop_client_DC01&amp;quot;,
+  &amp;quot;State&amp;quot;: &amp;quot;ENABLED&amp;quot;,
+  &amp;quot;Description&amp;quot;: &amp;quot;Stop the client Active Domain Controller when not being used&amp;quot;,
+  &amp;quot;ScheduleExpression&amp;quot;: &amp;quot;cron(40 15 ? * 2-6 *)&amp;quot;,
+  &amp;quot;EventBusName&amp;quot;: &amp;quot;default&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;sub&#34;&gt;sub&lt;/h4&gt;
+
+&lt;p&gt;Substitute is useful for strings; substituting &lt;em&gt;this&lt;/em&gt; for &lt;em&gt;that&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;In the following one, I want to substitue x&amp;rsquo;s for the customer account number from the .Arn and I also want to remove the customer name from all .Descriptions and .Names&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -rc &#39;.Rules[]|[.Name, .Arn, .State, .Description]|join(&amp;quot;,&amp;quot;)|sub(&amp;quot;CDLI&amp;quot;;&amp;quot;client&amp;quot;;&amp;quot;g&amp;quot;)|sub(&amp;quot;182306120021&amp;quot;;&amp;quot;xxxxxxxxxxxx&amp;quot;;&amp;quot;g&amp;quot;)&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;START_client_servers,arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/START_client_servers,ENABLED,Start client prod servers: CRM &amp;amp; OpenVPN server
+STOP_client_servers,arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/STOP_client_servers,ENABLED,Stop servers that are prod for client servers: CRM, OpenVPN server
+Start_client_DC01,arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/Start_client_DC01,ENABLED,Start the client Active Domain Controller
+Stop_client_DC01,arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/Stop_client_DC01,ENABLED,Stop the client Active Domain Controller when not being used
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Of course these things can get really difficult to read as they grow.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq -rc &#39;.Rules[]|select(.Description|contains(&amp;quot;Stop&amp;quot;))|[.Name, .Arn, .State, .Description]|join(&amp;quot;,&amp;quot;)|sub(&amp;quot;CDLI&amp;quot;;&amp;quot;client&amp;quot;;&amp;quot;g&amp;quot;)|sub(&amp;quot;182306120021&amp;quot;;&amp;quot;xxxxxxxxxxxx&amp;quot;;&amp;quot;g&amp;quot;)&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here we&amp;rsquo;re combining the select and using sub twice as above.&lt;/p&gt;
+
+&lt;h2 id=&#34;lesson-11&#34;&gt;Lesson 11&lt;/h2&gt;
+
+&lt;h3 id=&#34;reading-your-jq-from-a-file&#34;&gt;Reading your &lt;em&gt;jq&lt;/em&gt; from a file&lt;/h3&gt;
+
+&lt;p&gt;To make the &lt;em&gt;jq&lt;/em&gt; script easier to manage (and of course reuse), it&amp;rsquo;s often worth putting the script in a file and calling it using the &lt;em&gt;from-file&lt;/em&gt; ( -f ) flag. What makes this great is that now you can use newlines and set out your &lt;em&gt;jq&lt;/em&gt; in a much easier-to-read format.&lt;/p&gt;
+
+&lt;p&gt;Note however, that when doing this, you&amp;rsquo;ll need to leave off the single quotes ( &amp;lsquo; ) around your &lt;em&gt;jq&lt;/em&gt; command.&lt;/p&gt;
+
+&lt;p&gt;Re-writing the above &lt;em&gt;jq&lt;/em&gt; it would look like this in our file test.jq&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.Rules[]
+    | select(.Description
+        | contains(&amp;quot;Stop&amp;quot;))
+    | [.Name, .Arn, .State, .Description]
+    | join(&amp;quot;,&amp;quot;)
+    | sub(&amp;quot;CDLI&amp;quot;;&amp;quot;client&amp;quot;;&amp;quot;g&amp;quot;)
+    | sub(&amp;quot;182306120021&amp;quot;;&amp;quot;xxxxxxxxxxxx&amp;quot;;&amp;quot;g&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now running &lt;em&gt;jq&lt;/em&gt; is easier with:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws events list-rules | jq -f test.jq
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What makes this even more appealing is that you can use comments (everything after a # is a comment) in your &lt;em&gt;jq&lt;/em&gt; script now as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Grab the details of stop events from the aws event log
+# use as: aws events list-rules | jq -f &amp;lt;filename.jq&amp;gt;
+
+.Rules[]
+    | select(.Description
+        | contains(&amp;quot;Stop&amp;quot;))                     # From the rules, only select those where .Description contains the word &amp;quot;Stop&amp;quot;
+    | [.Name, .Arn, .State, .Description]       # Keep only the .Name, .Arn, .State and .Description. Remember to make as an array
+    | join(&amp;quot;,&amp;quot;)                                 # Join the array with commas
+    | sub(&amp;quot;CDLI&amp;quot;;&amp;quot;client&amp;quot;;&amp;quot;g&amp;quot;)                  # Remove the client name replacing with &amp;quot;client&amp;quot;
+    | sub(&amp;quot;182306120021&amp;quot;;&amp;quot;xxxxxxxxxxxx&amp;quot;;&amp;quot;g&amp;quot;)    # Remove the account number from .Arn
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;From this you will notice that white-space has no effect on the expression. This means we can indent the various parts of the &lt;em&gt;jq&lt;/em&gt; expression to make it even more legible. Additionally we like to put a comment at the top of the file to give&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;some indication of how to use this &lt;em&gt;jq&lt;/em&gt; expression and&lt;/li&gt;
+&lt;li&gt;to give details of what it does&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Finally, it may be worth naming the files intelligently. While you may think you&amp;rsquo;ll never use this &amp;ldquo;once-off&amp;rdquo; expression again, this is almost certainly not true - you will reuse it. Or at least you&amp;rsquo;ll remember that you used something in it that made sense at the time.&lt;/p&gt;
+
+&lt;p&gt;We name our files like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;events.rules.jq
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and store them in a directory structure similar to our shell, Python, Scala and other scripts. Spending a little time in the beginning will save you oodles of time later.&lt;/p&gt;
+
+&lt;p&gt;For the rest of the series we&amp;rsquo;ll be using &lt;em&gt;jq&lt;/em&gt; scripts in this form: as if they&amp;rsquo;re part of a file with comments.&lt;/p&gt;
+
+&lt;h2 id=&#34;lesson-12&#34;&gt;Lesson 12&lt;/h2&gt;
+
+&lt;h3 id=&#34;if-then-else&#34;&gt;If-then-else&lt;/h3&gt;
+
+&lt;p&gt;Of course every language has boolean conditionals; &lt;em&gt;jq&lt;/em&gt; is no exception.&lt;/p&gt;
+
+&lt;p&gt;Where we&amp;rsquo;ve found this most useful is in switching a variable, from say &amp;ldquo;done: False&amp;rdquo; to &amp;ldquo;done: True&amp;rdquo;. Most recently we had a DynamoDB table where we had just such a key:value pair. Wanting to switch all entries from &amp;ldquo;shouldRun: False&amp;rdquo; to &amp;ldquo;shouldRun: True&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Before we get there however, let&amp;rsquo;s take a step back. Using if-then-else-end to mark instances that are in a &amp;lsquo;running&amp;rsquo; state with an &amp;lsquo;R&amp;rsquo; while instances in a &amp;lsquo;stopped&amp;rsquo; state with an &amp;rsquo;S&amp;rsquo;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.Reservations[].Instances[]
+    | select(.State.Name == &amp;quot;running&amp;quot; or .State.Name == &amp;quot;stopped&amp;quot;)
+    | [.LaunchTime, .InstanceId, if .State.Name == &amp;quot;running&amp;quot; then &amp;quot;R&amp;quot; else &amp;quot;S&amp;quot; end, 
+       .PrivateIpAddress, 
+       ( .BlockDeviceMappings[]
+            | .DeviceName, .Ebs.Status, .Ebs.VolumeId ) ]   # Notice how I split these things up to make it
+                                                            # more meaningful
+    | join(&amp;quot;,&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, we&amp;rsquo;ve jumped ahead here a bit showing multiple things at once. Let&amp;rsquo;s tackle these things one at a time.&lt;/p&gt;
+
+&lt;p&gt;First notice the round braces ( () ) around the &lt;em&gt;.BlockDeviceMappings&lt;/em&gt; array. This allows us to treat the &lt;em&gt;.BlockDeviceMappings&lt;/em&gt; almost independently of the other JSON objects in the array we&amp;rsquo;re building.&lt;/p&gt;
+
+&lt;p&gt;As an alternative to using the round braces, we could have done this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        ...
+           .BlockDeviceMappings[].DeviceName,
+           .BlockDeviceMappings[].Ebs.Status,
+           .BlockDeviceMappings[].Ebs.VolumeId 
+        ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;but that&amp;rsquo;s just so verbose. Instead enclosing &lt;em&gt;.BlockDeviceMappings&lt;/em&gt; inside the braces and then applying a pipe to it&amp;rsquo;s output, thereby selecting only the keys we&amp;rsquo;re after.&lt;/p&gt;
+
+&lt;p&gt;So much nicer.&lt;/p&gt;
+
+&lt;p&gt;Comments add a lot of value, expecially later when you come back to try and figure out what you were up to. Note here that because white-space is ignored, we can run comments over multiple lines. Very handy indeed.&lt;/p&gt;
+
+&lt;p&gt;Finally the if statement&lt;/p&gt;
+
+&lt;p&gt;The way this works is that there must be an &lt;em&gt;if - then - else - end&lt;/em&gt;. You cannot leave off the else or the end.&lt;/p&gt;
+
+&lt;p&gt;In this case, we&amp;rsquo;re testing whether the &lt;em&gt;.State.Name&lt;/em&gt; is &amp;ldquo;running&amp;rdquo; and if it is, replace the current &lt;em&gt;.State.Name&lt;/em&gt; with an &amp;ldquo;R&amp;rdquo;, otherwise I replace it with an &amp;ldquo;S&amp;rdquo;. Notice how to include this in the list as if it&amp;rsquo;s a regular element.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;2020-05-13T03:45:33.000Z,i-053667d4e26795541,R,172.16.2.26,/dev/sda1,attached,vol-05dec31f2e74067b0&amp;quot;
+&amp;quot;2020-05-13T03:50:44.000Z,i-0a775b8c631e8ad27,R,172.16.2.15,/dev/sda1,attached,vol-01ca741dc26d7c0f9&amp;quot;
+&amp;quot;2020-04-23T12:37:54.000Z,i-06e986e85261c838e,S,172.16.1.10,/dev/sda1,attached,vol-01a80015424546dad&amp;quot;
+&amp;quot;2020-05-13T03:50:44.000Z,i-061b358b9cfc20505,R,172.16.1.13,/dev/sda1,attached,vol-0610ab7fde8c71943&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Exactly what we&amp;rsquo;re after.&lt;/p&gt;
+
+&lt;p&gt;For completeness, we&amp;rsquo;ve called this file running.jq and placed it in the directory:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;../programming/jq/aws/
+├── ec2
+│   └── running.jq          &amp;lt;----- here it is...
+└── events
+    └── events.rules.jq
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and call it like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances --profile cust --region eu-west-1 | jq -f ../programming/jq/aws/ec2/running.jq
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Of course we promised to show you how we change &amp;ldquo;shouldRun: False&amp;rdquo; to &amp;ldquo;shouldRun: True&amp;rdquo; in the DynamoDB table. We&amp;rsquo;ve done this in steps, but of course you could do it all in a single long command line. :-)&lt;/p&gt;
+
+&lt;p&gt;First dump the table to a JSON file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws dynamodb get-item --table-name scriptTable --key &amp;quot;{\&amp;quot;scriptName\&amp;quot;: {\&amp;quot;S\&amp;quot;: \&amp;quot;message_table\&amp;quot;}}&amp;quot; --region eu-west-1 | jq -j &#39;.&#39; &amp;gt; message_table.getitem
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This yield a file for the table looking like this (truncated for brevity):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+    &amp;quot;Item&amp;quot;: {
+        &amp;quot;lastRun&amp;quot;: {
+            &amp;quot;N&amp;quot;: &amp;quot;0&amp;quot;
+        }, 
+        &amp;quot;shouldRun&amp;quot;: {
+            &amp;quot;BOOL&amp;quot;: false
+        }, 
+        &amp;quot;startAt&amp;quot;: {
+            &amp;quot;N&amp;quot;: &amp;quot;0&amp;quot;
+        }, 
+        &amp;quot;description&amp;quot;: {
+            &amp;quot;S&amp;quot;: &amp;quot;A script to extract data from the message table on DB&amp;quot;
+        }, 
+        &amp;quot;lambda&amp;quot;: {
+            &amp;quot;S&amp;quot;: &amp;quot;livyLambda&amp;quot;
+        }, 
+        &amp;quot;clusterID&amp;quot;: {
+            &amp;quot;S&amp;quot;: &amp;quot;j-2EIPAI8VW80O&amp;quot;
+        }, 
+    ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We want to switch the &amp;ldquo;false&amp;rdquo; in &lt;em&gt;shouldRun&lt;/em&gt; to &amp;ldquo;true&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;Now we can apply a &lt;em&gt;jq&lt;/em&gt; expression to do that:&lt;/p&gt;
+
+&lt;p&gt;jq &amp;ldquo;if ( .Item.shouldRun ) then .Item.shouldRun={\&amp;ldquo;BOOL\&amp;rdquo;: true } else . end&amp;rdquo; message_table.getitem &amp;gt; message_table.putitem&lt;/p&gt;
+
+&lt;p&gt;Taking the resulting file and pushing that back to DynamoDB will do what we&amp;rsquo;re after:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jq &#39;.Item&#39; message_table.putitem &amp;gt; new.json &amp;amp;&amp;amp; aws dynamodb put-item --table-name scriptTable --item file:///home/hadoop/new.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Done. Your DynamoDB table has been updated with the &amp;ldquo;shouldRun&amp;rdquo; set to True.&lt;/p&gt;
+
+&lt;p&gt;As easy as that.&lt;/p&gt;
+
+&lt;p&gt;Tjoef-tjaf.&lt;/p&gt;
+
+&lt;p&gt;Thanks to @Wendy for the inspiration of the events rules.&lt;/p&gt;
+- https://cloud-fundis.github.io/lessons/jq/jq4/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>jq getting interesting: lessons 7 through 9</title>
         <link>https://cloud-fundis.github.io/lessons/jq/jq3/</link>
         <pubDate>Thu, 07 May 2020 15:21:37 +0200</pubDate>
         
@@ -344,7 +607,7 @@ jq: 1 compile error
 
 &lt;p&gt;Better. However if we&amp;rsquo;re going to be generating this for some further processing, we&amp;rsquo;re THEN going to have to remove the square braces in the next stage of processing. Not ideal.&lt;/p&gt;
 
-&lt;p&gt;So we could try this:&lt;/p&gt;
+&lt;p&gt;So we could try string interpolation as follows:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[1,3].Instances[] | &amp;quot;\(.InstanceId), \(.State.Name)&amp;quot;&#39;
 &lt;/code&gt;&lt;/pre&gt;
@@ -356,38 +619,21 @@ jq: 1 compile error
 &lt;pre&gt;&lt;code&gt;jq -rc &#39;.Reservations[1,3].Instances[] | &amp;quot;\(.InstanceId), \(.State.Name)&amp;quot;&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;    i-053667d4e26795541, running
-    i-0a775b8c631e8ad27, running
-    i-06e986e85261c838e, stopped
-    i-061b358b9cfc20505, running
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;A final example to round things off for today. Say we ALSO want the private IP address of these instances, with fields separated by a colon ( : ).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | &amp;quot;\(.InstanceId): \(.State.Name): \(.PrivateIpAddress)&amp;quot;&#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;i-053667d4e26795541: running: 172.16.2.26
-i-0a775b8c631e8ad27: running: 172.16.2.15
-i-06e986e85261c838e: stopped: 172.16.1.10
-i-061b358b9cfc20505: running: 172.16.1.13
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Yup. Enough for one day.&lt;/p&gt;
+&lt;p&gt;q &amp;lsquo;.Item&amp;rsquo; $i.putitem &amp;gt; new.json &amp;amp;&amp;amp; aws dynamodb put-item &amp;ndash;table-name scriptTable &amp;ndash;item file:///home/hadoop/new.json&lt;/p&gt;
 - https://cloud-fundis.github.io/lessons/jq/jq2/ - </description>
         </item>
     
     
     
         <item>
-        <title>jq - Lesson N - the N&#39;d game</title>
+        <title>jq - lesson N - the N&#39;d game</title>
         <link>https://cloud-fundis.github.io/lessons/jq/lesson-n/</link>
         <pubDate>Tue, 05 May 2020 12:55:16 +0200</pubDate>
         
         <guid>https://cloud-fundis.github.io/lessons/jq/lesson-n/</guid>
         <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq/lesson-n/ -&lt;p&gt;After all your learnings and this series, we&amp;rsquo;re trying to get to understand and write &lt;em&gt;jq&lt;/em&gt; like the one below. It&amp;rsquo;s a culmination of our learnings:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-code&#34;&gt;jq &#39;def dotkeys:
+&lt;pre&gt;&lt;code&gt;jq &#39;def dotkeys:
 	def stringify: map(tostring) | join(&amp;quot;.&amp;quot;);
 	. as $in
 	| reduce paths(scalars) as $p (null;

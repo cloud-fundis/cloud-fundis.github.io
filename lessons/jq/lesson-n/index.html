@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>jq - Lesson N - the N&#39;d game</title>
+<title>jq - lesson N - the N&#39;d game</title>
 
 <meta charset="utf-8">
 <meta name="X-UA-Compatible" content="IE=edge">
@@ -234,7 +234,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <div class="post-head-wrapper-text-only"
                  style="background-image: url('https://cloud-fundis.github.io/')">
                 <div class="post-title">
-                    jq - Lesson N - the N&#39;d game
+                    jq - lesson N - the N&#39;d game
                     
                     <div class="post-meta">
                         
@@ -266,7 +266,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 <div class="post-body">
                     <p>After all your learnings and this series, we&rsquo;re trying to get to understand and write <em>jq</em> like the one below. It&rsquo;s a culmination of our learnings:</p>
 
-<pre><code class="language-code">jq 'def dotkeys:
+<pre><code>jq 'def dotkeys:
 	def stringify: map(tostring) | join(&quot;.&quot;);
 	. as $in
 	| reduce paths(scalars) as $p (null;

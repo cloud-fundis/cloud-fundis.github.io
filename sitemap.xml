@@ -4,17 +4,82 @@
   
   <url>
     <loc>https://cloud-fundis.github.io/lessons/jq/</loc>
-    <lastmod>2020-05-07T15:21:37+02:00</lastmod>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>https://cloud-fundis.github.io/tags/aws-events/</loc>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://cloud-fundis.github.io/</loc>
-    <lastmod>2020-05-07T15:21:37+02:00</lastmod>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/comments/</loc>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/conditionals/</loc>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/functions/</loc>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/jq/</loc>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/json/</loc>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/lessons/jq/jq4/</loc>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/read-from-file/</loc>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/shell/</loc>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/</loc>
+    <lastmod>2020-05-12T16:20:39+02:00</lastmod>
   </url>
   
   <url>
     <loc>https://cloud-fundis.github.io/lessons/jq/jq3/</loc>
+    <lastmod>2020-05-07T15:21:37+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/new-json-structures/</loc>
+    <lastmod>2020-05-07T15:21:37+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/select/</loc>
+    <lastmod>2020-05-07T15:21:37+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloud-fundis.github.io/tags/stringify/</loc>
     <lastmod>2020-05-07T15:21:37+02:00</lastmod>
   </url>
   
@@ -24,32 +89,12 @@
   </url>
   
   <url>
-    <loc>https://cloud-fundis.github.io/tags/jq/</loc>
-    <lastmod>2020-05-05T14:41:29+02:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://cloud-fundis.github.io/lessons/jq/jq2/</loc>
     <lastmod>2020-05-05T14:41:29+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cloud-fundis.github.io/tags/json/</loc>
-    <lastmod>2020-05-05T14:41:29+02:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://cloud-fundis.github.io/tags/multi-attribute/</loc>
-    <lastmod>2020-05-05T14:41:29+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cloud-fundis.github.io/tags/shell/</loc>
-    <lastmod>2020-05-05T14:41:29+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cloud-fundis.github.io/tags/</loc>
     <lastmod>2020-05-05T14:41:29+02:00</lastmod>
   </url>
   

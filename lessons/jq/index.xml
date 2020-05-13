@@ -6,13 +6,24 @@
     <description>Recent content on because there are just too many things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 07 May 2020 15:21:37 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 12 May 2020 16:20:39 +0200</lastBuildDate>
     
 	<atom:link href="https://cloud-fundis.github.io/lessons/jq/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>jq getting interesting</title>
+      <title>lessons 10 through 12</title>
+      <link>https://cloud-fundis.github.io/lessons/jq/jq4/</link>
+      <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/lessons/jq/jq4/</guid>
+      <description>last time on jq Another way of producing a text list of running instances may be to push the fields we want though another jq function - join.
+Lesson 10 Using functions There are a number of useful functions in jq that will make life a little easier. Let&amp;rsquo;s explore some of them.
+join A function to join an array into a string. Whereas before we created a string using String iterpolation, we could simply use join.</description>
+    </item>
+    
+    <item>
+      <title>jq getting interesting: lessons 7 through 9</title>
       <link>https://cloud-fundis.github.io/lessons/jq/jq3/</link>
       <pubDate>Thu, 07 May 2020 15:21:37 +0200</pubDate>
       
@@ -34,7 +45,7 @@ Lesson 3 JSON is case sensitive JSON is case sensitive, so</description>
     </item>
     
     <item>
-      <title>jq - Lesson N - the N&#39;d game</title>
+      <title>jq - lesson N - the N&#39;d game</title>
       <link>https://cloud-fundis.github.io/lessons/jq/lesson-n/</link>
       <pubDate>Tue, 05 May 2020 12:55:16 +0200</pubDate>
       

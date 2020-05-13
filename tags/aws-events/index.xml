@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>aws-events on because there are just too many things to remember</title>
+    <link>https://cloud-fundis.github.io/tags/aws-events/</link>
+    <description>Recent content in aws-events on because there are just too many things to remember</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 12 May 2020 16:20:39 +0200</lastBuildDate>
+    
+	<atom:link href="https://cloud-fundis.github.io/tags/aws-events/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>lessons 10 through 12</title>
+      <link>https://cloud-fundis.github.io/lessons/jq/jq4/</link>
+      <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/lessons/jq/jq4/</guid>
+      <description>last time on jq Another way of producing a text list of running instances may be to push the fields we want though another jq function - join.
+Lesson 10 Using functions There are a number of useful functions in jq that will make life a little easier. Let&amp;rsquo;s explore some of them.
+join A function to join an array into a string. Whereas before we created a string using String iterpolation, we could simply use join.</description>
+    </item>
+    
+  </channel>
+</rss>

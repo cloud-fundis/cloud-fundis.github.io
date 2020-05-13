@@ -875,7 +875,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
 <p>Better. However if we&rsquo;re going to be generating this for some further processing, we&rsquo;re THEN going to have to remove the square braces in the next stage of processing. Not ideal.</p>
 
-<p>So we could try this:</p>
+<p>So we could try string interpolation as follows:</p>
 
 <pre><code>jq -c '.Reservations[1,3].Instances[] | &quot;\(.InstanceId), \(.State.Name)&quot;'
 </code></pre>
@@ -887,24 +887,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <pre><code>jq -rc '.Reservations[1,3].Instances[] | &quot;\(.InstanceId), \(.State.Name)&quot;'
 </code></pre>
 
-<pre><code>    i-053667d4e26795541, running
-    i-0a775b8c631e8ad27, running
-    i-06e986e85261c838e, stopped
-    i-061b358b9cfc20505, running
-</code></pre>
-
-<p>A final example to round things off for today. Say we ALSO want the private IP address of these instances, with fields separated by a colon ( : ).</p>
-
-<pre><code>jq -cr '.Reservations[].Instances[] | &quot;\(.InstanceId): \(.State.Name): \(.PrivateIpAddress)&quot;'
-</code></pre>
-
-<pre><code>i-053667d4e26795541: running: 172.16.2.26
-i-0a775b8c631e8ad27: running: 172.16.2.15
-i-06e986e85261c838e: stopped: 172.16.1.10
-i-061b358b9cfc20505: running: 172.16.1.13
-</code></pre>
-
-<p>Yup. Enough for one day.</p>
+<p>q &lsquo;.Item&rsquo; $i.putitem &gt; new.json &amp;&amp; aws dynamodb put-item &ndash;table-name scriptTable &ndash;item file:///home/hadoop/new.json</p>
 
                     
                     <HR width="100%" id="EOF">
@@ -918,13 +901,13 @@ i-061b358b9cfc20505: running: 172.16.1.13
 
                 
                 <a class="newer-posts" href="https://cloud-fundis.github.io/lessons/jq/jq3/">
-                    Next<br>jq getting interesting
+                    Next<br>jq getting interesting: lessons 7 through 9
                 </a>
                 
                 
                 
                 <a class="older-posts" href="https://cloud-fundis.github.io/lessons/jq/lesson-n/">
-                    Previous<br>jq - Lesson N - the N&#39;d game
+                    Previous<br>jq - lesson N - the N&#39;d game
                 </a>
                 
             </nav>

@@ -6,10 +6,109 @@
     <description>Recent content in Tags on because there are just too many things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 05 May 2020 14:41:29 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 12 May 2020 16:20:39 +0200</lastBuildDate>
     
 	<atom:link href="https://cloud-fundis.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>aws-events</title>
+      <link>https://cloud-fundis.github.io/tags/aws-events/</link>
+      <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/aws-events/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>comments</title>
+      <link>https://cloud-fundis.github.io/tags/comments/</link>
+      <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/comments/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>conditionals</title>
+      <link>https://cloud-fundis.github.io/tags/conditionals/</link>
+      <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/conditionals/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>functions</title>
+      <link>https://cloud-fundis.github.io/tags/functions/</link>
+      <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/functions/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jq</title>
+      <link>https://cloud-fundis.github.io/tags/jq/</link>
+      <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/jq/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>json</title>
+      <link>https://cloud-fundis.github.io/tags/json/</link>
+      <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/json/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>read-from-file</title>
+      <link>https://cloud-fundis.github.io/tags/read-from-file/</link>
+      <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/read-from-file/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>shell</title>
+      <link>https://cloud-fundis.github.io/tags/shell/</link>
+      <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/shell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>new-json-structures</title>
+      <link>https://cloud-fundis.github.io/tags/new-json-structures/</link>
+      <pubDate>Thu, 07 May 2020 15:21:37 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/new-json-structures/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>select</title>
+      <link>https://cloud-fundis.github.io/tags/select/</link>
+      <pubDate>Thu, 07 May 2020 15:21:37 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/select/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>stringify</title>
+      <link>https://cloud-fundis.github.io/tags/stringify/</link>
+      <pubDate>Thu, 07 May 2020 15:21:37 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/tags/stringify/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>case sentivity</title>
@@ -21,38 +120,11 @@
     </item>
     
     <item>
-      <title>jq</title>
-      <link>https://cloud-fundis.github.io/tags/jq/</link>
-      <pubDate>Tue, 05 May 2020 14:41:29 +0200</pubDate>
-      
-      <guid>https://cloud-fundis.github.io/tags/jq/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>json</title>
-      <link>https://cloud-fundis.github.io/tags/json/</link>
-      <pubDate>Tue, 05 May 2020 14:41:29 +0200</pubDate>
-      
-      <guid>https://cloud-fundis.github.io/tags/json/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>multi attribute</title>
       <link>https://cloud-fundis.github.io/tags/multi-attribute/</link>
       <pubDate>Tue, 05 May 2020 14:41:29 +0200</pubDate>
       
       <guid>https://cloud-fundis.github.io/tags/multi-attribute/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>shell</title>
-      <link>https://cloud-fundis.github.io/tags/shell/</link>
-      <pubDate>Tue, 05 May 2020 14:41:29 +0200</pubDate>
-      
-      <guid>https://cloud-fundis.github.io/tags/shell/</guid>
       <description></description>
     </item>
     
