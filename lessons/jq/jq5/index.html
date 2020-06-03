@@ -566,19 +566,20 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <p>Today we&rsquo;re going to dive into more useful <em>jq</em> things, but I&rsquo;m also going to refer to resources worth bookmarking.</p>
 <p>First up: <a href="https://jqterm.com/?query=.">jqterm</a>. This is a fantastic tool to test your queries iteractively. It does almost everything you could do in a terminal on your laptop, and gives immediate visual feedback. It however, doesn&rsquo;t seem to like comments like <em>jq</em>, but as a testing tool, it&rsquo;s great.</p>
 <p>It handles newlines beautifully as illustrated <img src="/jqterm.png" alt="below"></p>
-<p>.Events[]
-[.EventName,
-(.EventTime
-| strftime(&quot;%Y-%m-%d %H:%M:%S&rdquo;) ),
-(.CloudTrailEvent
-|fromjson
-|.sourceIPAddress,
-.userIdentity.userName,
-.eventTime,
-(.userAgent|split(&rdquo; &ldquo;)[3]),
-.responseElements.ConsoleLogin
-)
-]</p>
+<pre><code>.Events[]
+    [.EventName,
+        (.EventTime
+            | strftime(&quot;%Y-%m-%d %H:%M:%S&quot;) ),
+        (.CloudTrailEvent
+            |fromjson
+            |.sourceIPAddress,
+             .userIdentity.userName,
+             .eventTime,
+             (.userAgent|split(&quot; &quot;)[3]),
+             .responseElements.ConsoleLogin
+        )
+    ]
+</code></pre>
 <p>I use this expression because it illustrates a few things:</p>
 <p>(1) The CloudTrailEvent looks like JSON, but handling this initially required two <em>jq</em> statements chained together like this:</p>
 <p><img src="/twojqs.png" alt=""></p>

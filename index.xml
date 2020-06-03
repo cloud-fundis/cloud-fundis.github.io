@@ -21,19 +21,20 @@
 &lt;p&gt;Today we&amp;rsquo;re going to dive into more useful &lt;em&gt;jq&lt;/em&gt; things, but I&amp;rsquo;m also going to refer to resources worth bookmarking.&lt;/p&gt;
 &lt;p&gt;First up: &lt;a href=&#34;https://jqterm.com/?query=.&#34;&gt;jqterm&lt;/a&gt;. This is a fantastic tool to test your queries iteractively. It does almost everything you could do in a terminal on your laptop, and gives immediate visual feedback. It however, doesn&amp;rsquo;t seem to like comments like &lt;em&gt;jq&lt;/em&gt;, but as a testing tool, it&amp;rsquo;s great.&lt;/p&gt;
 &lt;p&gt;It handles newlines beautifully as illustrated &lt;img src=&#34;https://cloud-fundis.github.io/jqterm.png&#34; alt=&#34;below&#34;&gt;&lt;/p&gt;
-&lt;p&gt;.Events[]
-[.EventName,
-(.EventTime
-| strftime(&amp;quot;%Y-%m-%d %H:%M:%S&amp;rdquo;) ),
-(.CloudTrailEvent
-|fromjson
-|.sourceIPAddress,
-.userIdentity.userName,
-.eventTime,
-(.userAgent|split(&amp;rdquo; &amp;ldquo;)[3]),
-.responseElements.ConsoleLogin
-)
-]&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.Events[]
+    [.EventName,
+        (.EventTime
+            | strftime(&amp;quot;%Y-%m-%d %H:%M:%S&amp;quot;) ),
+        (.CloudTrailEvent
+            |fromjson
+            |.sourceIPAddress,
+             .userIdentity.userName,
+             .eventTime,
+             (.userAgent|split(&amp;quot; &amp;quot;)[3]),
+             .responseElements.ConsoleLogin
+        )
+    ]
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;I use this expression because it illustrates a few things:&lt;/p&gt;
 &lt;p&gt;(1) The CloudTrailEvent looks like JSON, but handling this initially required two &lt;em&gt;jq&lt;/em&gt; statements chained together like this:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://cloud-fundis.github.io/twojqs.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
@@ -604,7 +605,7 @@ jq: 1 compile error
 	def chain(key):
 	.[key] |= dotkeys ;
    chain(&amp;quot;AParticularNestedKey&amp;quot;)&#39;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Yup, this looks terrible, even to me. So I&amp;rsquo;m on a quest and hopefully this&amp;rsquo;ll make more sense as these lessons progress.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Yup, this looks terrible to me. Guess there&amp;rsquo;s a lot I need to learn here! So I&amp;rsquo;m on a quest and hopefully this&amp;rsquo;ll make more sense as these lessons progress.&lt;/p&gt;
 &lt;p&gt;But we&amp;rsquo;re not there yet.&lt;/p&gt;
 &lt;p&gt;Thanks @doug for this little bit of chicken-scratch.&lt;/p&gt;
 - https://cloud-fundis.github.io/lessons/jq/lesson-n/ - </description>
