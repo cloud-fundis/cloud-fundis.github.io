@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>shell on because there are just too many things to remember</title>
@@ -41,7 +41,7 @@ Lesson 3 JSON is case sensitive JSON is case sensitive, so</description>
       
       <guid>https://cloud-fundis.github.io/lessons/jq/lesson-n/</guid>
       <description>After all your learnings and this series, we&amp;rsquo;re trying to get to understand and write jq like the one below. It&amp;rsquo;s a culmination of our learnings:
-jq &#39;def dotkeys: def stringify: map(tostring) | join(&amp;quot;.&amp;quot;); . as $in | reduce paths(scalars) as $p (null; ($in|getpath($p)) as $v | setpath([$p|stringify]; $v)); def chain(key): .[key] |= dotkeys ; chain(&amp;quot;AParticularNestedKey&amp;quot;)&#39;  Yup, this looks terrible, even to me. So I&amp;rsquo;m on a quest and hopefully this&amp;rsquo;ll make more sense as these lessons progress.</description>
+jq &#39;def dotkeys: def stringify: map(tostring) | join(&amp;quot;.&amp;quot;); . as $in | reduce paths(scalars) as $p (null; ($in|getpath($p)) as $v | setpath([$p|stringify]; $v)); def chain(key): .[key] |= dotkeys ; chain(&amp;quot;AParticularNestedKey&amp;quot;)&#39; Yup, this looks terrible, even to me. So I&amp;rsquo;m on a quest and hopefully this&amp;rsquo;ll make more sense as these lessons progress.</description>
     </item>
     
     <item>

@@ -28,7 +28,7 @@
 
 
 
-<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/dark-mode.min.588bcae26a454daa76882866d3ccdf4ca1c9a0c7ce2159ac69108792f0aa8422.css" integrity="sha256-WIvK4mpFTap2iChm08zfTKHJoMfOIVmsaRCHkvCqhCI=" media="screen">
+<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/dark-mode.min.5a2bbd1758c83affd639a91fbfd5cc681b1a5574df99442825c444dd40504b13.css" integrity="sha256-Wiu9F1jIOv/WOakfv9XMaBsaVXTfmUQoJcRE3UBQSxM=" media="screen">
 
 
 <script src="https://cloud-fundis.github.io//js/loadCSS.js"></script>
@@ -232,7 +232,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             
 
             <div class="post-head-wrapper-text-only"
-                 style="background-image: url('https://cloud-fundis.github.io/')">
+                
+            >
                 <div class="post-title">
                     jq - lesson N - the N&#39;d game
                     
@@ -258,6 +259,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                                 &nbsp;
                             
                         
+                        
                     </div>
                 </div>
             </div>
@@ -265,7 +267,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <div class="post-body-wrapper">
                 <div class="post-body">
                     <p>After all your learnings and this series, we&rsquo;re trying to get to understand and write <em>jq</em> like the one below. It&rsquo;s a culmination of our learnings:</p>
-
 <pre><code>jq 'def dotkeys:
 	def stringify: map(tostring) | join(&quot;.&quot;);
 	. as $in
@@ -275,12 +276,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 	def chain(key):
 	.[key] |= dotkeys ;
    chain(&quot;AParticularNestedKey&quot;)'
-</code></pre>
-
-<p>Yup, this looks terrible, even to me. So I&rsquo;m on a quest and hopefully this&rsquo;ll make more sense as these lessons progress.</p>
-
+</code></pre><p>Yup, this looks terrible, even to me. So I&rsquo;m on a quest and hopefully this&rsquo;ll make more sense as these lessons progress.</p>
 <p>But we&rsquo;re not there yet.</p>
-
 <p>Thanks @doug for this little bit of chicken-scratch.</p>
 
                     

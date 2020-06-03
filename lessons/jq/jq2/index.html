@@ -28,7 +28,7 @@
 
 
 
-<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/dark-mode.min.588bcae26a454daa76882866d3ccdf4ca1c9a0c7ce2159ac69108792f0aa8422.css" integrity="sha256-WIvK4mpFTap2iChm08zfTKHJoMfOIVmsaRCHkvCqhCI=" media="screen">
+<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/dark-mode.min.5a2bbd1758c83affd639a91fbfd5cc681b1a5574df99442825c444dd40504b13.css" integrity="sha256-Wiu9F1jIOv/WOakfv9XMaBsaVXTfmUQoJcRE3UBQSxM=" media="screen">
 
 
 <script src="https://cloud-fundis.github.io//js/loadCSS.js"></script>
@@ -136,7 +136,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 								<li>
-				 					<a href="#previously-lessons-jq-jq1-on-jq" v-on:click="closeDrawer" id="previously-lessons-jq-jq1-on-jq-nav">
+				 					<a href="#previouslylessonsjqjq1-on-_jq_-" v-on:click="closeDrawer" id="previouslylessonsjqjq1-on-_jq_--nav">
 										 Previously on jq …
 									</a>
 								</li>
@@ -428,7 +428,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 								<li>
-				 					<a href="#previously-lessons-jq-jq1-on-jq" v-on:click="closeDrawer" id="previously-lessons-jq-jq1-on-jq-nav">
+				 					<a href="#previouslylessonsjqjq1-on-_jq_-" v-on:click="closeDrawer" id="previouslylessonsjqjq1-on-_jq_--nav">
 										 Previously on jq …
 									</a>
 								</li>
@@ -688,7 +688,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             
 
             <div class="post-head-wrapper-text-only"
-                 style="background-image: url('https://cloud-fundis.github.io/')">
+                
+            >
                 <div class="post-title">
                     jq - lessons 3 to 6
                     
@@ -720,173 +721,112 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                                 &nbsp;
                             
                         
+                        
                     </div>
                 </div>
             </div>
             
             <div class="post-body-wrapper">
                 <div class="post-body">
-                    
-
-<h1 id="previously-lessons-jq-jq1-on-jq"><a href="/lessons/jq/jq1">Previously</a> on <em>jq</em> &hellip;</h1>
-
+                    <h1 id="previouslylessonsjqjq1-on-_jq_-"><a href="/lessons/jq/jq1">Previously</a> on <em>jq</em> &hellip;</h1>
 <pre><code>aws ec2 describe-instances | jq '.Reservations[].Instances[] | keys'
 </code></pre>
-
 <p>shows us all the keys for all the <em>Reservations</em> for all the <em>Instances</em> I have launched in AWS.</p>
-
 <p>Perhaps we wish to know what the state of the instances are?</p>
-
 <p>I see there&rsquo;s a <strong>State</strong> in the resulting keys. Perhaps that has the state of all instances.</p>
-
 <h2 id="lesson-3">Lesson 3</h2>
-
 <h3 id="json-is-case-sensitive">JSON is case sensitive</h3>
-
 <p>JSON is case sensitive, so</p>
-
 <pre><code>aws ec2 describe-instances | jq '.Reservations[].Instances[].state'
 </code></pre>
-
 <p>returns nothing, while</p>
-
 <pre><code>aws ec2 describe-instances | jq '.Reservations[].Instances[].State'
 </code></pre>
-
 <p>returns</p>
-
-<pre><code class="language-json">{
-  &quot;Code&quot;: 80,
-  &quot;Name&quot;: &quot;stopped&quot;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">80</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;stopped&#34;</span>
 }
-</code></pre>
-
-<p>Ok. Cool. I only have one instance launched here, so this shows only one instance in a stopped state.</p>
-
+</code></pre></div><p>Ok. Cool. I only have one instance launched here, so this shows only one instance in a stopped state.</p>
 <p>In <em>jq</em> terminology, we&rsquo;ve applied a filter to this data. First we applied a filter of all Reservations, then all Instances and finally a filter of <em>State</em>.</p>
-
 <p>If I look in an account of one of our customers, then I see</p>
-
-<pre><code class="language-json">{
-  &quot;Code&quot;: 16,
-  &quot;Name&quot;: &quot;running&quot;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">16</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;running&#34;</span>
 }
 {
-  &quot;Code&quot;: 16,
-  &quot;Name&quot;: &quot;running&quot;
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">16</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;running&#34;</span>
 }
 {
-  &quot;Code&quot;: 80,
-  &quot;Name&quot;: &quot;stopped&quot;
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">80</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;stopped&#34;</span>
 }
 {
-  &quot;Code&quot;: 16,
-  &quot;Name&quot;: &quot;running&quot;
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">16</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;running&#34;</span>
 }
-</code></pre>
-
-<p>Nice, though, that&rsquo;s only partially useful, because I would like to know what the instanceId&rsquo;s are of the running and stopped instances.</p>
-
+</code></pre></div><p>Nice, though, that&rsquo;s only partially useful, because I would like to know what the instanceId&rsquo;s are of the running and stopped instances.</p>
 <h2 id="lesson-4">Lesson 4</h2>
-
 <h3 id="retriving-more-than-a-single-key-at-once">Retriving more than a single key at once</h3>
-
 <p>We could loop through this and do the aws call multiple times, retrieving the instanceId first and then&hellip;.BARF&hellip;Urgh, just writing that sentence make me sick.</p>
-
 <p>There <strong>MUST</strong> be a better way?</p>
-
 <p>Indeed. If we pipe ( | ) [we saw this used in an earlier lesson right?] the output of the <em>.Reservations[].Instances[]</em> and &lsquo;grab&rsquo; the keys we&rsquo;re interested in, then that would work:</p>
-
 <pre><code>aws ec2 describe-instances | jq '.Reservations[].Instances[] | .InstanceId,.State'
 </code></pre>
-
 <p>results in:</p>
-
-<pre><code class="language-json">&quot;i-0a775b8c631e8ad27&quot;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#e6db74">&#34;i-0a775b8c631e8ad27&#34;</span>
 {
-  &quot;Code&quot;: 16,
-  &quot;Name&quot;: &quot;running&quot;
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">16</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;running&#34;</span>
 }
-&quot;i-061b358b9cfc20505&quot;
+<span style="color:#e6db74">&#34;i-061b358b9cfc20505&#34;</span>
 {
-  &quot;Code&quot;: 16,
-  &quot;Name&quot;: &quot;running&quot;
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">16</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;running&#34;</span>
 }
-...
-</code></pre>
-
-<p>Now we&rsquo;re cooking.</p>
-
+<span style="color:#960050;background-color:#1e0010">...</span>
+</code></pre></div><p>Now we&rsquo;re cooking.</p>
 <p>NOTE: I&rsquo;m going to leave out the aws cli command from here, since really, it&rsquo;s adding no value to the learning and making the scroll-box on your browser ugly.</p>
-
 <h2 id="lesson-5">Lesson 5</h2>
-
 <h3 id="is-there-a-way-to-only-get-the-name-and-not-the-code">Is there a way to only get the &lsquo;Name&rsquo; and not the &lsquo;Code&rsquo;?</h3>
-
 <p>Funny you should ask that. There sure is.</p>
-
 <pre><code>jq '.Reservations[].Instances[] | .InstanceId,.State.Name'
 </code></pre>
-
 <pre><code>    &quot;i-0a775b8c631e8ad27&quot;
     &quot;running&quot;
     &quot;i-061b358b9cfc20505&quot;
     &quot;running&quot;
-</code></pre>
-
-<p>Ooooh&hellip;that&rsquo;s so much better! Simply adding the subkey to the key you want solve this nicely.</p>
-
+</code></pre><p>Ooooh&hellip;that&rsquo;s so much better! Simply adding the subkey to the key you want solve this nicely.</p>
 <p>Finally, you may be wondering about the double-quotes. That&rsquo;s going to hinder us later when we&rsquo;re trying to do something useful with this - like put it in a script.</p>
-
 <p>Using the &lsquo;raw&rsquo; flag ( -r ) for <em>jq</em> solve that.</p>
-
 <pre><code>jq -r '.Reservations[1,3].Instances[] | .InstanceId,.State.Name'
 </code></pre>
-
 <p>NOTE: I slipped something into this last command I&rsquo;ve not talked about. The selection of various elements of the <em>Reservations</em> array. See it there: <strong>1,3</strong>? That&rsquo;s saying the second and the 4th elements of this array. Remember JSON arrays are indexed from 0.</p>
-
 <h2 id="lesson-6">Lesson 6</h2>
-
 <h3 id="could-we-make-this-all-end-on-the-same-line">Could we make this all end on the same line?</h3>
-
 <p>Well, this is something I would like to be able to do.</p>
-
 <p>There are a couple of ways of doing this. To begin, use the compact ( -c ) flag. This will compact the output, but still, without a little fancy footwork in your <em>jq</em> expression, it&rsquo;ll not have the desired results.</p>
-
 <p>To understand this, you should know that the output after the pipe is writing two strings namely <em>InstanceId</em> and then <em>State</em>. What we really want to do is combine those outputs into a new string</p>
-
 <p>We could try this:</p>
-
 <pre><code>jq -c '.Reservations[1,3].Instances[] | &quot;.InstanceId, .State.Name&quot;'
 </code></pre>
-
 <p>however that produces two strings with .InstanceId, .State.Name. Not quite what we want.</p>
-
 <p>We could use an array to combine these strings into a new array as follows:</p>
-
 <pre><code>jq -c '.Reservations[1,3].Instances[] | [.InstanceId, .State.Name]'
 </code></pre>
-
 <p>which results in:</p>
-
 <pre><code>[&quot;i-0a775b8c631e8ad27&quot;,&quot;running&quot;]
 [&quot;i-061b358b9cfc20505&quot;,&quot;running&quot;]
 </code></pre>
-
 <p>Better. However if we&rsquo;re going to be generating this for some further processing, we&rsquo;re THEN going to have to remove the square braces in the next stage of processing. Not ideal.</p>
-
 <p>So we could try string interpolation as follows:</p>
-
 <pre><code>jq -c '.Reservations[1,3].Instances[] | &quot;\(.InstanceId), \(.State.Name)&quot;'
 </code></pre>
-
 <p>This encloses our values as a string. In <em>jq</em> documentation, this is discussed under String interpolation. When we place our fields inside round braces, escaping the opening brace it forces <em>jq</em> to interpolate them as a string.</p>
-
 <p>The above command (almost) does what we want. Why almost? Because we&rsquo;ve got the double-quote back again. But we know how to solve that; with the &lsquo;raw&rsquo; flag.</p>
-
 <pre><code>jq -rc '.Reservations[1,3].Instances[] | &quot;\(.InstanceId), \(.State.Name)&quot;'
 </code></pre>
-
 <p>q &lsquo;.Item&rsquo; $i.putitem &gt; new.json &amp;&amp; aws dynamodb put-item &ndash;table-name scriptTable &ndash;item file:///home/hadoop/new.json</p>
 
                     

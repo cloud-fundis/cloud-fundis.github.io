@@ -28,7 +28,7 @@
 
 
 
-<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/dark-mode.min.588bcae26a454daa76882866d3ccdf4ca1c9a0c7ce2159ac69108792f0aa8422.css" integrity="sha256-WIvK4mpFTap2iChm08zfTKHJoMfOIVmsaRCHkvCqhCI=" media="screen">
+<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/dark-mode.min.5a2bbd1758c83affd639a91fbfd5cc681b1a5574df99442825c444dd40504b13.css" integrity="sha256-Wiu9F1jIOv/WOakfv9XMaBsaVXTfmUQoJcRE3UBQSxM=" media="screen">
 
 
 <script src="https://cloud-fundis.github.io//js/loadCSS.js"></script>
@@ -454,7 +454,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             
 
             <div class="post-head-wrapper-text-only"
-                 style="background-image: url('https://cloud-fundis.github.io/')">
+                
+            >
                 <div class="post-title">
                     New blog posts ... tjoef tjaf
                     
@@ -468,74 +469,49 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                         
 
                         
+                        
                     </div>
                 </div>
             </div>
             
             <div class="post-body-wrapper">
                 <div class="post-body">
-                    
-
-<p>Yup, don&rsquo;t have time to muck around. Need to be able to blog about things I learn so that I can use them later.</p>
-
+                    <p>Yup, don&rsquo;t have time to muck around. Need to be able to blog about things I learn so that I can use them later.</p>
 <p>I think <em>tjoef-tjaf</em> is an Afrikaans expression meaning roughly, quick-quick. Here on <a href="https://en.wikipedia.org/wiki/List_of_South_African_slang_words">Wikipedia</a> are other &lsquo;real Souf-Afrikan&rsquo; words in common use - like <em>ja-nee</em></p>
-
 <h2 id="assumptions">Assumptions</h2>
-
 <p>In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.github.io - I&rsquo;ll be pushing from here to github</p>
-
 <ol>
 <li>Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/</li>
 </ol>
-
 <p>If not, then you can use hugo to create a new site in ~/somedir as follows</p>
-
 <blockquote>
 <p>somedir $ hugo new site myBlog</p>
 </blockquote>
-
 <p>Set up an alias in ~/.bash_aliases to make uploading and deployment easier:</p>
-
 <blockquote>
-<p>alias buildblog=&lsquo;(cd ~/WorkDocs/cloudfundis/myBlog/; hugo -d ../cloud-fundis.github.io/); (cd ~/WorkDocs/cloudfundis/cloud-fundis.github.io/ &amp;&amp; git add -A &amp;&amp; git commit -m &ldquo;Blog update&rdquo; &amp;&amp; git push)&rsquo;</p>
+<p>alias buildblog=&rsquo;(cd ~/WorkDocs/cloudfundis/myBlog/; hugo -d ../cloud-fundis.github.io/); (cd ~/WorkDocs/cloudfundis/cloud-fundis.github.io/ &amp;&amp; git add -A &amp;&amp; git commit -m &ldquo;Blog update&rdquo; &amp;&amp; git push)&rsquo;</p>
 </blockquote>
-
 <p>.bash_aliases is read by .bashrc, so re-sourcing .bashrc sets this up.</p>
-
-<ol start="2">
-2. You've set up your ssh-keys for github. If not, I'll post a future post about this elsewhere.
-</ol>
-
+<!-- raw HTML omitted -->
 <p>Now, it&rsquo;s time to write a post:</p>
-
 <h3 id="step-1">Step 1</h3>
-
 <p>Assuming you&rsquo;re in the <strong>myBlog</strong> directory on your local machine:</p>
-
 <blockquote>
 <p>hugo new post blog/tjoef-tjaf.md</p>
 </blockquote>
-
 <p>Creates the page (in content/blog/tjoef-tjaf.md) [I want tjoef-tjaf to be a new <strong>blog</strong> post on the site]. Edit tjoef-tjaf.md.</p>
-
 <h3 id="step-2">Step 2</h3>
-
 <p>Save it and then, using your alias, rebuild the website using hugo and deploy to github with commit and push</p>
-
 <blockquote>
 <p>$ buildblog</p>
 </blockquote>
-
 <p>Visit the site at cloud-fundis.github.io (actually, visit your own github pages site).</p>
-
 <h2 id="postscript">Postscript</h2>
-
 <p>What can happen is that, because you&rsquo;re pushing new changes to the git regularly, old stuff that you may not still want there, will continue to linger. These problems are difficult to diagnose. As a result, you might just want to scrub everything on your github pagess site and start again. Do this with caution!</p>
-
 <blockquote>
-<p>git rm -rf <br/>
-git commit -m &ldquo;Clean everything with bleach&rdquo;<br/>
-git push<br/></p>
+<p>git rm -rf <!-- raw HTML omitted -->
+git commit -m &ldquo;Clean everything with bleach&quot;<!-- raw HTML omitted -->
+git push<!-- raw HTML omitted --></p>
 </blockquote>
 
                     
