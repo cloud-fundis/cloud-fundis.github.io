@@ -6,10 +6,21 @@
     <description>Recent content in Blogs on because there are just too many things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Apr 2020 11:33:32 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 28 Oct 2020 15:51:11 +0200</lastBuildDate>
     
 	<atom:link href="https://cloud-fundis.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Odbc to Athena</title>
+      <link>https://cloud-fundis.github.io/blog/odbc-to-athena/</link>
+      <pubDate>Wed, 28 Oct 2020 15:51:11 +0200</pubDate>
+      
+      <guid>https://cloud-fundis.github.io/blog/odbc-to-athena/</guid>
+      <description>This article details the technical aspects of the higher-level blog post on accessing your data lake using off-the-shelf tools like Microsoft Excel, PowerBI or OpenOffice/LibreOffice products.
+Since I don&amp;rsquo;t have an MS Excel license (and it seems like my Office 365 license does not allow me to do this), I am simply putting links on how to do this on Microsoft Excel in the reference section below.
+The rest of this article will focus on doing this with LibreOffice Calc.</description>
+    </item>
     
     <item>
       <title>New blog posts ... tjoef tjaf</title>
