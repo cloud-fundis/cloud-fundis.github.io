@@ -29,7 +29,7 @@ environment should not be a massive leap.&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s get started.&lt;/p&gt;
 &lt;h3 id=&#34;things-youll-need&#34;&gt;Things you&amp;rsquo;ll need:&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; The Simba Driver for 64-bit Linux of your choice available &lt;a href=&#34;https://www.simba.com/drivers/athena-odbc-jdbc/&#34;&gt;here&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; The Simba Driver for 64-bit Linux of your choice available &lt;a href=&#34;https://www.simba.com/drivers/athena-odbc-jdbc/&#34;&gt;here&lt;/a&gt; or &lt;a href=&#34;https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc.html&#34;&gt;here&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; LibreOffice 6.4.6&lt;/li&gt;
 &lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Data in S3 in a format that you can easily understand (perhaps CSV data)&lt;/li&gt;
 &lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Access to AWS Athena on the AWS Console&lt;/li&gt;
