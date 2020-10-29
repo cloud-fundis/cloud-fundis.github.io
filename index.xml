@@ -5,9 +5,189 @@
     <description>Recent content on because there are just too many things to remember</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Apr 2020 13:09:58 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 28 Oct 2020 15:51:11 +0200</lastBuildDate>
     
         <atom:link href="https://cloud-fundis.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Odbc to Athena</title>
+        <link>https://cloud-fundis.github.io/odbc-to-athena/</link>
+        <pubDate>Wed, 28 Oct 2020 15:51:11 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/odbc-to-athena/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/odbc-to-athena/ -&lt;p&gt;This article details the technical aspects of the &lt;a href=&#34;https://cloud-fundis.co.za/aws/athena-and-odbc&#34;&gt;higher-level blog post&lt;/a&gt; on accessing
+your data lake using off-the-shelf tools like Microsoft Excel, PowerBI or
+OpenOffice/LibreOffice products.&lt;/p&gt;
+&lt;p&gt;Since I don&amp;rsquo;t have an MS Excel license (and it seems like my Office 365 license
+does not allow me to do this), I am simply putting links on how to do this on
+Microsoft Excel in the reference section below.&lt;/p&gt;
+&lt;p&gt;The rest of this article will focus on doing this with LibreOffice Calc. You&amp;rsquo;re
+a technical bunch, so extrapolating from this to something that works in your
+environment should not be a massive leap.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s get started.&lt;/p&gt;
+&lt;h3 id=&#34;things-youll-need&#34;&gt;Things you&amp;rsquo;ll need:&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; The Simba Driver for 64-bit Linux of your choice available &lt;a href=&#34;https://www.simba.com/drivers/athena-odbc-jdbc/&#34;&gt;here&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; LibreOffice 6.4.6&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Data in S3 in a format that you can easily understand (perhaps CSV data)&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Access to AWS Athena on the AWS Console&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; An AWS Access Key and an AWS Secret Access Key&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Nice-to-have&amp;rsquo;s:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Access to the CloudTrail logs to see what&amp;rsquo;s going on when you do queries&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; A table in Athena that contains Parquet data&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;step-1-installation&#34;&gt;Step 1: Installation&lt;/h3&gt;
+&lt;p&gt;Install the Simba drivers on your Linux host (if you&amp;rsquo;re using Windows, follow the Windows instructions). This can be a bit of a pain because it assumes a bunch of things. I found for example, that I needed the ODBC package unixodbc which contains the isql and iusql CLI tools for talking to an ODBC SQL data source.&lt;/p&gt;
+&lt;p&gt;In the Simba &lt;a href=&#34;%22/Simba_Athena_ODBC_Install_and_Configuration_Guide.pdf%22&#34;&gt;install instructions&lt;/a&gt; (bundled with the driver of course), they make a distinction between installing for iODBC and unixODBC. In my experience, I found the only method to tell them apart was by the version (Version: 2.3.6-0.1build1) of the driver (which told me I was installing the unixODBC drivers) and so I could choose the appropriate options.&lt;/p&gt;
+&lt;p&gt;I haven&amp;rsquo;t done this on Mac, so certainly YMMV.&lt;/p&gt;
+&lt;p&gt;Finally, I&amp;rsquo;m on Ubuntu (a Debian based distribution, and the Simba driver is an RPM package), so you need to use Alien to convert it to a .deb to do the installation. Not a train-smash, but good to know.&lt;/p&gt;
+&lt;h3 id=&#34;step-2-configuration&#34;&gt;Step 2: Configuration&lt;/h3&gt;
+&lt;p&gt;Now that they&amp;rsquo;re installed it&amp;rsquo;s time to configure things. There are two routes to using these:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;either using a data source name (DSN) or&lt;/li&gt;
+&lt;li&gt;using a DSN-less configuration. For ease of use, I chose the DSN route.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Essentially this means we describe a name for the connection and use that name when querying.&lt;/p&gt;
+&lt;p&gt;Choosing to go the other route (DSN-less), means having to use the Athena VPC endpoints. Certainly if there&amp;rsquo;s sufficient interest in this, we could revise this post to use DSN-less settings.&lt;/p&gt;
+&lt;p&gt;There are three files:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;/opt/simba/athenaodbc/Setup/odbc.ini&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The main configuration file that specifies the AWS credentials, the DSN and other important things.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;/opt/simba/athenaodbc/Setup/odbcinst.ini&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;A file the specifies the driver version and the name of the driver.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;/opt/simba/athenaodbc/lib/64/simba.athenaodbc.ini&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Configuration for logging of the Simba driver. It will, for example, create a file called simbaathenaodbcdriver.log in the PATH you specify.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In the Simba documentation, the install path is /usr/local/odbc while on Ubuntu it&amp;rsquo;s installed in /opt/simba/athenaodbc/ by default.&lt;/p&gt;
+&lt;p&gt;Now probably the easiest thing to do is to copy &lt;code&gt;/opt/simba/athenaodbc/Setup/odbc.ini&lt;/code&gt; to your home directory and rename is as &lt;code&gt;.odbc.ini&lt;/code&gt; (note the leading period). Edit the settings in this file and you&amp;rsquo;re good to go.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ve compressed my configs below, but there are other settings you can configure:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;ODBC&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+ Trace&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;yes
+ &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;ODBC Data Sources&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+ MyAthena&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;Simba Athena ODBC Driver 64-bit
+ &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;MyAthena&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+ Description&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;Simba Athena ODBC Driver &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;64-bit&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; DSN
+ Driver&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/opt/simba/athenaodbc/lib/64/libathenaodbc_sb64.so
+ AwsRegion&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;eu-west-1
+ Schema&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;homeautomation
+ S3OutputLocation&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;s3://myS3-big-data-bucket/athena-queries/
+ AuthenticationType&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;IAM Credentials
+ UID&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;AKIA&amp;lt;....&amp;gt;
+ PWD&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;gEc&amp;lt;....&amp;gt;xkU28v
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Things you may wonder about:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;MyAthena&lt;/code&gt; in the configuration above is the DSN I&amp;rsquo;ll be using in my connections&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;UID&lt;/code&gt; is your AWS AccessKey&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;PWD&lt;/code&gt; is your AWS Secret AccessKey&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;AuthenticationType&lt;/code&gt; allows us to use this simple auth. If you&amp;rsquo;re using Microsoft Active Directory, the Simba driver allows authentication through federated credentials from AD. Other options are also possible.&lt;/p&gt;
+&lt;p&gt;Now we have this in place, it&amp;rsquo;s time to test our connection.&lt;/p&gt;
+&lt;p&gt;To do this one can use the &lt;code&gt;isql&lt;/code&gt; client supplied by the unixodbc package. Simply start it as follows:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ isql MyAthena&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;If everything worked, then you should see &lt;strong&gt;Connected!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Typing &lt;code&gt;help electricmeter&lt;/code&gt; will initiate a query to Athena.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;+---------------------------------------+
+| Connected!                            |
+|                                       |
+| sql-statement                         |
+| help [tablename]                      |
+| quit                                  |
+|                                       |
++---------------------------------------+
+SQL&amp;gt; help electricmeter
+
+| TABLE_QUALIFIER | TABLE_OWNER | TABLE_NAME | COLUMN_NAME | DATA_TYPE | TYPE_NAME | PRECISION |LENGTH | SCALE | RADIX | NULLABLE | REMARKS | COLUMN_DEF | SQL_DATA_TYPE | SQL_DATETIME_SUB | CHAR_OCTET_LENGTH | SEQ_IN_INDEX | IS_NULLABLE | USER_DATA_TYPE | 
+| AwsDataCatalog | homeautomation | electricmeter | date | 12 | string | 255 | 255 | | | 1 | | | 12 | | 255 | 1 | YES | 0 |
+| AwsDataCatalog | homeautomation | electricmeter | reading | 7 | float | 24 | 4 | | 2 | 1 | | | 7 | | | 2 | YES | 0 |
+
+SQLRowCount returns -1
+2 rows fetched
+SQL&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Sure enough, two rows describing my dataset - one being the &lt;em&gt;date&lt;/em&gt; of the electrical reading and the other being the actual &lt;em&gt;reading&lt;/em&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;step-3-connecting-athena-to-libreoffice--through-libreoffice-base&#34;&gt;Step 3: Connecting Athena to LibreOffice &amp;hellip; through LibreOffice Base&lt;/h3&gt;
+&lt;p&gt;So now the only thing left to do is to get LibreOffice Calc to see this table. To do this, we need to create a new database connection in LibreOffice Base. Simple enough really. Just fire up LibreOffice Base&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ soffice --base&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Connection settings outlined in the images below:&lt;/p&gt;
+&lt;p&gt;(1) &lt;strong&gt;Options for which driver to select&lt;/strong&gt;
+&lt;img src=&#34;https://cloud-fundis.github.io/existing-driver-1.png&#34; alt=&#34;Driver options&#34;&gt;&lt;/p&gt;
+&lt;p&gt;(2) &lt;strong&gt;Register a new connection in Base&lt;/strong&gt;
+&lt;img src=&#34;https://cloud-fundis.github.io/new-connection.png&#34; alt=&#34;New Connection&#34;&gt;&lt;/p&gt;
+&lt;p&gt;(3) &lt;strong&gt;The tables in Athena&lt;/strong&gt;
+&lt;img src=&#34;https://cloud-fundis.github.io/athena-table-awsconsole.png&#34; alt=&#34;Athena tables&#34;&gt;&lt;/p&gt;
+&lt;p&gt;(4) &lt;strong&gt;Now name the connection and save it&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;It might be helpful too to hit the &amp;ldquo;Test Connection&amp;rdquo; button to make sure it all works&lt;/p&gt;
+&lt;p&gt;Registering a new DB connection is done! Now it&amp;rsquo;s time to use this thing.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: All the steps above only need to be done the first time. After the connection is made, all [new] tables created in Athena will be visible to this connection.&lt;/p&gt;
+&lt;p&gt;Open LibreOffice Calc and hit &amp;lt;Shift&amp;gt; + &amp;lt;Ctrl&amp;gt; + &amp;lt;F4&amp;gt; which will open the Data Sources window. You should see your database connection &lt;code&gt;MyAthena&lt;/code&gt; as an option alongside the default one &lt;code&gt;Bibliography&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Opening &lt;code&gt;MyAthena&lt;/code&gt; will show the tables we have available to us.&lt;/p&gt;
+&lt;h3 id=&#34;step-4-graphing-our-data&#34;&gt;Step 4: Graphing our data&lt;/h3&gt;
+&lt;p&gt;Now let&amp;rsquo;s grab some of the data.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cloud-fundis.github.io/opening-athena-tables.png&#34; alt=&#34;The Athena tables&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cloud-fundis.github.io/graph.png&#34; alt=&#34;Final graph&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;last-but-not-least-cloudtrail&#34;&gt;Last but not least: CloudTrail&lt;/h3&gt;
+&lt;p&gt;It would be good to know how these queries look in AWS CloudTrail. If you&amp;rsquo;ve got access to CloudTrail, then&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=StartQueryExecution|jq -M &#39;.Events[0]|.CloudTrailEvent|fromjson&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This should show output along these lines (here I&amp;rsquo;ve only taken the most recent Event for the &lt;code&gt;StartQuertExecution&lt;/code&gt; API call, which selected records where the reading was less than 35)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cloud-fundis.github.io/less-than-35.png&#34; alt=&#34;Less than 35&#34;&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;eventVersion&amp;quot;: &amp;quot;1.05&amp;quot;,
+  &amp;quot;userIdentity&amp;quot;: {
+    &amp;quot;type&amp;quot;: &amp;quot;IAMUser&amp;quot;,
+    &amp;quot;principalId&amp;quot;: &amp;quot;AIDAxxxxxxxxxxxxxxxJT&amp;quot;,
+    &amp;quot;arn&amp;quot;: &amp;quot;arn:aws:iam::xxxxxxxxxxxx:user/hamish&amp;quot;,
+    &amp;quot;accountId&amp;quot;: &amp;quot;xxxxxxxxxxxx&amp;quot;,
+    &amp;quot;accessKeyId&amp;quot;: &amp;quot;AKIAxxxxxxxxxxxxxWWT&amp;quot;,
+    &amp;quot;userName&amp;quot;: &amp;quot;hamish&amp;quot;
+  },
+  &amp;quot;eventTime&amp;quot;: &amp;quot;2020-10-28T16:21:42Z&amp;quot;,
+  &amp;quot;eventSource&amp;quot;: &amp;quot;athena.amazonaws.com&amp;quot;,
+  &amp;quot;eventName&amp;quot;: &amp;quot;StartQueryExecution&amp;quot;,
+  &amp;quot;awsRegion&amp;quot;: &amp;quot;eu-west-1&amp;quot;,
+  &amp;quot;sourceIPAddress&amp;quot;: &amp;quot;xxx.xxx.xxx.xx&amp;quot;,
+  &amp;quot;userAgent&amp;quot;: &amp;quot;aws-sdk-cpp/1.7.365 Linux/5.4.0-7642-generic x86_64 GCC/4.9.2&amp;quot;,
+  &amp;quot;requestParameters&amp;quot;: {
+    &amp;quot;queryString&amp;quot;: &amp;quot;SELECT * FROM \&amp;quot;AwsDataCatalog\&amp;quot;.\&amp;quot;homeautomation\&amp;quot;.\&amp;quot;electricmeter_parquet\&amp;quot; WHERE ( \&amp;quot;AwsDataCatalog\&amp;quot;.\&amp;quot;homeautomation\&amp;quot;.\&amp;quot;electricmeter_parquet\&amp;quot;.\&amp;quot;reading\&amp;quot; &amp;lt;= 35 )&amp;quot;,
+    &amp;quot;clientRequestToken&amp;quot;: &amp;quot;AE646CD5-......-CE28&amp;quot;,
+    &amp;quot;queryExecutionContext&amp;quot;: {
+      &amp;quot;database&amp;quot;: &amp;quot;homeautomation&amp;quot;
+    },
+    &amp;quot;resultConfiguration&amp;quot;: {
+      &amp;quot;outputLocation&amp;quot;: &amp;quot;s3://myS3-big-data-bucket/athena-queries/&amp;quot;
+    }
+  },
+  &amp;quot;responseElements&amp;quot;: {
+    &amp;quot;queryExecutionId&amp;quot;: &amp;quot;399xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx230&amp;quot;
+  },
+  &amp;quot;requestID&amp;quot;: &amp;quot;2eaxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxf5b&amp;quot;,
+  &amp;quot;eventID&amp;quot;: &amp;quot;390xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxa4b&amp;quot;,
+  &amp;quot;eventType&amp;quot;: &amp;quot;AwsApiCall&amp;quot;,
+  &amp;quot;recipientAccountId&amp;quot;: &amp;quot;xxxxxxxxxxxx&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;references&#34;&gt;References&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;http://raaviblog.com/how-to-connect-microsoft-power-bi-to-amazon-athena-using-athena-odbc-driver/&#34;&gt;Connecting Athena to PowerBI using a DSN&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cdata.com/drivers/&#34;&gt;CData provide a host of drivers&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://dzone.com/articles/connecting-to-odbc-data-sources-in-google-apps-scr&#34;&gt;Connecting to an ODBC data source from Google Apps&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;disclaimers&#34;&gt;Disclaimers:&lt;/h4&gt;
+&lt;p&gt;It should be noted that there may well be better ways of getting access to the S3 data than the way proposed in this blog; so certainly explore those. This was primarily aimed at highlighting that the data in the data lake should be accessible to as many as possible.&lt;/p&gt;
+- https://cloud-fundis.github.io/odbc-to-athena/ - </description>
+        </item>
     
     
     
@@ -125,17 +305,20 @@
   &lt;span style=&#34;color:#ae81ff&#34;&gt;1956&lt;/span&gt;
 ]
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Subtle, but different; and to the &lt;em&gt;add&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt; functions, this is a significant difference!&lt;/p&gt;
-&lt;p&gt;This is cool, but if you wish to re-use part of the parsed JSON, you&amp;rsquo;re going to have to define a variable. &lt;em&gt;jq&lt;/em&gt; makes this easy with the &lt;strong&gt;as $var&lt;/strong&gt; syntax.&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s another example: We want to find out the average spot instance price of the m4.xlarge instance sizes over some period of time:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-spot-price-history --instance-types m4.xlarge --product-descriptions &amp;quot;Linux/UNIX&amp;quot; --start-time 2020-06-01T00:00:00|jq &#39;[.SpotPriceHistory[]|(.SpotPrice|tonumber)]|add/length&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is very cool, but if you wish to re-use part of the parsed JSON, you&amp;rsquo;re going to have to define a variable. &lt;em&gt;jq&lt;/em&gt; makes this easy with the &lt;strong&gt;as $var&lt;/strong&gt; syntax.&lt;/p&gt;
 &lt;p&gt;Check this out:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;.Events[]
-    | (.CloudTrailEvent|fromjson) as $ct
-    | [
+    | (.CloudTrailEvent|fromjson) as $ct |
+    [
         .EventName,
         (.EventTime
             | strftime(&amp;quot;%Y-%m-%d %H:%M:%S&amp;quot;) ),
         $ct.userIdentity.userName,
         ($ct.userAgent|split(&amp;quot; &amp;quot;)[0,3,4])
-      ]
+    ]
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;How cool is that?&lt;/p&gt;
 &lt;p&gt;We&amp;rsquo;re actually assigned the variable &lt;em&gt;ct&lt;/em&gt; to the whole &lt;strong&gt;.CloudTrailEvent | fromjson&lt;/strong&gt;. This means that later, we can use it in the same way as before.&lt;/p&gt;
@@ -178,6 +361,9 @@
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Assigning a variable means we have to terminate the assignment with a pipe as before (and by way of convention), I&amp;rsquo;m going to use the ending pipe to terminate the variables at the end of the line rather than at the beginning.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Do yourself a favour, come up with some converntion that works for you and stick to it. Whether it&amp;rsquo;s placing different outputs on different lines, or putting the pipe on the end of the line for variable definition. Whatever. Just make sure you stick to it because you&amp;rsquo;re not going to undestand this &lt;em&gt;jq&lt;/em&gt; later unless you do!&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Phew. That felt like a long post, a lot of information and technically a little more challenging.&lt;/p&gt;

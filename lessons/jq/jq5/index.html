@@ -670,17 +670,20 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
   <span style="color:#ae81ff">1956</span>
 ]
 </code></pre></div><p>Subtle, but different; and to the <em>add</em> and <em>length</em> functions, this is a significant difference!</p>
-<p>This is cool, but if you wish to re-use part of the parsed JSON, you&rsquo;re going to have to define a variable. <em>jq</em> makes this easy with the <strong>as $var</strong> syntax.</p>
+<p>Here&rsquo;s another example: We want to find out the average spot instance price of the m4.xlarge instance sizes over some period of time:</p>
+<pre><code>aws ec2 describe-spot-price-history --instance-types m4.xlarge --product-descriptions &quot;Linux/UNIX&quot; --start-time 2020-06-01T00:00:00|jq '[.SpotPriceHistory[]|(.SpotPrice|tonumber)]|add/length'
+</code></pre>
+<p>This is very cool, but if you wish to re-use part of the parsed JSON, you&rsquo;re going to have to define a variable. <em>jq</em> makes this easy with the <strong>as $var</strong> syntax.</p>
 <p>Check this out:</p>
 <pre><code>.Events[]
-    | (.CloudTrailEvent|fromjson) as $ct
-    | [
+    | (.CloudTrailEvent|fromjson) as $ct |
+    [
         .EventName,
         (.EventTime
             | strftime(&quot;%Y-%m-%d %H:%M:%S&quot;) ),
         $ct.userIdentity.userName,
         ($ct.userAgent|split(&quot; &quot;)[0,3,4])
-      ]
+    ]
 </code></pre>
 <p>How cool is that?</p>
 <p>We&rsquo;re actually assigned the variable <em>ct</em> to the whole <strong>.CloudTrailEvent | fromjson</strong>. This means that later, we can use it in the same way as before.</p>
@@ -724,6 +727,9 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <li>
 <p>Assigning a variable means we have to terminate the assignment with a pipe as before (and by way of convention), I&rsquo;m going to use the ending pipe to terminate the variables at the end of the line rather than at the beginning.</p>
 </li>
+<li>
+<p>Do yourself a favour, come up with some converntion that works for you and stick to it. Whether it&rsquo;s placing different outputs on different lines, or putting the pipe on the end of the line for variable definition. Whatever. Just make sure you stick to it because you&rsquo;re not going to undestand this <em>jq</em> later unless you do!</p>
+</li>
 </ul>
 <p>Phew. That felt like a long post, a lot of information and technically a little more challenging.</p>
 <hr>
@@ -746,8 +752,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts">
-                    Next<br>No newer posts.
+                <a class="newer-posts" href="https://cloud-fundis.github.io/odbc-to-athena/">
+                    Next<br>Odbc to Athena
                 </a>
                 
                 
