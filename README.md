@@ -174,11 +174,11 @@ This error occurs if you have not installed the `go` programming language on you
 See this [section](https://www.docsy.dev/docs/get-started/docsy-as-module/installation-prerequisites/#install-go-language) of the user guide for instructions on how to install `go`.
 
 
-[alternate dashboard]: https://app.netlify.com/sites/goldydocs/deploys
+[alternate dashboard]: https://app.netlify.com/sites/Brightspark/deploys
 [deploys]: https://app.netlify.com/sites/docsy-example/deploys
 [Docsy user guide]: https://docsy.dev/docs
 [Docsy]: https://github.com/google/docsy
-[example.docsy.dev]: https://example.docsy.dev
+[example.docsy.dev]: https://cloud-fundis.github.io/
 [Hugo theme module]: https://gohugo.io/hugo-modules/use-modules/#use-a-module-for-a-theme
 [Netlify]: https://netlify.com
 [Docker Compose documentation]: https://docs.docker.com/compose/gettingstarted/

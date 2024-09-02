@@ -1,5 +1,5 @@
 ---
-title: Goldydocs
+title: Brightspark
 ---
 
 {{< blocks/cover title="Welcome to Cloud Fundi's Brightspark Documentation!" image_anchor="top" height="full" >}}
@@ -47,7 +47,7 @@ This is the second section
 {{% blocks/section type="row" %}}
 
 {{% blocks/feature icon="fab fa-app-store-ios" title="Download **from AppStore**" %}}
-Get the Goldydocs app!
+Get the Brightspark app!
 {{% /blocks/feature %}}
 
 {{% blocks/feature icon="fab fa-github" title="Contributions welcome!"

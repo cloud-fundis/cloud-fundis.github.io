@@ -1,5 +1,5 @@
-baseURL = "https://example.docsy.dev/"
-title = "Goldydocs"
+baseURL = "https://cloud-fundis.github.io//"
+title = "Brightspark"
 
 # Language settings
 contentDir = "content/en"
@@ -55,7 +55,7 @@ anchor = "smart"
 [languages]
 [languages.en]
 languageName ="English"
-title = "Goldydocs"
+title = "Brightspark"
 [languages.en.params]
 description = "A Docsy example site"
 
