@@ -1,6 +1,6 @@
 ---
-title: Reference
-description: Low level reference docs for your project.
+title: API Reference
+description: Low level API reference docs for your project.
 weight: 9
 ---
 
