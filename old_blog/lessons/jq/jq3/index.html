@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html><head>
+<title>jq getting interesting: lessons 7 through 9</title>
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+<script src="/vendor/js/jquery.min.js" ></script>
+<script src="/vendor/js/popper.min.js" ></script>
+<script src="/vendor/js/bootstrap.min.js" ></script>
+<script src="/vendor/js/smooth-scroll.polyfills.min.js" ></script>
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<script src="/vendor/js/vue.min.js" ></script>
+
+
+
+
+<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/journal.min.56b67b8b01d7cd1015ed14414fd2fc33ebfb2e8413dcbc47c5cd734544c92cd7.css" integrity="sha256-VrZ7iwHXzRAV7RRBT9L8M&#43;v7LoQT3LxHxc1zRUTJLNc=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/dark-mode.min.5a2bbd1758c83affd639a91fbfd5cc681b1a5574df99442825c444dd40504b13.css" integrity="sha256-Wiu9F1jIOv/WOakfv9XMaBsaVXTfmUQoJcRE3UBQSxM=" media="screen">
+
+
+<script src="https://cloud-fundis.github.io//js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Noto+Serif+SC|Material+Icons");
+</script>
+
+<script src="https://cloud-fundis.github.io//js/table.js"></script>
+
+
+
+
+<script src="https://cloud-fundis.github.io//js/toc.js"></script>
+
+
+
+
+
+
+
+
+</head><body>
+    	<div id="app"><div ref="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://cloud-fundis.github.io/">
+    
+        <div class="nav-title">
+            because there are just too many things to remember
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/blog">
+                Blogs
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            <parent name="Lessons" type="nav-link-item active">
+                
+                    <li><a href="/lessons/jq"> jq</a></li>
+                
+            </parent>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 because there are just too many things to remember
+	
+    </div>
+    
+</div><div ref="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#where-were-welessonsjqjq2" v-on:click="closeDrawer" id="where-were-welessonsjqjq2-nav">
+										 Where were we?
+									</a>
+								</li>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-7" v-on:click="closeDrawer" id="lesson-7-nav">
+										 Lesson 7
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#creating-new-structures" v-on:click="closeDrawer" id="creating-new-structures-nav">
+										 Creating new structures
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-8" v-on:click="closeDrawer" id="lesson-8-nav">
+										 Lesson 8
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#selecting-only-running-instances-and-changing-the-order-of-the-output" v-on:click="closeDrawer" id="selecting-only-running-instances-and-changing-the-order-of-the-output-nav">
+										 Selecting only running instances and changing the order of the output
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-9" v-on:click="closeDrawer" id="lesson-9-nav">
+										 Lesson 9
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#using-functions-and-also-stopping-the-pipe" v-on:click="closeDrawer" id="using-functions-and-also-stopping-the-pipe-nav">
+										 Using functions (and also stopping the pipe)
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a class="pagination-action" v-on:click="toggleDarkMode">
+            <i class="material-icons pagination-action-icon" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons pagination-action-icon" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </a>
+        
+        
+    </div>
+</div><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/blog">
+                    Blogs
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                <parent name="Lessons" type="drawer-menu-item active">
+                    
+                        <li><a href="/lessons/jq"> jq</a></li>
+                    
+                </parent>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#where-were-welessonsjqjq2" v-on:click="closeDrawer" id="where-were-welessonsjqjq2-nav">
+										 Where were we?
+									</a>
+								</li>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-7" v-on:click="closeDrawer" id="lesson-7-nav">
+										 Lesson 7
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#creating-new-structures" v-on:click="closeDrawer" id="creating-new-structures-nav">
+										 Creating new structures
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-8" v-on:click="closeDrawer" id="lesson-8-nav">
+										 Lesson 8
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#selecting-only-running-instances-and-changing-the-order-of-the-output" v-on:click="closeDrawer" id="selecting-only-running-instances-and-changing-the-order-of-the-output-nav">
+										 Selecting only running instances and changing the order of the output
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-9" v-on:click="closeDrawer" id="lesson-9-nav">
+										 Lesson 9
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#using-functions-and-also-stopping-the-pipe" v-on:click="closeDrawer" id="using-functions-and-also-stopping-the-pipe-nav">
+										 Using functions (and also stopping the pipe)
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="https://cloud-fundis.github.io/">
+            because there are just too many things to remember
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" v-on:click="toggleDarkMode">
+            <i class="material-icons" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://cloud-fundis.github.io/">
+        <div class="single-column-header-title">because there are just too many things to remember</div>
+        
+
+    </a>
+</div>
+            <div id="content">
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    jq getting interesting: lessons 7 through 9
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020-05-07 15:21
+                        </time>
+                        
+
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/jq">jq</a>
+                                &nbsp;
+                            
+                                <a href="/tags/json">json</a>
+                                &nbsp;
+                            
+                                <a href="/tags/new-json-structures">new-json-structures</a>
+                                &nbsp;
+                            
+                                <a href="/tags/select">select</a>
+                                &nbsp;
+                            
+                                <a href="/tags/functions">functions</a>
+                                &nbsp;
+                            
+                                <a href="/tags/stringify">stringify</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                <div class="post-body">
+                    <h1 id="where-were-welessonsjqjq2"><a href="/lessons/jq/jq2">Where were we?</a></h1>
+<h2 id="lesson-7">Lesson 7</h2>
+<h3 id="creating-new-structures">Creating new structures</h3>
+<p>Last time, we created a string from each of the outputs we were interested in using a combination of the pipe ( | ), the raw and compact flag and string interpolation with round braces:</p>
+<pre><code>jq -cr '.Reservations[].Instances[] | &quot;\(.InstanceId): \(.State.Name): \(.PrivateIpAddress)&quot;'
+</code></pre>
+<p>Perhaps we would like to create an array of the values. This is pretty simple because, in effect what we&rsquo;re doing on the right hand side of the pipe ( | ) is to create a new structure. That structure itself could be a string like that above, or it could be an array</p>
+<pre><code>jq -cr '.Reservations[].Instances[] | [.InstanceId), .State.Name, .PrivateIpAddress]'
+</code></pre>
+<p>Not when you do this, it seems to ignore the raw ( -r ) flag. That may seem strange, but in fact creating an array in JSON means that elements of the array HAVE to use double quotes ( &quot; ) and must be separated by commas ( , ). That&rsquo;s JSON.</p>
+<pre><code>[&quot;i-053667d4e26795541&quot;,&quot;running&quot;,&quot;172.16.2.26&quot;]
+[&quot;i-0a775b8c631e8ad27&quot;,&quot;running&quot;,&quot;172.16.2.15&quot;]
+[&quot;i-06e986e85261c838e&quot;,&quot;stopped&quot;,&quot;172.16.1.10&quot;]
+[&quot;i-061b358b9cfc20505&quot;,&quot;running&quot;,&quot;172.16.1.13&quot;]
+</code></pre><p>So how about creating a new object in JSON with each element tagged with a key?</p>
+<pre><code>jq -cr '.Reservations[].Instances[] | {instance:.InstanceId), state:.State.Name, ip:.PrivateIpAddress}'
+</code></pre>
+<p>produces</p>
+<pre><code>{&quot;instance&quot;:&quot;i-053667d4e26795541&quot;,&quot;state&quot;:&quot;running&quot;,&quot;ip&quot;:&quot;172.16.2.26&quot;}
+{&quot;instance&quot;:&quot;i-0a775b8c631e8ad27&quot;,&quot;state&quot;:&quot;running&quot;,&quot;ip&quot;:&quot;172.16.2.15&quot;}
+{&quot;instance&quot;:&quot;i-06e986e85261c838e&quot;,&quot;state&quot;:&quot;stopped&quot;,&quot;ip&quot;:&quot;172.16.1.10&quot;}
+{&quot;instance&quot;:&quot;i-061b358b9cfc20505&quot;,&quot;state&quot;:&quot;running&quot;,&quot;ip&quot;:&quot;172.16.1.13&quot;}
+</code></pre><p>NOTE: Worth noting here is that if I leave out a comma ( , ) between each element, this produces an error because that&rsquo;s invalid JSON.</p>
+<pre><code>jq: error: syntax error, unexpected IDENT, expecting '}' (Unix shell quoting issues?) at &lt;top-level&gt;, line 1:
+.Reservations[].Instances[]|  {instance:.InstanceId,     state:.State.Name ip:.PrivateIpAddress}                                                                           
+jq: 1 compile error
+</code></pre><p>The reason for this error was I left out a comma between the <em>state:.State.Name</em> and the <em>ip.PrivateIPAddress</em>. That results in an error in the newly created JSON.</p>
+<p>What&rsquo;s cool about this is that, I may also like to know the state of block storage on the instances that are launched, and even though I&rsquo;ve not unpacked the BlockDeviceMappings JSON, I can still use it prefectly:</p>
+<pre><code>jq -cr '.Reservations[].Instances[] | [.InstanceId, .State.Name, .PrivateIpAddress, .BlockDeviceMappings]'
+</code></pre>
+<pre><code>[&quot;i-053667d4e26795541&quot;,&quot;running&quot;,&quot;172.16.2.26&quot;,[{&quot;DeviceName&quot;:&quot;/dev/sda1&quot;,&quot;Ebs&quot;:{&quot;AttachTime&quot;:&quot;2019-06-21T15:24:29.000Z&quot;,&quot;DeleteOnTermination&quot;:true,&quot;Status&quot;:&quot;attached&quot;,&quot;VolumeId&quot;:&quot;vol-05dec31f2e74067b0&quot;}}]]
+[&quot;i-0a775b8c631e8ad27&quot;,&quot;running&quot;,&quot;172.16.2.15&quot;,[{&quot;DeviceName&quot;:&quot;/dev/sda1&quot;,&quot;Ebs&quot;:{&quot;AttachTime&quot;:&quot;2019-10-11T15:18:37.000Z&quot;,&quot;DeleteOnTermination&quot;:false,&quot;Status&quot;:&quot;attached&quot;,&quot;VolumeId&quot;:&quot;vol-01ca741dc26d7c0f9&quot;}}]]
+[&quot;i-06e986e85261c838e&quot;,&quot;stopped&quot;,&quot;172.16.1.10&quot;,[{&quot;DeviceName&quot;:&quot;/dev/sda1&quot;,&quot;Ebs&quot;:{&quot;AttachTime&quot;:&quot;2020-03-12T08:17:14.000Z&quot;,&quot;DeleteOnTermination&quot;:false,&quot;Status&quot;:&quot;attached&quot;,&quot;VolumeId&quot;:&quot;vol-01a80015424546dad&quot;}}]]
+[&quot;i-061b358b9cfc20505&quot;,&quot;running&quot;,&quot;172.16.1.13&quot;,[{&quot;DeviceName&quot;:&quot;/dev/sda1&quot;,&quot;Ebs&quot;:{&quot;AttachTime&quot;:&quot;2020-03-17T10:18:13.000Z&quot;,&quot;DeleteOnTermination&quot;:true,&quot;Status&quot;:&quot;attached&quot;,&quot;VolumeId&quot;:&quot;vol-0610ab7fde8c71943&quot;}}]]
+</code></pre><h2 id="lesson-8">Lesson 8</h2>
+<h3 id="selecting-only-running-instances-and-changing-the-order-of-the-output">Selecting only running instances and changing the order of the output</h3>
+<p>I certainly would like to know what instances are running, filtering out (discarding) those that are stopped.</p>
+<p><strong>Select</strong> is the answer.</p>
+<pre><code>jq -c '.Reservations[].Instances[] | select(.State.Name == &quot;running&quot;) | [.LaunchTime, .InstanceId, .State.Name, .PrivateIpAddress]'
+</code></pre>
+<p>Just like in a Unix pipe, one can use select to choose what you&rsquo;re after and once you have it, you pipe those results to the output just as before.</p>
+<p>The command above produces only the running instances:</p>
+<pre><code>[&quot;2020-05-07T03:45:33.000Z&quot;,&quot;i-053667d4e26795541&quot;,&quot;running&quot;,&quot;172.16.2.26&quot;]
+[&quot;2020-05-07T03:50:45.000Z&quot;,&quot;i-0a775b8c631e8ad27&quot;,&quot;running&quot;,&quot;172.16.2.15&quot;]
+[&quot;2020-05-07T03:50:45.000Z&quot;,&quot;i-061b358b9cfc20505&quot;,&quot;running&quot;,&quot;172.16.1.13&quot;]
+</code></pre><p>NOTE: I know that for this customer, instances are started every morning, so adding LaunchTime as the first element of the array shows me that indeed, these instances were launched today.</p>
+<p>In this example (now including the VPC ID), I want to write the output into a sentence:</p>
+<pre><code>jq -c '.Reservations[].Instances[] | select(.State.Name == &quot;running&quot;) | &quot;Instance \(.InstanceId) is \(.State.Name) and was launched at \(.LaunchTime). It has \(.PrivateIpAddress) private IP in \(.VpcId)&quot;'
+</code></pre>
+<pre><code>&quot;Instance i-053667d4e26795541 is running and was launched at 2020-05-08T03:45:33.000Z. It has 172.16.2.26 private IP in vpc-0c092d552baffc13d&quot;
+&quot;Instance i-0a775b8c631e8ad27 is running and was launched at 2020-05-08T03:50:44.000Z. It has 172.16.2.15 private IP in vpc-0c092d552baffc13d&quot;
+&quot;Instance i-061b358b9cfc20505 is running and was launched at 2020-05-08T03:50:44.000Z. It has 172.16.1.13 private IP in vpc-0c092d552baffc13d&quot;
+</code></pre><p>Now that&rsquo;s verbose output!</p>
+<h2 id="lesson-9">Lesson 9</h2>
+<h3 id="using-functions-and-also-stopping-the-pipe">Using functions (and also stopping the pipe)</h3>
+<p><em>jq</em> has a number of useful functions that can be applied to your output. Functions like ascii_downcase, map, join, mktime and many others. Using them though can be a challenge. The examples in the documentation don&rsquo;t help a ton.</p>
+<p>Suppose I wish to change the LaunchTime into UNIX time, how would I do that.</p>
+<p>Certainly it seems like this might work:</p>
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;)|.InstanceId, .LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime'
+</code></pre>
+<p>But alas it doesn&rsquo;t and produces this error:</p>
+<pre><code>jq: error (at &lt;stdin&gt;:551): date &quot;i-053667d4e26795541&quot; does not match format &quot;%Y-%m-%dT%H:%M:%S.000Z&quot;
+</code></pre>
+<p>Of course. <em>jq</em> is piping everything into mktime including the InstanceId; but that&rsquo;s not a time. How do we stop that?</p>
+<p>One way might be to enclose the time in it&rsquo;s own array as follows:</p>
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;)|.InstanceId, [.LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime]'
+</code></pre>
+<p>That does it, but it&rsquo;s ugly. However it does give you a hint of what&rsquo;s going on here. If you create a new field (in this case, I&rsquo;ve created an array), that seems to stop the pipe in it&rsquo;s tracks. Armed with that knowledge, we could try making it into a string with string interpolation as follows:</p>
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;)|.InstanceId, &quot;\(.LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime)&quot;'
+</code></pre>
+<p>That&rsquo;s right; we&rsquo;re grabbing the .InstanceId, but the .LaunchTime we&rsquo;re stringifying and pushing that through two functions: string-parse-time (strptime) and mktime to convert it to UNIX time.</p>
+<pre><code>&quot;i-053667d4e26795541&quot;
+&quot;1588909533&quot;
+&quot;i-0a775b8c631e8ad27&quot;
+&quot;1588909844&quot;
+&quot;i-061b358b9cfc20505&quot;
+&quot;1588909844&quot;
+</code></pre><p>That has however caused us to lose some of our functionality that we had before (everything on one line for one instance). To solve that, we can put this back into an array as follows:</p>
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;)|[.InstanceId, &quot;\(.LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime)&quot;]'
+</code></pre>
+<p>Of course, we now get an array back, but this can be solved using the add function (and a further <em>jq</em> invocation):</p>
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;)|[.InstanceId, &quot;\(.LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime)&quot;]'|jq 'add'
+</code></pre>
+<p>Notice how the <strong>add</strong> in a separate <em>jq</em> adds the elements of the array together:</p>
+<pre><code>&quot;i-053667d4e267955411588909533&quot;
+&quot;i-0a775b8c631e8ad271588909844&quot;
+&quot;i-061b358b9cfc205051588909844&quot;
+</code></pre><p>Of course, this is still not ideal because we&rsquo;ve now got a long sting and we would have to work out where the InstanceId stops and the UNIX timestamp starts.</p>
+<p>A final change fixes that:</p>
+<pre><code>jq -c '.Reservations[].Instances[]|select(.State.Name == &quot;running&quot;) | [.InstanceId, &quot;:&quot;, &quot;\(.LaunchTime|strptime(&quot;%Y-%m-%dT%H:%M:%S.000Z&quot;)|mktime)&quot;]' | jq 'add'
+</code></pre>
+<p>Including a colon ( : ) as a string in the array definition produces:</p>
+<pre><code>&quot;i-053667d4e26795541:1588909533&quot;
+&quot;i-0a775b8c631e8ad27:1588909844&quot;
+&quot;i-061b358b9cfc20505:1588909844&quot;
+</code></pre><p>Adding a raw flag to the second <em>jq</em> command fixes all the double-quotes too.</p>
+<p>Until next time, happy <em>jq</em>\ing.</p>
+
+                    
+                    <HR width="100%" id="EOF">
+                    <p style="color:#777;">Last modified on 2020-05-07</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://cloud-fundis.github.io/lessons/jq/jq4/">
+                    Next<br>lessons 10 through 12
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://cloud-fundis.github.io/lessons/jq/jq2/">
+                    Previous<br>jq - lessons 3 to 6
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 because there are just too many things to remember
+	</div>
+    	</div>
+    <script src="https://cloud-fundis.github.io//js/journal.js"></script>
+    </body>
+</html>

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html><head>
+<title>jq - lessons 3 to 6</title>
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+<script src="/vendor/js/jquery.min.js" ></script>
+<script src="/vendor/js/popper.min.js" ></script>
+<script src="/vendor/js/bootstrap.min.js" ></script>
+<script src="/vendor/js/smooth-scroll.polyfills.min.js" ></script>
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<script src="/vendor/js/vue.min.js" ></script>
+
+
+
+
+<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/journal.min.56b67b8b01d7cd1015ed14414fd2fc33ebfb2e8413dcbc47c5cd734544c92cd7.css" integrity="sha256-VrZ7iwHXzRAV7RRBT9L8M&#43;v7LoQT3LxHxc1zRUTJLNc=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/dark-mode.min.5a2bbd1758c83affd639a91fbfd5cc681b1a5574df99442825c444dd40504b13.css" integrity="sha256-Wiu9F1jIOv/WOakfv9XMaBsaVXTfmUQoJcRE3UBQSxM=" media="screen">
+
+
+<script src="https://cloud-fundis.github.io//js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Noto+Serif+SC|Material+Icons");
+</script>
+
+<script src="https://cloud-fundis.github.io//js/table.js"></script>
+
+
+
+
+<script src="https://cloud-fundis.github.io//js/toc.js"></script>
+
+
+
+
+
+
+
+
+</head><body>
+    	<div id="app"><div ref="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://cloud-fundis.github.io/">
+    
+        <div class="nav-title">
+            because there are just too many things to remember
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/blog">
+                Blogs
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            <parent name="Lessons" type="nav-link-item active">
+                
+                    <li><a href="/lessons/jq"> jq</a></li>
+                
+            </parent>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 because there are just too many things to remember
+	
+    </div>
+    
+</div><div ref="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#previouslylessonsjqjq1-on-_jq_-" v-on:click="closeDrawer" id="previouslylessonsjqjq1-on-_jq_--nav">
+										 Previously on jq …
+									</a>
+								</li>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-3" v-on:click="closeDrawer" id="lesson-3-nav">
+										 Lesson 3
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#json-is-case-sensitive" v-on:click="closeDrawer" id="json-is-case-sensitive-nav">
+										 JSON is case sensitive
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-4" v-on:click="closeDrawer" id="lesson-4-nav">
+										 Lesson 4
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#retriving-more-than-a-single-key-at-once" v-on:click="closeDrawer" id="retriving-more-than-a-single-key-at-once-nav">
+										 Retriving more than a single key at once
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-5" v-on:click="closeDrawer" id="lesson-5-nav">
+										 Lesson 5
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#is-there-a-way-to-only-get-the-name-and-not-the-code" v-on:click="closeDrawer" id="is-there-a-way-to-only-get-the-name-and-not-the-code-nav">
+										 Is there a way to only get the ‘Name’ and not the ‘Code’?
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-6" v-on:click="closeDrawer" id="lesson-6-nav">
+										 Lesson 6
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#could-we-make-this-all-end-on-the-same-line" v-on:click="closeDrawer" id="could-we-make-this-all-end-on-the-same-line-nav">
+										 Could we make this all end on the same line?
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a class="pagination-action" v-on:click="toggleDarkMode">
+            <i class="material-icons pagination-action-icon" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons pagination-action-icon" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </a>
+        
+        
+    </div>
+</div><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/blog">
+                    Blogs
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                <parent name="Lessons" type="drawer-menu-item active">
+                    
+                        <li><a href="/lessons/jq"> jq</a></li>
+                    
+                </parent>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#previouslylessonsjqjq1-on-_jq_-" v-on:click="closeDrawer" id="previouslylessonsjqjq1-on-_jq_--nav">
+										 Previously on jq …
+									</a>
+								</li>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-3" v-on:click="closeDrawer" id="lesson-3-nav">
+										 Lesson 3
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#json-is-case-sensitive" v-on:click="closeDrawer" id="json-is-case-sensitive-nav">
+										 JSON is case sensitive
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-4" v-on:click="closeDrawer" id="lesson-4-nav">
+										 Lesson 4
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#retriving-more-than-a-single-key-at-once" v-on:click="closeDrawer" id="retriving-more-than-a-single-key-at-once-nav">
+										 Retriving more than a single key at once
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-5" v-on:click="closeDrawer" id="lesson-5-nav">
+										 Lesson 5
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#is-there-a-way-to-only-get-the-name-and-not-the-code" v-on:click="closeDrawer" id="is-there-a-way-to-only-get-the-name-and-not-the-code-nav">
+										 Is there a way to only get the ‘Name’ and not the ‘Code’?
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-6" v-on:click="closeDrawer" id="lesson-6-nav">
+										 Lesson 6
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#could-we-make-this-all-end-on-the-same-line" v-on:click="closeDrawer" id="could-we-make-this-all-end-on-the-same-line-nav">
+										 Could we make this all end on the same line?
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="https://cloud-fundis.github.io/">
+            because there are just too many things to remember
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" v-on:click="toggleDarkMode">
+            <i class="material-icons" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://cloud-fundis.github.io/">
+        <div class="single-column-header-title">because there are just too many things to remember</div>
+        
+
+    </a>
+</div>
+            <div id="content">
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    jq - lessons 3 to 6
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020-05-05 14:41
+                        </time>
+                        
+
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/jq">jq</a>
+                                &nbsp;
+                            
+                                <a href="/tags/json">json</a>
+                                &nbsp;
+                            
+                                <a href="/tags/shell">shell</a>
+                                &nbsp;
+                            
+                                <a href="/tags/case-sentivity">case sentivity</a>
+                                &nbsp;
+                            
+                                <a href="/tags/multi-attribute">multi attribute</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                <div class="post-body">
+                    <h1 id="previouslylessonsjqjq1-on-_jq_-"><a href="/lessons/jq/jq1">Previously</a> on <em>jq</em> &hellip;</h1>
+<pre><code>aws ec2 describe-instances | jq '.Reservations[].Instances[] | keys'
+</code></pre>
+<p>shows us all the keys for all the <em>Reservations</em> for all the <em>Instances</em> I have launched in AWS.</p>
+<p>Perhaps we wish to know what the state of the instances are?</p>
+<p>I see there&rsquo;s a <strong>State</strong> in the resulting keys. Perhaps that has the state of all instances.</p>
+<h2 id="lesson-3">Lesson 3</h2>
+<h3 id="json-is-case-sensitive">JSON is case sensitive</h3>
+<p>JSON is case sensitive, so</p>
+<pre><code>aws ec2 describe-instances | jq '.Reservations[].Instances[].state'
+</code></pre>
+<p>returns nothing, while</p>
+<pre><code>aws ec2 describe-instances | jq '.Reservations[].Instances[].State'
+</code></pre>
+<p>returns</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">80</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;stopped&#34;</span>
+}
+</code></pre></div><p>Ok. Cool. I only have one instance launched here, so this shows only one instance in a stopped state.</p>
+<p>In <em>jq</em> terminology, we&rsquo;ve applied a filter to this data. First we applied a filter of all Reservations, then all Instances and finally a filter of <em>State</em>.</p>
+<p>If I look in an account of one of our customers, then I see</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">16</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;running&#34;</span>
+}
+{
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">16</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;running&#34;</span>
+}
+{
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">80</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;stopped&#34;</span>
+}
+{
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">16</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;running&#34;</span>
+}
+</code></pre></div><p>Nice, though, that&rsquo;s only partially useful, because I would like to know what the instanceId&rsquo;s are of the running and stopped instances.</p>
+<h2 id="lesson-4">Lesson 4</h2>
+<h3 id="retriving-more-than-a-single-key-at-once">Retriving more than a single key at once</h3>
+<p>We could loop through this and do the aws call multiple times, retrieving the instanceId first and then&hellip;.BARF&hellip;Urgh, just writing that sentence make me sick.</p>
+<p>There <strong>MUST</strong> be a better way?</p>
+<p>Indeed. If we pipe ( | ) [we saw this used in an earlier lesson right?] the output of the <em>.Reservations[].Instances[]</em> and &lsquo;grab&rsquo; the keys we&rsquo;re interested in, then that would work:</p>
+<pre><code>aws ec2 describe-instances | jq '.Reservations[].Instances[] | .InstanceId,.State'
+</code></pre>
+<p>results in:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#e6db74">&#34;i-0a775b8c631e8ad27&#34;</span>
+{
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">16</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;running&#34;</span>
+}
+<span style="color:#e6db74">&#34;i-061b358b9cfc20505&#34;</span>
+{
+  <span style="color:#f92672">&#34;Code&#34;</span>: <span style="color:#ae81ff">16</span>,
+  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;running&#34;</span>
+}
+<span style="color:#960050;background-color:#1e0010">...</span>
+</code></pre></div><p>Now we&rsquo;re cooking.</p>
+<p>NOTE: I&rsquo;m going to leave out the aws cli command from here, since really, it&rsquo;s adding no value to the learning and making the scroll-box on your browser ugly.</p>
+<h2 id="lesson-5">Lesson 5</h2>
+<h3 id="is-there-a-way-to-only-get-the-name-and-not-the-code">Is there a way to only get the &lsquo;Name&rsquo; and not the &lsquo;Code&rsquo;?</h3>
+<p>Funny you should ask that. There sure is.</p>
+<pre><code>jq '.Reservations[].Instances[] | .InstanceId,.State.Name'
+</code></pre>
+<pre><code>    &quot;i-0a775b8c631e8ad27&quot;
+    &quot;running&quot;
+    &quot;i-061b358b9cfc20505&quot;
+    &quot;running&quot;
+</code></pre><p>Ooooh&hellip;that&rsquo;s so much better! Simply adding the subkey to the key you want solve this nicely.</p>
+<p>Finally, you may be wondering about the double-quotes. That&rsquo;s going to hinder us later when we&rsquo;re trying to do something useful with this - like put it in a script.</p>
+<p>Using the &lsquo;raw&rsquo; flag ( -r ) for <em>jq</em> solve that.</p>
+<pre><code>jq -r '.Reservations[1,3].Instances[] | .InstanceId,.State.Name'
+</code></pre>
+<p>NOTE: I slipped something into this last command I&rsquo;ve not talked about. The selection of various elements of the <em>Reservations</em> array. See it there: <strong>1,3</strong>? That&rsquo;s saying the second and the 4th elements of this array. Remember JSON arrays are indexed from 0.</p>
+<h2 id="lesson-6">Lesson 6</h2>
+<h3 id="could-we-make-this-all-end-on-the-same-line">Could we make this all end on the same line?</h3>
+<p>Well, this is something I would like to be able to do.</p>
+<p>There are a couple of ways of doing this. To begin, use the compact ( -c ) flag. This will compact the output, but still, without a little fancy footwork in your <em>jq</em> expression, it&rsquo;ll not have the desired results.</p>
+<p>To understand this, you should know that the output after the pipe is writing two strings namely <em>InstanceId</em> and then <em>State</em>. What we really want to do is combine those outputs into a new string</p>
+<p>We could try this:</p>
+<pre><code>jq -c '.Reservations[1,3].Instances[] | &quot;.InstanceId, .State.Name&quot;'
+</code></pre>
+<p>however that produces two strings with .InstanceId, .State.Name. Not quite what we want.</p>
+<p>We could use an array to combine these strings into a new array as follows:</p>
+<pre><code>jq -c '.Reservations[1,3].Instances[] | [.InstanceId, .State.Name]'
+</code></pre>
+<p>which results in:</p>
+<pre><code>[&quot;i-0a775b8c631e8ad27&quot;,&quot;running&quot;]
+[&quot;i-061b358b9cfc20505&quot;,&quot;running&quot;]
+</code></pre>
+<p>Better. However if we&rsquo;re going to be generating this for some further processing, we&rsquo;re THEN going to have to remove the square braces in the next stage of processing. Not ideal.</p>
+<p>So we could try string interpolation as follows:</p>
+<pre><code>jq -c '.Reservations[1,3].Instances[] | &quot;\(.InstanceId), \(.State.Name)&quot;'
+</code></pre>
+<p>This encloses our values as a string. In <em>jq</em> documentation, this is discussed under String interpolation. When we place our fields inside round braces, escaping the opening brace it forces <em>jq</em> to interpolate them as a string.</p>
+<p>The above command (almost) does what we want. Why almost? Because we&rsquo;ve got the double-quote back again. But we know how to solve that; with the &lsquo;raw&rsquo; flag.</p>
+<pre><code>jq -rc '.Reservations[1,3].Instances[] | &quot;\(.InstanceId), \(.State.Name)&quot;'
+</code></pre>
+<p>q &lsquo;.Item&rsquo; $i.putitem &gt; new.json &amp;&amp; aws dynamodb put-item &ndash;table-name scriptTable &ndash;item file:///home/hadoop/new.json</p>
+
+                    
+                    <HR width="100%" id="EOF">
+                    <p style="color:#777;">Last modified on 2020-05-05</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://cloud-fundis.github.io/lessons/jq/jq3/">
+                    Next<br>jq getting interesting: lessons 7 through 9
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://cloud-fundis.github.io/lessons/jq/lesson-n/">
+                    Previous<br>jq - lesson N - the N&#39;d game
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 because there are just too many things to remember
+	</div>
+    	</div>
+    <script src="https://cloud-fundis.github.io//js/journal.js"></script>
+    </body>
+</html>

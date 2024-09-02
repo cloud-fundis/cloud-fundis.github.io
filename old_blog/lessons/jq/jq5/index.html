@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html><head>
+<title>Resources worth bookmarking and other jq lessons</title>
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+<script src="/vendor/js/jquery.min.js" ></script>
+<script src="/vendor/js/popper.min.js" ></script>
+<script src="/vendor/js/bootstrap.min.js" ></script>
+<script src="/vendor/js/smooth-scroll.polyfills.min.js" ></script>
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<script src="/vendor/js/vue.min.js" ></script>
+
+
+
+
+<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/journal.min.56b67b8b01d7cd1015ed14414fd2fc33ebfb2e8413dcbc47c5cd734544c92cd7.css" integrity="sha256-VrZ7iwHXzRAV7RRBT9L8M&#43;v7LoQT3LxHxc1zRUTJLNc=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://cloud-fundis.github.io/scss/dark-mode.min.5a2bbd1758c83affd639a91fbfd5cc681b1a5574df99442825c444dd40504b13.css" integrity="sha256-Wiu9F1jIOv/WOakfv9XMaBsaVXTfmUQoJcRE3UBQSxM=" media="screen">
+
+
+<script src="https://cloud-fundis.github.io//js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Noto+Serif+SC|Material+Icons");
+</script>
+
+<script src="https://cloud-fundis.github.io//js/table.js"></script>
+
+
+
+
+<script src="https://cloud-fundis.github.io//js/toc.js"></script>
+
+
+
+
+
+
+
+
+</head><body>
+    	<div id="app"><div ref="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://cloud-fundis.github.io/">
+    
+        <div class="nav-title">
+            because there are just too many things to remember
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/blog">
+                Blogs
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            <parent name="Lessons" type="nav-link-item active">
+                
+                    <li><a href="/lessons/jq"> jq</a></li>
+                
+            </parent>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 because there are just too many things to remember
+	
+    </div>
+    
+</div><div ref="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-13" v-on:click="closeDrawer" id="lesson-13-nav">
+										 Lesson 13:
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#converting-a-document-into-json-that-you-can-use" v-on:click="closeDrawer" id="converting-a-document-into-json-that-you-can-use-nav">
+										 Converting a document into JSON that you can use
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-14" v-on:click="closeDrawer" id="lesson-14-nav">
+										 Lesson 14
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#defining-variables-for-later-use" v-on:click="closeDrawer" id="defining-variables-for-later-use-nav">
+										 Defining variables for later use
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#additional-resources" v-on:click="closeDrawer" id="additional-resources-nav">
+										 Additional resources
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a class="pagination-action" v-on:click="toggleDarkMode">
+            <i class="material-icons pagination-action-icon" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons pagination-action-icon" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </a>
+        
+        
+    </div>
+</div><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/blog">
+                    Blogs
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                <parent name="Lessons" type="drawer-menu-item active">
+                    
+                        <li><a href="/lessons/jq"> jq</a></li>
+                    
+                </parent>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-13" v-on:click="closeDrawer" id="lesson-13-nav">
+										 Lesson 13:
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#converting-a-document-into-json-that-you-can-use" v-on:click="closeDrawer" id="converting-a-document-into-json-that-you-can-use-nav">
+										 Converting a document into JSON that you can use
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#lesson-14" v-on:click="closeDrawer" id="lesson-14-nav">
+										 Lesson 14
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#defining-variables-for-later-use" v-on:click="closeDrawer" id="defining-variables-for-later-use-nav">
+										 Defining variables for later use
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+							<ul>
+						
+							<ul>
+						
+							<ul>
+						
+						
+								<li>
+				 					<a href="#additional-resources" v-on:click="closeDrawer" id="additional-resources-nav">
+										 Additional resources
+									</a>
+								</li>
+						
+							</ul>
+						
+							</ul>
+						
+							</ul>
+						
+					
+				
+			
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="https://cloud-fundis.github.io/">
+            because there are just too many things to remember
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" v-on:click="toggleDarkMode">
+            <i class="material-icons" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://cloud-fundis.github.io/">
+        <div class="single-column-header-title">because there are just too many things to remember</div>
+        
+
+    </a>
+</div>
+            <div id="content">
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Resources worth bookmarking and other jq lessons
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020-06-02 11:50
+                        </time>
+                        
+
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/lesson13">lesson13</a>
+                                &nbsp;
+                            
+                                <a href="/tags/lesson14">lesson14</a>
+                                &nbsp;
+                            
+                                <a href="/tags/resources">resources</a>
+                                &nbsp;
+                            
+                                <a href="/tags/jq">jq</a>
+                                &nbsp;
+                            
+                                <a href="/tags/json">json</a>
+                                &nbsp;
+                            
+                                <a href="/tags/more-functions">more functions</a>
+                                &nbsp;
+                            
+                                <a href="/tags/variables">variables</a>
+                                &nbsp;
+                            
+                                <a href="/tags/ordering">ordering</a>
+                                &nbsp;
+                            
+                                <a href="/tags/cloudwatch">cloudwatch</a>
+                                &nbsp;
+                            
+                                <a href="/tags/aws-events">aws-events</a>
+                                &nbsp;
+                            
+                                <a href="/tags/consolelogins">consoleLogins</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                <div class="post-body">
+                    <p>It&rsquo;s been a while since the <a href="lessons/jq/jq4.md">last</a> lesson. In that time, my computer died and was repaired and I&rsquo;ve finally got things back together.</p>
+<p>Today we&rsquo;re going to dive into more useful <em>jq</em> things, but I&rsquo;m also going to refer to resources worth bookmarking.</p>
+<p>First up: <a href="https://jqterm.com/?query=.">jqterm</a>. This is a fantastic tool to test your queries iteractively. It does almost everything you could do in a terminal on your laptop, and gives immediate visual feedback. It however, doesn&rsquo;t seem to like comments like <em>jq</em>, but as a testing tool, it&rsquo;s great.</p>
+<p>It handles newlines beautifully as illustrated <img src="/jqterm.png" alt="below"></p>
+<pre><code>.Events[]
+    [.EventName,
+        (.EventTime
+            | strftime(&quot;%Y-%m-%d %H:%M:%S&quot;) ),
+        (.CloudTrailEvent
+            |fromjson
+            |.sourceIPAddress,
+             .userIdentity.userName,
+             .eventTime,
+             (.userAgent|split(&quot; &quot;)[3]),
+             .responseElements.ConsoleLogin
+        )
+    ]
+</code></pre>
+<p>I use this expression because it illustrates a few things:</p>
+<p>(1) The CloudTrailEvent looks like JSON, but handling this initially required two <em>jq</em> statements chained together like this:</p>
+<p><img src="/twojqs.png" alt=""></p>
+<p>This is ugly for a number of reasons, but mostly because I would like to get all the output in a single sweep. More on that later.</p>
+<p>(2) Writing the output into a format that we might like (like tab-separated-values (tsv)), <em>jq</em> has a function for that. Piping the output directly though @tsv does this cleanly.</p>
+<p>There are some great resources out there, but it&rsquo;s taken me time to find them. I&rsquo;ll create a separate blog post about them, but <a href="https://remysharp.com/drafts/jq-recipes">this</a> and <a href="https://programminghistorian.org/en/lessons/json-and-jq">this</a> are great ones to bookmark now. Lots of examples and demos. Had I found these before I started this series I wouldn&rsquo;t have done the series because these are comprhensive resources on <em>jq</em>. Anyhow, here we are!</p>
+<h2 id="lesson-13">Lesson 13:</h2>
+<h3 id="converting-a-document-into-json-that-you-can-use">Converting a document into JSON that you can use</h3>
+<p>Getting the ConsoleLogin events from CLoudTrail, here&rsquo;s a sample event:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">       {
+            <span style="color:#f92672">&#34;EventId&#34;</span>: <span style="color:#e6db74">&#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxx068613&#34;</span>,
+            <span style="color:#f92672">&#34;EventName&#34;</span>: <span style="color:#e6db74">&#34;ConsoleLogin&#34;</span>,
+            <span style="color:#f92672">&#34;ReadOnly&#34;</span>: <span style="color:#e6db74">&#34;false&#34;</span>,
+            <span style="color:#f92672">&#34;EventTime&#34;</span>: <span style="color:#ae81ff">1584080740.0</span>,
+            <span style="color:#f92672">&#34;EventSource&#34;</span>: <span style="color:#e6db74">&#34;signin.amazonaws.com&#34;</span>,
+            <span style="color:#f92672">&#34;Username&#34;</span>: <span style="color:#e6db74">&#34;hamish&#34;</span>,
+            <span style="color:#f92672">&#34;Resources&#34;</span>: [],
+            <span style="color:#f92672">&#34;CloudTrailEvent&#34;</span>: <span style="color:#e6db74">&#34;{\&#34;eventVersion\&#34;:\&#34;1.05\&#34;,\&#34;userIdentity\&#34;:{\&#34;type\&#34;:\&#34;IAMUser\&#34;,\&#34;principalId\&#34;:\&#34;AIDAxxxxxxxxxxxxxxxxx\&#34;,\&#34;arn\&#34;:\&#34;arn:aws:iam::xxxxxxxx0012:user/hamish\&#34;,\&#34;accountId\&#34;:\&#34;xxxxxxxx0012\&#34;,\&#34;userName\&#34;:\&#34;hamish\&#34;},\&#34;eventTime\&#34;:\&#34;2020-03-13T06:25:40Z\&#34;,\&#34;eventSource\&#34;:\&#34;signin.amazonaws.com\&#34;,\&#34;eventName\&#34;:\&#34;ConsoleLogin\&#34;,\&#34;awsRegion\&#34;:\&#34;us-east-1\&#34;,\&#34;sourceIPAddress\&#34;:\&#34;156.xxx.xxx.xxx\&#34;,\&#34;userAgent\&#34;:\&#34;Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:73.0) Gecko/20100101 Firefox/73.0\&#34;,\&#34;requestParameters\&#34;:null,\&#34;responseElements\&#34;:{\&#34;ConsoleLogin\&#34;:\&#34;Success\&#34;},\&#34;additionalEventData\&#34;:{\&#34;LoginTo\&#34;:\&#34;https://console.aws.amazon.com/iam/home?region=eu-west-1&amp;state=hashArgs%23&amp;isauthcode=true\&#34;,\&#34;MobileVersion\&#34;:\&#34;No\&#34;,\&#34;MFAUsed\&#34;:\&#34;No\&#34;},\&#34;eventID\&#34;:\&#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxx068613\&#34;,\&#34;eventType\&#34;:\&#34;AwsConsoleSignIn\&#34;,\&#34;recipientAccountId\&#34;:\&#34;xxxxxxxx0012\&#34;}&#34;</span>
+        }
+</code></pre></div><p>Let&rsquo;s start with this as part (1) of this lesson:</p>
+<pre><code>.Events[]
+    |[(.CloudTrailEvent
+                    |fromjson
+                    |.sourceIPAddress,.userIdentity.userName,.eventTime,(.userAgent|split(&quot; &quot;)[3]), .responseElements.ConsoleLogin
+                ),
+                .EventName,
+                (.EventTime
+                    |strftime(&quot;%Y-%m-%d %H:%M&quot;)),
+                ]
+| @tsv
+</code></pre>
+<p>Now the <strong>.CloudTrailEvent</strong> looks awlfully like JSON. In fact it is, and previously we would have had to pipe the events through two <em>jq</em> commands (see above).</p>
+<p>The <em>fromjson</em> builtin function allows us to convert this ugly-looking almost-JSON to JSON we can use. Hence the <em>jq</em> above. Notice how I enclose the <strong>.CloudTrailEvent</strong> in round ( ) braces. This allows me to handle all the <strong>.CloudTrailEvent</strong> keys in a single group.</p>
+<p>Part (2): Take note too how I changed the order of the data returned. How is that so?</p>
+<p>What this means is that the input JSON goes though each part of the <em>jq</em> pipeline - irrespective of the order it is in. I&rsquo;ve subtly swapped the first bit of JSON (the <strong>.Event</strong> information) with the second bit (the <strong>.CloudTrailEvent</strong>). That&rsquo;s handy.</p>
+<h2 id="lesson-14">Lesson 14</h2>
+<h3 id="defining-variables-for-later-use">Defining variables for later use</h3>
+<p>Following on from the above (that <em>jq</em> passes every part of the JSON through the program), what does it matter?</p>
+<p>Well, unlike many other languages, we would have to define variables if we wanted to do something, while in <em>jq</em> we can achieve this more simply. Say we wanted to find the average of the following <strong>.time_taken</strong>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">	{
+	    <span style="color:#f92672">&#34;url_details&#34;</span>: [
+	        {
+	            <span style="color:#f92672">&#34;api_url&#34;</span>: <span style="color:#e6db74">&#34;https://xxxxxxx/v1/wellness/count/level/customer/id/123456/impactarea/performance,efficiency,availability,protection,capacity,configuration,security?sum1=performance,efficiency&amp;sum2=availability,protection&#34;</span>,
+	            <span style="color:#f92672">&#34;time_taken&#34;</span>: <span style="color:#ae81ff">1373</span>
+	        },
+	        {
+	            <span style="color:#f92672">&#34;api_url&#34;</span>: <span style="color:#e6db74">&#34;https://xxxxxxxxxxxxx/v1/wellness/renewal/count/level/customer/id/1234546&#34;</span>,
+	            <span style="color:#f92672">&#34;time_taken&#34;</span>: <span style="color:#ae81ff">1414</span>
+	        },
+	        {
+	            <span style="color:#f92672">&#34;api_url&#34;</span>: <span style="color:#e6db74">&#34;https://xxxxxxxxxxxxx/v1/wellness/renewal/count/level/customer/id/1234546&#34;</span>,
+	            <span style="color:#f92672">&#34;time_taken&#34;</span>: <span style="color:#ae81ff">1478</span>
+	        },
+	        {
+	            <span style="color:#f92672">&#34;api_url&#34;</span>: <span style="color:#e6db74">&#34;https://xxxxxxxxxxxxx/v1/wellness/renewal/count/level/customer/id/1234546&#34;</span>,
+	            <span style="color:#f92672">&#34;time_taken&#34;</span>: <span style="color:#ae81ff">1956</span>
+	        }]
+	}
+</code></pre></div><p>In traditional coding, we would need to keep track of (a) the number of entries (in this case 4) and (b) the sum of all entries to calculate the average. However, since <em>jq</em> sends the data through each part of a pipeline, we simply do this:</p>
+<pre><code>jq '[.url_details[] | .time_taken]|add/length'
+</code></pre>
+<p>Here the .time_taken is passed through the function <em>add</em> and that same JSON is passed through the function <em>length</em>. Bingo, we have the average.</p>
+<p>But wait: there&rsquo;s something else going on here.</p>
+<p>You should note the first set of square [ ] braces inside the <em>jq</em>. We&rsquo;ve not seen that before! Why do they appear before the .url_details?</p>
+<p>The <em>add</em> and the <em>length</em> functions are expecting an array object - to be able to add and to find the length of the array. Previously we&rsquo;ve used the square braces AFTER the pipe, but in this case we&rsquo;re using an array to enclose the values we wish to <em>add</em> and find the <em>length</em> of.</p>
+<p>So contrast this:</p>
+<pre><code>jq '.url_details[] | [.time_taken]'
+</code></pre>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">[
+  <span style="color:#ae81ff">1373</span>
+]
+[
+  <span style="color:#ae81ff">1414</span>
+]
+[
+  <span style="color:#ae81ff">1478</span>
+]
+[
+  <span style="color:#ae81ff">1956</span>
+]
+</code></pre></div><p>with this:</p>
+<pre><code>jq '[.url_details[] | .time_taken]'
+</code></pre>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">[
+  <span style="color:#ae81ff">1373</span>,
+  <span style="color:#ae81ff">1414</span>,
+  <span style="color:#ae81ff">1478</span>,
+  <span style="color:#ae81ff">1956</span>
+]
+</code></pre></div><p>Subtle, but different; and to the <em>add</em> and <em>length</em> functions, this is a significant difference!</p>
+<p>Here&rsquo;s another example: We want to find out the average spot instance price of the m4.xlarge instance sizes over some period of time:</p>
+<pre><code>aws ec2 describe-spot-price-history --instance-types m4.xlarge --product-descriptions &quot;Linux/UNIX&quot; --start-time 2020-06-01T00:00:00|jq '[.SpotPriceHistory[]|(.SpotPrice|tonumber)]|add/length'
+</code></pre>
+<p>This is very cool, but if you wish to re-use part of the parsed JSON, you&rsquo;re going to have to define a variable. <em>jq</em> makes this easy with the <strong>as $var</strong> syntax.</p>
+<p>Check this out:</p>
+<pre><code>.Events[]
+    | (.CloudTrailEvent|fromjson) as $ct |
+    [
+        .EventName,
+        (.EventTime
+            | strftime(&quot;%Y-%m-%d %H:%M:%S&quot;) ),
+        $ct.userIdentity.userName,
+        ($ct.userAgent|split(&quot; &quot;)[0,3,4])
+    ]
+</code></pre>
+<p>How cool is that?</p>
+<p>We&rsquo;re actually assigned the variable <em>ct</em> to the whole <strong>.CloudTrailEvent | fromjson</strong>. This means that later, we can use it in the same way as before.</p>
+<p>That&rsquo;s defining a variable for a whole section of JSON. I&rsquo;ve included some additional things here including splitting the <strong>.userAgent</strong> string into parts so I can get the OS and the browser used to login.</p>
+<p>Of course I could also place something specific into a variable like this:</p>
+<pre><code>.Events[]
+    | (.CloudTrailEvent|fromjson) as $ct |
+    [
+        .EventName,
+        (.EventTime
+            | strftime(&quot;%Y-%m-%d %H:%M:%S&quot;) ),
+        ($ct.userIdentity.userName|ascii_upcase) as $user |
+        ($ct.userAgent|split(&quot; &quot;)[0,3,4]),
+        &quot;User is &quot;+$user
+    ]
+</code></pre>
+<p>The output:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">[
+  <span style="color:#e6db74">&#34;ConsoleLogin&#34;</span>,
+  <span style="color:#e6db74">&#34;2020-05-04 10:32:09&#34;</span>,
+  <span style="color:#e6db74">&#34;Mozilla/5.0&#34;</span>,
+  <span style="color:#e6db74">&#34;Linux&#34;</span>,
+  <span style="color:#e6db74">&#34;x86_64;&#34;</span>,
+  <span style="color:#e6db74">&#34;User is HAMISH&#34;</span>
+]
+[
+  <span style="color:#e6db74">&#34;ConsoleLogin&#34;</span>,
+  <span style="color:#e6db74">&#34;2020-03-19 03:45:34&#34;</span>,
+  <span style="color:#e6db74">&#34;Mozilla/5.0&#34;</span>,
+  <span style="color:#e6db74">&#34;Mac&#34;</span>,
+  <span style="color:#e6db74">&#34;OS&#34;</span>,
+  <span style="color:#e6db74">&#34;User is HAMISH&#34;</span>
+] <span style="color:#960050;background-color:#1e0010">...</span>
+</code></pre></div><p>As you can see, I&rsquo;ve assigned <strong>.userName</strong> to <strong>$user</strong>, but in addition, I&rsquo;ve upper-cased the result for later use. That is pretty cool.</p>
+<p>Take note that this can get pretty messy if you don&rsquo;t keep it neat. I mean, all this works on a single line; but don&rsquo;t ask me to maintain that later!</p>
+<p>Additional things:</p>
+<ul>
+<li>
+<p>Putting a string into the resulting JSON with the final line &ldquo;User is&hellip;&quot;. We can do this with a variable.</p>
+</li>
+<li>
+<p>Assigning a variable means we have to terminate the assignment with a pipe as before (and by way of convention), I&rsquo;m going to use the ending pipe to terminate the variables at the end of the line rather than at the beginning.</p>
+</li>
+<li>
+<p>Do yourself a favour, come up with some converntion that works for you and stick to it. Whether it&rsquo;s placing different outputs on different lines, or putting the pipe on the end of the line for variable definition. Whatever. Just make sure you stick to it because you&rsquo;re not going to undestand this <em>jq</em> later unless you do!</p>
+</li>
+</ul>
+<p>Phew. That felt like a long post, a lot of information and technically a little more challenging.</p>
+<hr>
+<h3 id="additional-resources">Additional resources</h3>
+<p>Here are some resources I found useful:</p>
+<p>A <a href="https://hyperpolyglot.org/json"><em>jq</em> cheat-sheet</a></p>
+<p>An interactive <em>jq</em> interface on the Interwebs <a href="https://jqterm.com">jqterm</a></p>
+<p>Some good <em>jq</em> recipes (though they get advanced quickly!) <a href="https://remysharp.com/drafts/jq-recipes"><em>jq</em> recipes</a></p>
+<p>Another great <em>jq</em> tutorial <a href="https://programminghistorian.org/en/lessons/json-and-jq">Reshaping JSON with <em>jq</em></a></p>
+<p>An alternative to jqterm <a href="https://jqplay.org/"><em>JQ</em> play</a></p>
+
+                    
+                    <HR width="100%" id="EOF">
+                    <p style="color:#777;">Last modified on 2020-06-02</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://cloud-fundis.github.io/blog/odbc-to-athena/">
+                    Next<br>Odbc to Athena
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://cloud-fundis.github.io/lessons/jq/jq4/">
+                    Previous<br>lessons 10 through 12
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 because there are just too many things to remember
+	</div>
+    	</div>
+    <script src="https://cloud-fundis.github.io//js/journal.js"></script>
+    </body>
+</html>

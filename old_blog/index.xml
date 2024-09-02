@@ -1,0 +1,1076 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>because there are just too many things to remember</title>
+    <link>https://cloud-fundis.github.io/</link>
+    <description>Recent content on because there are just too many things to remember</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 29 Apr 2020 13:09:58 +0200</lastBuildDate>
+    
+        <atom:link href="https://cloud-fundis.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Odbc to Athena</title>
+        <link>https://cloud-fundis.github.io/blog/odbc-to-athena/</link>
+        <pubDate>Wed, 28 Oct 2020 15:51:11 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/blog/odbc-to-athena/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/blog/odbc-to-athena/ -&lt;p&gt;This article details the technical aspects of the &lt;a href=&#34;https://cloud-fundis.co.za/aws/athena-and-odbc&#34;&gt;higher-level blog post&lt;/a&gt; on accessing
+your data lake using off-the-shelf tools like Microsoft Excel, PowerBI or
+OpenOffice/LibreOffice products.&lt;/p&gt;
+&lt;p&gt;Since I don&amp;rsquo;t have an MS Excel license (and it seems like my Office 365 license
+does not allow me to do this), I am simply putting links on how to do this on
+Microsoft Excel in the reference section below.&lt;/p&gt;
+&lt;p&gt;The rest of this article will focus on doing this with LibreOffice Calc. You&amp;rsquo;re
+a technical bunch, so extrapolating from this to something that works in your
+environment should not be a massive leap.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s get started.&lt;/p&gt;
+&lt;h3 id=&#34;things-youll-need&#34;&gt;Things you&amp;rsquo;ll need:&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; The Simba Driver for 64-bit Linux of your choice available &lt;a href=&#34;https://www.simba.com/drivers/athena-odbc-jdbc/&#34;&gt;here&lt;/a&gt; or &lt;a href=&#34;https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc.html&#34;&gt;here&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; LibreOffice 6.4.6&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Data in S3 in a format that you can easily understand (perhaps CSV data)&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Access to AWS Athena on the AWS Console&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; An AWS Access Key and an AWS Secret Access Key&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Nice-to-have&amp;rsquo;s:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Access to the CloudTrail logs to see what&amp;rsquo;s going on when you do queries&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; A table in Athena that contains Parquet data&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;step-1-installation&#34;&gt;Step 1: Installation&lt;/h3&gt;
+&lt;p&gt;Install the Simba drivers on your Linux host (if you&amp;rsquo;re using Windows, follow the Windows instructions). This can be a bit of a pain because it assumes a bunch of things. I found for example, that I needed the ODBC package unixodbc which contains the isql and iusql CLI tools for talking to an ODBC SQL data source.&lt;/p&gt;
+&lt;p&gt;In the Simba &lt;a href=&#34;%22/Simba_Athena_ODBC_Install_and_Configuration_Guide.pdf%22&#34;&gt;install instructions&lt;/a&gt; (bundled with the driver of course), they make a distinction between installing for iODBC and unixODBC. In my experience, I found the only method to tell them apart was by the version (Version: 2.3.6-0.1build1) of the driver (which told me I was installing the unixODBC drivers) and so I could choose the appropriate options.&lt;/p&gt;
+&lt;p&gt;I haven&amp;rsquo;t done this on Mac, so certainly YMMV.&lt;/p&gt;
+&lt;p&gt;Finally, I&amp;rsquo;m on Ubuntu (a Debian based distribution, and the Simba driver is an RPM package), so you need to use Alien to convert it to a .deb to do the installation. Not a train-smash, but good to know.&lt;/p&gt;
+&lt;h3 id=&#34;step-2-configuration&#34;&gt;Step 2: Configuration&lt;/h3&gt;
+&lt;p&gt;Now that they&amp;rsquo;re installed it&amp;rsquo;s time to configure things. There are two routes to using these:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;either using a data source name (DSN) or&lt;/li&gt;
+&lt;li&gt;using a DSN-less configuration. For ease of use, I chose the DSN route.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Essentially this means we describe a name for the connection and use that name when querying.&lt;/p&gt;
+&lt;p&gt;Choosing to go the other route (DSN-less), means having to use the Athena VPC endpoints. Certainly if there&amp;rsquo;s sufficient interest in this, we could revise this post to use DSN-less settings.&lt;/p&gt;
+&lt;p&gt;There are three files:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;/opt/simba/athenaodbc/Setup/odbc.ini&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The main configuration file that specifies the AWS credentials, the DSN and other important things.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;/opt/simba/athenaodbc/Setup/odbcinst.ini&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;A file the specifies the driver version and the name of the driver.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;/opt/simba/athenaodbc/lib/64/simba.athenaodbc.ini&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Configuration for logging of the Simba driver. It will, for example, create a file called simbaathenaodbcdriver.log in the PATH you specify.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In the Simba documentation, the install path is /usr/local/odbc while on Ubuntu it&amp;rsquo;s installed in /opt/simba/athenaodbc/ by default.&lt;/p&gt;
+&lt;p&gt;Now probably the easiest thing to do is to copy &lt;code&gt;/opt/simba/athenaodbc/Setup/odbc.ini&lt;/code&gt; to your home directory and rename is as &lt;code&gt;.odbc.ini&lt;/code&gt; (note the leading period). Edit the settings in this file and you&amp;rsquo;re good to go.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ve compressed my configs below, but there are other settings you can configure:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;ODBC&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+ Trace&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;yes
+ &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;ODBC Data Sources&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+ MyAthena&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;Simba Athena ODBC Driver 64-bit
+ &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;MyAthena&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+ Description&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;Simba Athena ODBC Driver &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;64-bit&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; DSN
+ Driver&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/opt/simba/athenaodbc/lib/64/libathenaodbc_sb64.so
+ AwsRegion&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;eu-west-1
+ Schema&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;homeautomation
+ S3OutputLocation&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;s3://myS3-big-data-bucket/athena-queries/
+ AuthenticationType&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;IAM Credentials
+ UID&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;AKIA&amp;lt;....&amp;gt;
+ PWD&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;gEc&amp;lt;....&amp;gt;xkU28v
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Things you may wonder about:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;MyAthena&lt;/code&gt; in the configuration above is the DSN I&amp;rsquo;ll be using in my connections&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;UID&lt;/code&gt; is your AWS AccessKey&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;PWD&lt;/code&gt; is your AWS Secret AccessKey&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;AuthenticationType&lt;/code&gt; allows us to use this simple auth. If you&amp;rsquo;re using Microsoft Active Directory, the Simba driver allows authentication through federated credentials from AD. Other options are also possible.&lt;/p&gt;
+&lt;p&gt;Now we have this in place, it&amp;rsquo;s time to test our connection.&lt;/p&gt;
+&lt;p&gt;To do this one can use the &lt;code&gt;isql&lt;/code&gt; client supplied by the unixodbc package. Simply start it as follows:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ isql MyAthena&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;If everything worked, then you should see &lt;strong&gt;Connected!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Typing &lt;code&gt;help electricmeter&lt;/code&gt; will initiate a query to Athena.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;+---------------------------------------+
+| Connected!                            |
+|                                       |
+| sql-statement                         |
+| help [tablename]                      |
+| quit                                  |
+|                                       |
++---------------------------------------+
+SQL&amp;gt; help electricmeter
+
+| TABLE_QUALIFIER | TABLE_OWNER | TABLE_NAME | COLUMN_NAME | DATA_TYPE | TYPE_NAME | PRECISION |LENGTH | SCALE | RADIX | NULLABLE | REMARKS | COLUMN_DEF | SQL_DATA_TYPE | SQL_DATETIME_SUB | CHAR_OCTET_LENGTH | SEQ_IN_INDEX | IS_NULLABLE | USER_DATA_TYPE | 
+| AwsDataCatalog | homeautomation | electricmeter | date | 12 | string | 255 | 255 | | | 1 | | | 12 | | 255 | 1 | YES | 0 |
+| AwsDataCatalog | homeautomation | electricmeter | reading | 7 | float | 24 | 4 | | 2 | 1 | | | 7 | | | 2 | YES | 0 |
+
+SQLRowCount returns -1
+2 rows fetched
+SQL&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Sure enough, two rows describing my dataset - one being the &lt;em&gt;date&lt;/em&gt; of the electrical reading and the other being the actual &lt;em&gt;reading&lt;/em&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;step-3-connecting-athena-to-libreoffice--through-libreoffice-base&#34;&gt;Step 3: Connecting Athena to LibreOffice &amp;hellip; through LibreOffice Base&lt;/h3&gt;
+&lt;p&gt;So now the only thing left to do is to get LibreOffice Calc to see this table. To do this, we need to create a new database connection in LibreOffice Base. Simple enough really. Just fire up LibreOffice Base&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ soffice --base&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Connection settings outlined in the images below:&lt;/p&gt;
+&lt;p&gt;(1) &lt;strong&gt;Options for which driver to select&lt;/strong&gt;
+&lt;img src=&#34;https://cloud-fundis.github.io/existing-driver-1.png&#34; alt=&#34;Driver options&#34;&gt;&lt;/p&gt;
+&lt;p&gt;(2) &lt;strong&gt;Register a new connection in Base&lt;/strong&gt;
+&lt;img src=&#34;https://cloud-fundis.github.io/new-connection.png&#34; alt=&#34;New Connection&#34;&gt;&lt;/p&gt;
+&lt;p&gt;(3) &lt;strong&gt;The tables in Athena&lt;/strong&gt;
+&lt;img src=&#34;https://cloud-fundis.github.io/athena-table-awsconsole.png&#34; alt=&#34;Athena tables&#34;&gt;&lt;/p&gt;
+&lt;p&gt;(4) &lt;strong&gt;Now name the connection and save it&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;It might be helpful too to hit the &amp;ldquo;Test Connection&amp;rdquo; button to make sure it all works&lt;/p&gt;
+&lt;p&gt;Registering a new DB connection is done! Now it&amp;rsquo;s time to use this thing.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: All the steps above only need to be done the first time. After the connection is made, all [new] tables created in Athena will be visible to this connection.&lt;/p&gt;
+&lt;p&gt;Open LibreOffice Calc and hit &amp;lt;Shift&amp;gt; + &amp;lt;Ctrl&amp;gt; + &amp;lt;F4&amp;gt; which will open the Data Sources window. You should see your database connection &lt;code&gt;MyAthena&lt;/code&gt; as an option alongside the default one &lt;code&gt;Bibliography&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Opening &lt;code&gt;MyAthena&lt;/code&gt; will show the tables we have available to us.&lt;/p&gt;
+&lt;h3 id=&#34;step-4-graphing-our-data&#34;&gt;Step 4: Graphing our data&lt;/h3&gt;
+&lt;p&gt;Now let&amp;rsquo;s grab some of the data.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cloud-fundis.github.io/opening-athena-tables.png&#34; alt=&#34;The Athena tables&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cloud-fundis.github.io/graph.png&#34; alt=&#34;Final graph&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;last-but-not-least-cloudtrail&#34;&gt;Last but not least: CloudTrail&lt;/h3&gt;
+&lt;p&gt;It would be good to know how these queries look in AWS CloudTrail. If you&amp;rsquo;ve got access to CloudTrail, then&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=StartQueryExecution|jq -M &#39;.Events[0]|.CloudTrailEvent|fromjson&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This should show output along these lines (here I&amp;rsquo;ve only taken the most recent Event for the &lt;code&gt;StartQuertExecution&lt;/code&gt; API call, which selected records where the reading was less than 35)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cloud-fundis.github.io/less-than-35.png&#34; alt=&#34;Less than 35&#34;&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;eventVersion&amp;quot;: &amp;quot;1.05&amp;quot;,
+  &amp;quot;userIdentity&amp;quot;: {
+    &amp;quot;type&amp;quot;: &amp;quot;IAMUser&amp;quot;,
+    &amp;quot;principalId&amp;quot;: &amp;quot;AIDAxxxxxxxxxxxxxxxJT&amp;quot;,
+    &amp;quot;arn&amp;quot;: &amp;quot;arn:aws:iam::xxxxxxxxxxxx:user/hamish&amp;quot;,
+    &amp;quot;accountId&amp;quot;: &amp;quot;xxxxxxxxxxxx&amp;quot;,
+    &amp;quot;accessKeyId&amp;quot;: &amp;quot;AKIAxxxxxxxxxxxxxWWT&amp;quot;,
+    &amp;quot;userName&amp;quot;: &amp;quot;hamish&amp;quot;
+  },
+  &amp;quot;eventTime&amp;quot;: &amp;quot;2020-10-28T16:21:42Z&amp;quot;,
+  &amp;quot;eventSource&amp;quot;: &amp;quot;athena.amazonaws.com&amp;quot;,
+  &amp;quot;eventName&amp;quot;: &amp;quot;StartQueryExecution&amp;quot;,
+  &amp;quot;awsRegion&amp;quot;: &amp;quot;eu-west-1&amp;quot;,
+  &amp;quot;sourceIPAddress&amp;quot;: &amp;quot;xxx.xxx.xxx.xx&amp;quot;,
+  &amp;quot;userAgent&amp;quot;: &amp;quot;aws-sdk-cpp/1.7.365 Linux/5.4.0-7642-generic x86_64 GCC/4.9.2&amp;quot;,
+  &amp;quot;requestParameters&amp;quot;: {
+    &amp;quot;queryString&amp;quot;: &amp;quot;SELECT * FROM \&amp;quot;AwsDataCatalog\&amp;quot;.\&amp;quot;homeautomation\&amp;quot;.\&amp;quot;electricmeter_parquet\&amp;quot; WHERE ( \&amp;quot;AwsDataCatalog\&amp;quot;.\&amp;quot;homeautomation\&amp;quot;.\&amp;quot;electricmeter_parquet\&amp;quot;.\&amp;quot;reading\&amp;quot; &amp;lt;= 35 )&amp;quot;,
+    &amp;quot;clientRequestToken&amp;quot;: &amp;quot;AE646CD5-......-CE28&amp;quot;,
+    &amp;quot;queryExecutionContext&amp;quot;: {
+      &amp;quot;database&amp;quot;: &amp;quot;homeautomation&amp;quot;
+    },
+    &amp;quot;resultConfiguration&amp;quot;: {
+      &amp;quot;outputLocation&amp;quot;: &amp;quot;s3://myS3-big-data-bucket/athena-queries/&amp;quot;
+    }
+  },
+  &amp;quot;responseElements&amp;quot;: {
+    &amp;quot;queryExecutionId&amp;quot;: &amp;quot;399xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx230&amp;quot;
+  },
+  &amp;quot;requestID&amp;quot;: &amp;quot;2eaxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxf5b&amp;quot;,
+  &amp;quot;eventID&amp;quot;: &amp;quot;390xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxa4b&amp;quot;,
+  &amp;quot;eventType&amp;quot;: &amp;quot;AwsApiCall&amp;quot;,
+  &amp;quot;recipientAccountId&amp;quot;: &amp;quot;xxxxxxxxxxxx&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;references&#34;&gt;References&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;http://raaviblog.com/how-to-connect-microsoft-power-bi-to-amazon-athena-using-athena-odbc-driver/&#34;&gt;Connecting Athena to PowerBI using a DSN&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cdata.com/drivers/&#34;&gt;CData provide a host of drivers&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://dzone.com/articles/connecting-to-odbc-data-sources-in-google-apps-scr&#34;&gt;Connecting to an ODBC data source from Google Apps&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;disclaimers&#34;&gt;Disclaimers:&lt;/h4&gt;
+&lt;p&gt;It should be noted that there may well be better ways of getting access to the S3 data than the way proposed in this blog; so certainly explore those. This was primarily aimed at highlighting that the data in the data lake should be accessible to as many as possible.&lt;/p&gt;
+- https://cloud-fundis.github.io/blog/odbc-to-athena/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Resources worth bookmarking and other jq lessons</title>
+        <link>https://cloud-fundis.github.io/lessons/jq/jq5/</link>
+        <pubDate>Tue, 02 Jun 2020 11:50:31 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/lessons/jq/jq5/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq/jq5/ -&lt;p&gt;It&amp;rsquo;s been a while since the &lt;a href=&#34;lessons/jq/jq4.md&#34;&gt;last&lt;/a&gt; lesson. In that time, my computer died and was repaired and I&amp;rsquo;ve finally got things back together.&lt;/p&gt;
+&lt;p&gt;Today we&amp;rsquo;re going to dive into more useful &lt;em&gt;jq&lt;/em&gt; things, but I&amp;rsquo;m also going to refer to resources worth bookmarking.&lt;/p&gt;
+&lt;p&gt;First up: &lt;a href=&#34;https://jqterm.com/?query=.&#34;&gt;jqterm&lt;/a&gt;. This is a fantastic tool to test your queries iteractively. It does almost everything you could do in a terminal on your laptop, and gives immediate visual feedback. It however, doesn&amp;rsquo;t seem to like comments like &lt;em&gt;jq&lt;/em&gt;, but as a testing tool, it&amp;rsquo;s great.&lt;/p&gt;
+&lt;p&gt;It handles newlines beautifully as illustrated &lt;img src=&#34;https://cloud-fundis.github.io/jqterm.png&#34; alt=&#34;below&#34;&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.Events[]
+    [.EventName,
+        (.EventTime
+            | strftime(&amp;quot;%Y-%m-%d %H:%M:%S&amp;quot;) ),
+        (.CloudTrailEvent
+            |fromjson
+            |.sourceIPAddress,
+             .userIdentity.userName,
+             .eventTime,
+             (.userAgent|split(&amp;quot; &amp;quot;)[3]),
+             .responseElements.ConsoleLogin
+        )
+    ]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I use this expression because it illustrates a few things:&lt;/p&gt;
+&lt;p&gt;(1) The CloudTrailEvent looks like JSON, but handling this initially required two &lt;em&gt;jq&lt;/em&gt; statements chained together like this:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cloud-fundis.github.io/twojqs.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;This is ugly for a number of reasons, but mostly because I would like to get all the output in a single sweep. More on that later.&lt;/p&gt;
+&lt;p&gt;(2) Writing the output into a format that we might like (like tab-separated-values (tsv)), &lt;em&gt;jq&lt;/em&gt; has a function for that. Piping the output directly though @tsv does this cleanly.&lt;/p&gt;
+&lt;p&gt;There are some great resources out there, but it&amp;rsquo;s taken me time to find them. I&amp;rsquo;ll create a separate blog post about them, but &lt;a href=&#34;https://remysharp.com/drafts/jq-recipes&#34;&gt;this&lt;/a&gt; and &lt;a href=&#34;https://programminghistorian.org/en/lessons/json-and-jq&#34;&gt;this&lt;/a&gt; are great ones to bookmark now. Lots of examples and demos. Had I found these before I started this series I wouldn&amp;rsquo;t have done the series because these are comprhensive resources on &lt;em&gt;jq&lt;/em&gt;. Anyhow, here we are!&lt;/p&gt;
+&lt;h2 id=&#34;lesson-13&#34;&gt;Lesson 13:&lt;/h2&gt;
+&lt;h3 id=&#34;converting-a-document-into-json-that-you-can-use&#34;&gt;Converting a document into JSON that you can use&lt;/h3&gt;
+&lt;p&gt;Getting the ConsoleLogin events from CLoudTrail, here&amp;rsquo;s a sample event:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;       {
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;EventId&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxx068613&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;EventName&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ConsoleLogin&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;ReadOnly&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;false&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;EventTime&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1584080740.0&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;EventSource&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;signin.amazonaws.com&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Username&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hamish&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Resources&amp;#34;&lt;/span&gt;: [],
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;CloudTrailEvent&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{\&amp;#34;eventVersion\&amp;#34;:\&amp;#34;1.05\&amp;#34;,\&amp;#34;userIdentity\&amp;#34;:{\&amp;#34;type\&amp;#34;:\&amp;#34;IAMUser\&amp;#34;,\&amp;#34;principalId\&amp;#34;:\&amp;#34;AIDAxxxxxxxxxxxxxxxxx\&amp;#34;,\&amp;#34;arn\&amp;#34;:\&amp;#34;arn:aws:iam::xxxxxxxx0012:user/hamish\&amp;#34;,\&amp;#34;accountId\&amp;#34;:\&amp;#34;xxxxxxxx0012\&amp;#34;,\&amp;#34;userName\&amp;#34;:\&amp;#34;hamish\&amp;#34;},\&amp;#34;eventTime\&amp;#34;:\&amp;#34;2020-03-13T06:25:40Z\&amp;#34;,\&amp;#34;eventSource\&amp;#34;:\&amp;#34;signin.amazonaws.com\&amp;#34;,\&amp;#34;eventName\&amp;#34;:\&amp;#34;ConsoleLogin\&amp;#34;,\&amp;#34;awsRegion\&amp;#34;:\&amp;#34;us-east-1\&amp;#34;,\&amp;#34;sourceIPAddress\&amp;#34;:\&amp;#34;156.xxx.xxx.xxx\&amp;#34;,\&amp;#34;userAgent\&amp;#34;:\&amp;#34;Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:73.0) Gecko/20100101 Firefox/73.0\&amp;#34;,\&amp;#34;requestParameters\&amp;#34;:null,\&amp;#34;responseElements\&amp;#34;:{\&amp;#34;ConsoleLogin\&amp;#34;:\&amp;#34;Success\&amp;#34;},\&amp;#34;additionalEventData\&amp;#34;:{\&amp;#34;LoginTo\&amp;#34;:\&amp;#34;https://console.aws.amazon.com/iam/home?region=eu-west-1&amp;amp;state=hashArgs%23&amp;amp;isauthcode=true\&amp;#34;,\&amp;#34;MobileVersion\&amp;#34;:\&amp;#34;No\&amp;#34;,\&amp;#34;MFAUsed\&amp;#34;:\&amp;#34;No\&amp;#34;},\&amp;#34;eventID\&amp;#34;:\&amp;#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxx068613\&amp;#34;,\&amp;#34;eventType\&amp;#34;:\&amp;#34;AwsConsoleSignIn\&amp;#34;,\&amp;#34;recipientAccountId\&amp;#34;:\&amp;#34;xxxxxxxx0012\&amp;#34;}&amp;#34;&lt;/span&gt;
+        }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s start with this as part (1) of this lesson:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.Events[]
+    |[(.CloudTrailEvent
+                    |fromjson
+                    |.sourceIPAddress,.userIdentity.userName,.eventTime,(.userAgent|split(&amp;quot; &amp;quot;)[3]), .responseElements.ConsoleLogin
+                ),
+                .EventName,
+                (.EventTime
+                    |strftime(&amp;quot;%Y-%m-%d %H:%M&amp;quot;)),
+                ]
+| @tsv
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now the &lt;strong&gt;.CloudTrailEvent&lt;/strong&gt; looks awlfully like JSON. In fact it is, and previously we would have had to pipe the events through two &lt;em&gt;jq&lt;/em&gt; commands (see above).&lt;/p&gt;
+&lt;p&gt;The &lt;em&gt;fromjson&lt;/em&gt; builtin function allows us to convert this ugly-looking almost-JSON to JSON we can use. Hence the &lt;em&gt;jq&lt;/em&gt; above. Notice how I enclose the &lt;strong&gt;.CloudTrailEvent&lt;/strong&gt; in round ( ) braces. This allows me to handle all the &lt;strong&gt;.CloudTrailEvent&lt;/strong&gt; keys in a single group.&lt;/p&gt;
+&lt;p&gt;Part (2): Take note too how I changed the order of the data returned. How is that so?&lt;/p&gt;
+&lt;p&gt;What this means is that the input JSON goes though each part of the &lt;em&gt;jq&lt;/em&gt; pipeline - irrespective of the order it is in. I&amp;rsquo;ve subtly swapped the first bit of JSON (the &lt;strong&gt;.Event&lt;/strong&gt; information) with the second bit (the &lt;strong&gt;.CloudTrailEvent&lt;/strong&gt;). That&amp;rsquo;s handy.&lt;/p&gt;
+&lt;h2 id=&#34;lesson-14&#34;&gt;Lesson 14&lt;/h2&gt;
+&lt;h3 id=&#34;defining-variables-for-later-use&#34;&gt;Defining variables for later use&lt;/h3&gt;
+&lt;p&gt;Following on from the above (that &lt;em&gt;jq&lt;/em&gt; passes every part of the JSON through the program), what does it matter?&lt;/p&gt;
+&lt;p&gt;Well, unlike many other languages, we would have to define variables if we wanted to do something, while in &lt;em&gt;jq&lt;/em&gt; we can achieve this more simply. Say we wanted to find the average of the following &lt;strong&gt;.time_taken&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;	{
+	    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;url_details&amp;#34;&lt;/span&gt;: [
+	        {
+	            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;api_url&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://xxxxxxx/v1/wellness/count/level/customer/id/123456/impactarea/performance,efficiency,availability,protection,capacity,configuration,security?sum1=performance,efficiency&amp;amp;sum2=availability,protection&amp;#34;&lt;/span&gt;,
+	            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;time_taken&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1373&lt;/span&gt;
+	        },
+	        {
+	            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;api_url&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://xxxxxxxxxxxxx/v1/wellness/renewal/count/level/customer/id/1234546&amp;#34;&lt;/span&gt;,
+	            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;time_taken&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1414&lt;/span&gt;
+	        },
+	        {
+	            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;api_url&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://xxxxxxxxxxxxx/v1/wellness/renewal/count/level/customer/id/1234546&amp;#34;&lt;/span&gt;,
+	            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;time_taken&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1478&lt;/span&gt;
+	        },
+	        {
+	            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;api_url&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://xxxxxxxxxxxxx/v1/wellness/renewal/count/level/customer/id/1234546&amp;#34;&lt;/span&gt;,
+	            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;time_taken&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1956&lt;/span&gt;
+	        }]
+	}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In traditional coding, we would need to keep track of (a) the number of entries (in this case 4) and (b) the sum of all entries to calculate the average. However, since &lt;em&gt;jq&lt;/em&gt; sends the data through each part of a pipeline, we simply do this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq &#39;[.url_details[] | .time_taken]|add/length&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here the .time_taken is passed through the function &lt;em&gt;add&lt;/em&gt; and that same JSON is passed through the function &lt;em&gt;length&lt;/em&gt;. Bingo, we have the average.&lt;/p&gt;
+&lt;p&gt;But wait: there&amp;rsquo;s something else going on here.&lt;/p&gt;
+&lt;p&gt;You should note the first set of square [ ] braces inside the &lt;em&gt;jq&lt;/em&gt;. We&amp;rsquo;ve not seen that before! Why do they appear before the .url_details?&lt;/p&gt;
+&lt;p&gt;The &lt;em&gt;add&lt;/em&gt; and the &lt;em&gt;length&lt;/em&gt; functions are expecting an array object - to be able to add and to find the length of the array. Previously we&amp;rsquo;ve used the square braces AFTER the pipe, but in this case we&amp;rsquo;re using an array to enclose the values we wish to &lt;em&gt;add&lt;/em&gt; and find the &lt;em&gt;length&lt;/em&gt; of.&lt;/p&gt;
+&lt;p&gt;So contrast this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq &#39;.url_details[] | [.time_taken]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;[
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;1373&lt;/span&gt;
+]
+[
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;1414&lt;/span&gt;
+]
+[
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;1478&lt;/span&gt;
+]
+[
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;1956&lt;/span&gt;
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;with this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq &#39;[.url_details[] | .time_taken]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;[
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;1373&lt;/span&gt;,
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;1414&lt;/span&gt;,
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;1478&lt;/span&gt;,
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;1956&lt;/span&gt;
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Subtle, but different; and to the &lt;em&gt;add&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt; functions, this is a significant difference!&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s another example: We want to find out the average spot instance price of the m4.xlarge instance sizes over some period of time:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-spot-price-history --instance-types m4.xlarge --product-descriptions &amp;quot;Linux/UNIX&amp;quot; --start-time 2020-06-01T00:00:00|jq &#39;[.SpotPriceHistory[]|(.SpotPrice|tonumber)]|add/length&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is very cool, but if you wish to re-use part of the parsed JSON, you&amp;rsquo;re going to have to define a variable. &lt;em&gt;jq&lt;/em&gt; makes this easy with the &lt;strong&gt;as $var&lt;/strong&gt; syntax.&lt;/p&gt;
+&lt;p&gt;Check this out:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.Events[]
+    | (.CloudTrailEvent|fromjson) as $ct |
+    [
+        .EventName,
+        (.EventTime
+            | strftime(&amp;quot;%Y-%m-%d %H:%M:%S&amp;quot;) ),
+        $ct.userIdentity.userName,
+        ($ct.userAgent|split(&amp;quot; &amp;quot;)[0,3,4])
+    ]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;How cool is that?&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;re actually assigned the variable &lt;em&gt;ct&lt;/em&gt; to the whole &lt;strong&gt;.CloudTrailEvent | fromjson&lt;/strong&gt;. This means that later, we can use it in the same way as before.&lt;/p&gt;
+&lt;p&gt;That&amp;rsquo;s defining a variable for a whole section of JSON. I&amp;rsquo;ve included some additional things here including splitting the &lt;strong&gt;.userAgent&lt;/strong&gt; string into parts so I can get the OS and the browser used to login.&lt;/p&gt;
+&lt;p&gt;Of course I could also place something specific into a variable like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.Events[]
+    | (.CloudTrailEvent|fromjson) as $ct |
+    [
+        .EventName,
+        (.EventTime
+            | strftime(&amp;quot;%Y-%m-%d %H:%M:%S&amp;quot;) ),
+        ($ct.userIdentity.userName|ascii_upcase) as $user |
+        ($ct.userAgent|split(&amp;quot; &amp;quot;)[0,3,4]),
+        &amp;quot;User is &amp;quot;+$user
+    ]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The output:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;[
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ConsoleLogin&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2020-05-04 10:32:09&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mozilla/5.0&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Linux&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x86_64;&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;User is HAMISH&amp;#34;&lt;/span&gt;
+]
+[
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ConsoleLogin&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2020-03-19 03:45:34&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mozilla/5.0&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mac&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;OS&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;User is HAMISH&amp;#34;&lt;/span&gt;
+] &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;As you can see, I&amp;rsquo;ve assigned &lt;strong&gt;.userName&lt;/strong&gt; to &lt;strong&gt;$user&lt;/strong&gt;, but in addition, I&amp;rsquo;ve upper-cased the result for later use. That is pretty cool.&lt;/p&gt;
+&lt;p&gt;Take note that this can get pretty messy if you don&amp;rsquo;t keep it neat. I mean, all this works on a single line; but don&amp;rsquo;t ask me to maintain that later!&lt;/p&gt;
+&lt;p&gt;Additional things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Putting a string into the resulting JSON with the final line &amp;ldquo;User is&amp;hellip;&amp;quot;. We can do this with a variable.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Assigning a variable means we have to terminate the assignment with a pipe as before (and by way of convention), I&amp;rsquo;m going to use the ending pipe to terminate the variables at the end of the line rather than at the beginning.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Do yourself a favour, come up with some converntion that works for you and stick to it. Whether it&amp;rsquo;s placing different outputs on different lines, or putting the pipe on the end of the line for variable definition. Whatever. Just make sure you stick to it because you&amp;rsquo;re not going to undestand this &lt;em&gt;jq&lt;/em&gt; later unless you do!&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Phew. That felt like a long post, a lot of information and technically a little more challenging.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;additional-resources&#34;&gt;Additional resources&lt;/h3&gt;
+&lt;p&gt;Here are some resources I found useful:&lt;/p&gt;
+&lt;p&gt;A &lt;a href=&#34;https://hyperpolyglot.org/json&#34;&gt;&lt;em&gt;jq&lt;/em&gt; cheat-sheet&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;An interactive &lt;em&gt;jq&lt;/em&gt; interface on the Interwebs &lt;a href=&#34;https://jqterm.com&#34;&gt;jqterm&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Some good &lt;em&gt;jq&lt;/em&gt; recipes (though they get advanced quickly!) &lt;a href=&#34;https://remysharp.com/drafts/jq-recipes&#34;&gt;&lt;em&gt;jq&lt;/em&gt; recipes&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Another great &lt;em&gt;jq&lt;/em&gt; tutorial &lt;a href=&#34;https://programminghistorian.org/en/lessons/json-and-jq&#34;&gt;Reshaping JSON with &lt;em&gt;jq&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;An alternative to jqterm &lt;a href=&#34;https://jqplay.org/&#34;&gt;&lt;em&gt;JQ&lt;/em&gt; play&lt;/a&gt;&lt;/p&gt;
+- https://cloud-fundis.github.io/lessons/jq/jq5/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>lessons 10 through 12</title>
+        <link>https://cloud-fundis.github.io/lessons/jq/jq4/</link>
+        <pubDate>Tue, 12 May 2020 16:20:39 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/lessons/jq/jq4/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq/jq4/ -&lt;h1 id=&#34;last-time-on-jqlessonsjqjq3&#34;&gt;&lt;a href=&#34;https://cloud-fundis.github.io/lessons/jq/jq3&#34;&gt;last time on jq&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Another way of producing a text list of running instances may be to push the fields we want though another &lt;em&gt;jq&lt;/em&gt; function - join.&lt;/p&gt;
+&lt;h2 id=&#34;lesson-10&#34;&gt;Lesson 10&lt;/h2&gt;
+&lt;h3 id=&#34;using-functions&#34;&gt;Using functions&lt;/h3&gt;
+&lt;p&gt;There are a number of useful functions in &lt;em&gt;jq&lt;/em&gt; that will make life a little easier. Let&amp;rsquo;s explore some of them.&lt;/p&gt;
+&lt;h4 id=&#34;join&#34;&gt;join&lt;/h4&gt;
+&lt;p&gt;A function to join an array into a string. Whereas before we created a string using String iterpolation, we could simply use join.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;) | [.LaunchTime, .InstanceId, .State.Name, .PrivateIpAddress, .BlockDeviceMappings[].Ebs.Status, .BlockDeviceMappings[].DeviceName, .BlockDeviceMappings[].Ebs.VolumeId]| join(&amp;quot;,&amp;quot;)&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;produces a nice string as before, just a little more easily. You should note though that the fields in this example are all in a single string; not multiple strings as before.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;2020-05-13T03:45:33.000Z,i-053667d4e26795541,running,172.16.2.26,attached,/dev/sda1,vol-05dec31f2e74067b0&amp;quot;
+&amp;quot;2020-05-13T03:50:44.000Z,i-0a775b8c631e8ad27,running,172.16.2.15,attached,/dev/sda1,vol-01ca741dc26d7c0f9&amp;quot;
+&amp;quot;2020-05-13T03:50:44.000Z,i-061b358b9cfc20505,running,172.16.1.13,attached,/dev/sda1,vol-0610ab7fde8c71943&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Notice too, that in order to use join, we need to supply it with an array. Hence my fields are enclosed in square ( [ ] ) braces turning the output into an array. This array is consumed by the &lt;em&gt;join&lt;/em&gt; function.&lt;/p&gt;
+&lt;h4 id=&#34;contains&#34;&gt;contains&lt;/h4&gt;
+&lt;p&gt;To change tack slightly, we look at the events rules that have been configured. Event rules are set up in the CloudWatch console but are referred to as events in the AWS CLI.&lt;/p&gt;
+&lt;p&gt;Suppose I have a number of rules, and I only want to select those that contain the description &amp;ldquo;Stop&amp;rdquo;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws events list-rules | jq &#39;.Rules[]|select(.Description|contains(&amp;quot;Stop&amp;quot;))&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here we&amp;rsquo;re using two functions: &lt;em&gt;select&lt;/em&gt; and &lt;em&gt;contains&lt;/em&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;Name&amp;quot;: &amp;quot;STOP_client_servers&amp;quot;,
+  &amp;quot;Arn&amp;quot;: &amp;quot;arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/STOP_client_servers&amp;quot;,
+  &amp;quot;State&amp;quot;: &amp;quot;ENABLED&amp;quot;,
+  &amp;quot;Description&amp;quot;: &amp;quot;Stop servers that are prod for client servers: CRM, OpenVPN server&amp;quot;,
+  &amp;quot;ScheduleExpression&amp;quot;: &amp;quot;cron(30 15 ? * 2-6 *)&amp;quot;,
+  &amp;quot;EventBusName&amp;quot;: &amp;quot;default&amp;quot;
+}
+{
+  &amp;quot;Name&amp;quot;: &amp;quot;Stop_client_DC01&amp;quot;,
+  &amp;quot;Arn&amp;quot;: &amp;quot;arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/Stop_client_DC01&amp;quot;,
+  &amp;quot;State&amp;quot;: &amp;quot;ENABLED&amp;quot;,
+  &amp;quot;Description&amp;quot;: &amp;quot;Stop the client Active Domain Controller when not being used&amp;quot;,
+  &amp;quot;ScheduleExpression&amp;quot;: &amp;quot;cron(40 15 ? * 2-6 *)&amp;quot;,
+  &amp;quot;EventBusName&amp;quot;: &amp;quot;default&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;sub&#34;&gt;sub&lt;/h4&gt;
+&lt;p&gt;Substitute is useful for strings; substituting &lt;em&gt;this&lt;/em&gt; for &lt;em&gt;that&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;In the following one, I want to substitue x&amp;rsquo;s for the customer account number from the .Arn and I also want to remove the customer name from all .Descriptions and .Names&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -rc &#39;.Rules[]|[.Name, .Arn, .State, .Description]|join(&amp;quot;,&amp;quot;)|sub(&amp;quot;CDLI&amp;quot;;&amp;quot;client&amp;quot;;&amp;quot;g&amp;quot;)|sub(&amp;quot;182306120021&amp;quot;;&amp;quot;xxxxxxxxxxxx&amp;quot;;&amp;quot;g&amp;quot;)&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;START_client_servers,arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/START_client_servers,ENABLED,Start client prod servers: CRM &amp;amp; OpenVPN server
+STOP_client_servers,arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/STOP_client_servers,ENABLED,Stop servers that are prod for client servers: CRM, OpenVPN server
+Start_client_DC01,arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/Start_client_DC01,ENABLED,Start the client Active Domain Controller
+Stop_client_DC01,arn:aws:events:eu-west-1:xxxxxxxxxxxx:rule/Stop_client_DC01,ENABLED,Stop the client Active Domain Controller when not being used
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Of course these things can get really difficult to read as they grow.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -rc &#39;.Rules[]|select(.Description|contains(&amp;quot;Stop&amp;quot;))|[.Name, .Arn, .State, .Description]|join(&amp;quot;,&amp;quot;)|sub(&amp;quot;CDLI&amp;quot;;&amp;quot;client&amp;quot;;&amp;quot;g&amp;quot;)|sub(&amp;quot;182306120021&amp;quot;;&amp;quot;xxxxxxxxxxxx&amp;quot;;&amp;quot;g&amp;quot;)&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here we&amp;rsquo;re combining the select and using sub twice as above.&lt;/p&gt;
+&lt;h2 id=&#34;lesson-11&#34;&gt;Lesson 11&lt;/h2&gt;
+&lt;h3 id=&#34;reading-your-_jq_-from-a-file&#34;&gt;Reading your &lt;em&gt;jq&lt;/em&gt; from a file&lt;/h3&gt;
+&lt;p&gt;To make the &lt;em&gt;jq&lt;/em&gt; script easier to manage (and of course reuse), it&amp;rsquo;s often worth putting the script in a file and calling it using the &lt;em&gt;from-file&lt;/em&gt; ( -f ) flag. What makes this great is that now you can use newlines and set out your &lt;em&gt;jq&lt;/em&gt; in a much easier-to-read format.&lt;/p&gt;
+&lt;p&gt;Note however, that when doing this, you&amp;rsquo;ll need to leave off the single quotes ( &#39; ) around your &lt;em&gt;jq&lt;/em&gt; command.&lt;/p&gt;
+&lt;p&gt;Re-writing the above &lt;em&gt;jq&lt;/em&gt; it would look like this in our file test.jq&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.Rules[]
+    | select(.Description
+        | contains(&amp;quot;Stop&amp;quot;))
+    | [.Name, .Arn, .State, .Description]
+    | join(&amp;quot;,&amp;quot;)
+    | sub(&amp;quot;CDLI&amp;quot;;&amp;quot;client&amp;quot;;&amp;quot;g&amp;quot;)
+    | sub(&amp;quot;182306120021&amp;quot;;&amp;quot;xxxxxxxxxxxx&amp;quot;;&amp;quot;g&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now running &lt;em&gt;jq&lt;/em&gt; is easier with:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws events list-rules | jq -f test.jq
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What makes this even more appealing is that you can use comments (everything after a # is a comment) in your &lt;em&gt;jq&lt;/em&gt; script now as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Grab the details of stop events from the aws event log
+# use as: aws events list-rules | jq -f &amp;lt;filename.jq&amp;gt;
+
+.Rules[]
+    | select(.Description
+        | contains(&amp;quot;Stop&amp;quot;))                     # From the rules, only select those where .Description contains the word &amp;quot;Stop&amp;quot;
+    | [.Name, .Arn, .State, .Description]       # Keep only the .Name, .Arn, .State and .Description. Remember to make as an array
+    | join(&amp;quot;,&amp;quot;)                                 # Join the array with commas
+    | sub(&amp;quot;CDLI&amp;quot;;&amp;quot;client&amp;quot;;&amp;quot;g&amp;quot;)                  # Remove the client name replacing with &amp;quot;client&amp;quot;
+    | sub(&amp;quot;182306120021&amp;quot;;&amp;quot;xxxxxxxxxxxx&amp;quot;;&amp;quot;g&amp;quot;)    # Remove the account number from .Arn
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;From this you will notice that white-space has no effect on the expression. This means we can indent the various parts of the &lt;em&gt;jq&lt;/em&gt; expression to make it even more legible. Additionally we like to put a comment at the top of the file to give&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;some indication of how to use this &lt;em&gt;jq&lt;/em&gt; expression and&lt;/li&gt;
+&lt;li&gt;to give details of what it does&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Finally, it may be worth naming the files intelligently. While you may think you&amp;rsquo;ll never use this &amp;ldquo;once-off&amp;rdquo; expression again, this is almost certainly not true - you will reuse it. Or at least you&amp;rsquo;ll remember that you used something in it that made sense at the time.&lt;/p&gt;
+&lt;p&gt;We name our files like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;events.rules.jq
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and store them in a directory structure similar to our shell, Python, Scala and other scripts. Spending a little time in the beginning will save you oodles of time later.&lt;/p&gt;
+&lt;p&gt;For the rest of the series we&amp;rsquo;ll be using &lt;em&gt;jq&lt;/em&gt; scripts in this form: as if they&amp;rsquo;re part of a file with comments.&lt;/p&gt;
+&lt;h2 id=&#34;lesson-12&#34;&gt;Lesson 12&lt;/h2&gt;
+&lt;h3 id=&#34;if-then-else&#34;&gt;If-then-else&lt;/h3&gt;
+&lt;p&gt;Of course every language has boolean conditionals; &lt;em&gt;jq&lt;/em&gt; is no exception.&lt;/p&gt;
+&lt;p&gt;Where we&amp;rsquo;ve found this most useful is in switching a variable, from say &amp;ldquo;done: False&amp;rdquo; to &amp;ldquo;done: True&amp;rdquo;. Most recently we had a DynamoDB table where we had just such a key:value pair. Wanting to switch all entries from &amp;ldquo;shouldRun: False&amp;rdquo; to &amp;ldquo;shouldRun: True&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Before we get there however, let&amp;rsquo;s take a step back. Using if-then-else-end to mark instances that are in a &amp;lsquo;running&amp;rsquo; state with an &amp;lsquo;R&amp;rsquo; while instances in a &amp;lsquo;stopped&amp;rsquo; state with an &amp;lsquo;S&amp;rsquo;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.Reservations[].Instances[]
+    | select(.State.Name == &amp;quot;running&amp;quot; or .State.Name == &amp;quot;stopped&amp;quot;)
+    | [.LaunchTime, .InstanceId, if .State.Name == &amp;quot;running&amp;quot; then &amp;quot;R&amp;quot; else &amp;quot;S&amp;quot; end, 
+       .PrivateIpAddress, 
+       ( .BlockDeviceMappings[]
+            | .DeviceName, .Ebs.Status, .Ebs.VolumeId ) ]   # Notice how I split these things up to make it
+                                                            # more meaningful
+    | join(&amp;quot;,&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Ok, we&amp;rsquo;ve jumped ahead here a bit showing multiple things at once. Let&amp;rsquo;s tackle these things one at a time.&lt;/p&gt;
+&lt;p&gt;First notice the round braces ( () ) around the &lt;em&gt;.BlockDeviceMappings&lt;/em&gt; array. This allows us to treat the &lt;em&gt;.BlockDeviceMappings&lt;/em&gt; almost independently of the other JSON objects in the array we&amp;rsquo;re building.&lt;/p&gt;
+&lt;p&gt;As an alternative to using the round braces, we could have done this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;        ...
+           .BlockDeviceMappings[].DeviceName,
+           .BlockDeviceMappings[].Ebs.Status,
+           .BlockDeviceMappings[].Ebs.VolumeId 
+        ...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;but that&amp;rsquo;s just so verbose. Instead enclosing &lt;em&gt;.BlockDeviceMappings&lt;/em&gt; inside the braces and then applying a pipe to it&amp;rsquo;s output, thereby selecting only the keys we&amp;rsquo;re after.&lt;/p&gt;
+&lt;p&gt;So much nicer.&lt;/p&gt;
+&lt;p&gt;Comments add a lot of value, expecially later when you come back to try and figure out what you were up to. Note here that because white-space is ignored, we can run comments over multiple lines. Very handy indeed.&lt;/p&gt;
+&lt;p&gt;Finally the if statement&lt;/p&gt;
+&lt;p&gt;The way this works is that there must be an &lt;em&gt;if - then - else - end&lt;/em&gt;. You cannot leave off the else or the end.&lt;/p&gt;
+&lt;p&gt;In this case, we&amp;rsquo;re testing whether the &lt;em&gt;.State.Name&lt;/em&gt; is &amp;ldquo;running&amp;rdquo; and if it is, replace the current &lt;em&gt;.State.Name&lt;/em&gt; with an &amp;ldquo;R&amp;rdquo;, otherwise I replace it with an &amp;ldquo;S&amp;rdquo;. Notice how to include this in the list as if it&amp;rsquo;s a regular element.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;2020-05-13T03:45:33.000Z,i-053667d4e26795541,R,172.16.2.26,/dev/sda1,attached,vol-05dec31f2e74067b0&amp;quot;
+&amp;quot;2020-05-13T03:50:44.000Z,i-0a775b8c631e8ad27,R,172.16.2.15,/dev/sda1,attached,vol-01ca741dc26d7c0f9&amp;quot;
+&amp;quot;2020-04-23T12:37:54.000Z,i-06e986e85261c838e,S,172.16.1.10,/dev/sda1,attached,vol-01a80015424546dad&amp;quot;
+&amp;quot;2020-05-13T03:50:44.000Z,i-061b358b9cfc20505,R,172.16.1.13,/dev/sda1,attached,vol-0610ab7fde8c71943&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Exactly what we&amp;rsquo;re after.&lt;/p&gt;
+&lt;p&gt;For completeness, we&amp;rsquo;ve called this file running.jq and placed it in the directory:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;../programming/jq/aws/
+├── ec2
+│   └── running.jq          &amp;lt;----- here it is...
+└── events
+    └── events.rules.jq
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;and call it like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances --profile cust --region eu-west-1 | jq -f ../programming/jq/aws/ec2/running.jq
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Of course we promised to show you how we change &amp;ldquo;shouldRun: False&amp;rdquo; to &amp;ldquo;shouldRun: True&amp;rdquo; in the DynamoDB table. We&amp;rsquo;ve done this in steps, but of course you could do it all in a single long command line. :-)&lt;/p&gt;
+&lt;p&gt;First dump the table to a JSON file:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws dynamodb get-item --table-name scriptTable --key &amp;quot;{\&amp;quot;scriptName\&amp;quot;: {\&amp;quot;S\&amp;quot;: \&amp;quot;message_table\&amp;quot;}}&amp;quot; --region eu-west-1 | jq -j &#39;.&#39; &amp;gt; message_table.getitem
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This yield a file for the table looking like this (truncated for brevity):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+    &amp;quot;Item&amp;quot;: {
+        &amp;quot;lastRun&amp;quot;: {
+            &amp;quot;N&amp;quot;: &amp;quot;0&amp;quot;
+        }, 
+        &amp;quot;shouldRun&amp;quot;: {
+            &amp;quot;BOOL&amp;quot;: false
+        }, 
+        &amp;quot;startAt&amp;quot;: {
+            &amp;quot;N&amp;quot;: &amp;quot;0&amp;quot;
+        }, 
+        &amp;quot;description&amp;quot;: {
+            &amp;quot;S&amp;quot;: &amp;quot;A script to extract data from the message table on DB&amp;quot;
+        }, 
+        &amp;quot;lambda&amp;quot;: {
+            &amp;quot;S&amp;quot;: &amp;quot;livyLambda&amp;quot;
+        }, 
+        &amp;quot;clusterID&amp;quot;: {
+            &amp;quot;S&amp;quot;: &amp;quot;j-2EIPAI8VW80O&amp;quot;
+        }, 
+    ...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We want to switch the &amp;ldquo;false&amp;rdquo; in &lt;em&gt;shouldRun&lt;/em&gt; to &amp;ldquo;true&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Now we can apply a &lt;em&gt;jq&lt;/em&gt; expression to do that:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq &amp;quot;if ( .Item.shouldRun ) then .Item.shouldRun={\&amp;quot;BOOL\&amp;quot;: true } else . end&amp;quot; message_table.getitem &amp;gt; message_table.putitem
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Taking the resulting file and pushing that back to DynamoDB will do what we&amp;rsquo;re after:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq &#39;.Item&#39; message_table.putitem &amp;gt; new.json &amp;amp;&amp;amp; aws dynamodb put-item --table-name scriptTable --item file:///home/hadoop/new.json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Done. Your DynamoDB table has been updated with the &amp;ldquo;shouldRun&amp;rdquo; set to True.&lt;/p&gt;
+&lt;p&gt;One final note unrelated to the if-then. I write the output to new.json because it&amp;rsquo;s then easy to apply the same pattern to many other Items in the DynamoDB table and not only the message_table.putitem.&lt;/p&gt;
+&lt;p&gt;As easy as that.&lt;/p&gt;
+&lt;p&gt;Tjoef-tjaf.&lt;/p&gt;
+&lt;p&gt;Thanks to @Wendy for the inspiration of the events rules.&lt;/p&gt;
+- https://cloud-fundis.github.io/lessons/jq/jq4/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>jq getting interesting: lessons 7 through 9</title>
+        <link>https://cloud-fundis.github.io/lessons/jq/jq3/</link>
+        <pubDate>Thu, 07 May 2020 15:21:37 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/lessons/jq/jq3/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq/jq3/ -&lt;h1 id=&#34;where-were-welessonsjqjq2&#34;&gt;&lt;a href=&#34;https://cloud-fundis.github.io/lessons/jq/jq2&#34;&gt;Where were we?&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;lesson-7&#34;&gt;Lesson 7&lt;/h2&gt;
+&lt;h3 id=&#34;creating-new-structures&#34;&gt;Creating new structures&lt;/h3&gt;
+&lt;p&gt;Last time, we created a string from each of the outputs we were interested in using a combination of the pipe ( | ), the raw and compact flag and string interpolation with round braces:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | &amp;quot;\(.InstanceId): \(.State.Name): \(.PrivateIpAddress)&amp;quot;&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Perhaps we would like to create an array of the values. This is pretty simple because, in effect what we&amp;rsquo;re doing on the right hand side of the pipe ( | ) is to create a new structure. That structure itself could be a string like that above, or it could be an array&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | [.InstanceId), .State.Name, .PrivateIpAddress]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Not when you do this, it seems to ignore the raw ( -r ) flag. That may seem strange, but in fact creating an array in JSON means that elements of the array HAVE to use double quotes ( &amp;quot; ) and must be separated by commas ( , ). That&amp;rsquo;s JSON.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[&amp;quot;i-053667d4e26795541&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.26&amp;quot;]
+[&amp;quot;i-0a775b8c631e8ad27&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.15&amp;quot;]
+[&amp;quot;i-06e986e85261c838e&amp;quot;,&amp;quot;stopped&amp;quot;,&amp;quot;172.16.1.10&amp;quot;]
+[&amp;quot;i-061b358b9cfc20505&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.1.13&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;So how about creating a new object in JSON with each element tagged with a key?&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | {instance:.InstanceId), state:.State.Name, ip:.PrivateIpAddress}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;produces&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{&amp;quot;instance&amp;quot;:&amp;quot;i-053667d4e26795541&amp;quot;,&amp;quot;state&amp;quot;:&amp;quot;running&amp;quot;,&amp;quot;ip&amp;quot;:&amp;quot;172.16.2.26&amp;quot;}
+{&amp;quot;instance&amp;quot;:&amp;quot;i-0a775b8c631e8ad27&amp;quot;,&amp;quot;state&amp;quot;:&amp;quot;running&amp;quot;,&amp;quot;ip&amp;quot;:&amp;quot;172.16.2.15&amp;quot;}
+{&amp;quot;instance&amp;quot;:&amp;quot;i-06e986e85261c838e&amp;quot;,&amp;quot;state&amp;quot;:&amp;quot;stopped&amp;quot;,&amp;quot;ip&amp;quot;:&amp;quot;172.16.1.10&amp;quot;}
+{&amp;quot;instance&amp;quot;:&amp;quot;i-061b358b9cfc20505&amp;quot;,&amp;quot;state&amp;quot;:&amp;quot;running&amp;quot;,&amp;quot;ip&amp;quot;:&amp;quot;172.16.1.13&amp;quot;}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;NOTE: Worth noting here is that if I leave out a comma ( , ) between each element, this produces an error because that&amp;rsquo;s invalid JSON.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq: error: syntax error, unexpected IDENT, expecting &#39;}&#39; (Unix shell quoting issues?) at &amp;lt;top-level&amp;gt;, line 1:
+.Reservations[].Instances[]|  {instance:.InstanceId,     state:.State.Name ip:.PrivateIpAddress}                                                                           
+jq: 1 compile error
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The reason for this error was I left out a comma between the &lt;em&gt;state:.State.Name&lt;/em&gt; and the &lt;em&gt;ip.PrivateIPAddress&lt;/em&gt;. That results in an error in the newly created JSON.&lt;/p&gt;
+&lt;p&gt;What&amp;rsquo;s cool about this is that, I may also like to know the state of block storage on the instances that are launched, and even though I&amp;rsquo;ve not unpacked the BlockDeviceMappings JSON, I can still use it prefectly:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -cr &#39;.Reservations[].Instances[] | [.InstanceId, .State.Name, .PrivateIpAddress, .BlockDeviceMappings]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;[&amp;quot;i-053667d4e26795541&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.26&amp;quot;,[{&amp;quot;DeviceName&amp;quot;:&amp;quot;/dev/sda1&amp;quot;,&amp;quot;Ebs&amp;quot;:{&amp;quot;AttachTime&amp;quot;:&amp;quot;2019-06-21T15:24:29.000Z&amp;quot;,&amp;quot;DeleteOnTermination&amp;quot;:true,&amp;quot;Status&amp;quot;:&amp;quot;attached&amp;quot;,&amp;quot;VolumeId&amp;quot;:&amp;quot;vol-05dec31f2e74067b0&amp;quot;}}]]
+[&amp;quot;i-0a775b8c631e8ad27&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.15&amp;quot;,[{&amp;quot;DeviceName&amp;quot;:&amp;quot;/dev/sda1&amp;quot;,&amp;quot;Ebs&amp;quot;:{&amp;quot;AttachTime&amp;quot;:&amp;quot;2019-10-11T15:18:37.000Z&amp;quot;,&amp;quot;DeleteOnTermination&amp;quot;:false,&amp;quot;Status&amp;quot;:&amp;quot;attached&amp;quot;,&amp;quot;VolumeId&amp;quot;:&amp;quot;vol-01ca741dc26d7c0f9&amp;quot;}}]]
+[&amp;quot;i-06e986e85261c838e&amp;quot;,&amp;quot;stopped&amp;quot;,&amp;quot;172.16.1.10&amp;quot;,[{&amp;quot;DeviceName&amp;quot;:&amp;quot;/dev/sda1&amp;quot;,&amp;quot;Ebs&amp;quot;:{&amp;quot;AttachTime&amp;quot;:&amp;quot;2020-03-12T08:17:14.000Z&amp;quot;,&amp;quot;DeleteOnTermination&amp;quot;:false,&amp;quot;Status&amp;quot;:&amp;quot;attached&amp;quot;,&amp;quot;VolumeId&amp;quot;:&amp;quot;vol-01a80015424546dad&amp;quot;}}]]
+[&amp;quot;i-061b358b9cfc20505&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.1.13&amp;quot;,[{&amp;quot;DeviceName&amp;quot;:&amp;quot;/dev/sda1&amp;quot;,&amp;quot;Ebs&amp;quot;:{&amp;quot;AttachTime&amp;quot;:&amp;quot;2020-03-17T10:18:13.000Z&amp;quot;,&amp;quot;DeleteOnTermination&amp;quot;:true,&amp;quot;Status&amp;quot;:&amp;quot;attached&amp;quot;,&amp;quot;VolumeId&amp;quot;:&amp;quot;vol-0610ab7fde8c71943&amp;quot;}}]]
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;lesson-8&#34;&gt;Lesson 8&lt;/h2&gt;
+&lt;h3 id=&#34;selecting-only-running-instances-and-changing-the-order-of-the-output&#34;&gt;Selecting only running instances and changing the order of the output&lt;/h3&gt;
+&lt;p&gt;I certainly would like to know what instances are running, filtering out (discarding) those that are stopped.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Select&lt;/strong&gt; is the answer.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[] | select(.State.Name == &amp;quot;running&amp;quot;) | [.LaunchTime, .InstanceId, .State.Name, .PrivateIpAddress]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Just like in a Unix pipe, one can use select to choose what you&amp;rsquo;re after and once you have it, you pipe those results to the output just as before.&lt;/p&gt;
+&lt;p&gt;The command above produces only the running instances:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[&amp;quot;2020-05-07T03:45:33.000Z&amp;quot;,&amp;quot;i-053667d4e26795541&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.26&amp;quot;]
+[&amp;quot;2020-05-07T03:50:45.000Z&amp;quot;,&amp;quot;i-0a775b8c631e8ad27&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.2.15&amp;quot;]
+[&amp;quot;2020-05-07T03:50:45.000Z&amp;quot;,&amp;quot;i-061b358b9cfc20505&amp;quot;,&amp;quot;running&amp;quot;,&amp;quot;172.16.1.13&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;NOTE: I know that for this customer, instances are started every morning, so adding LaunchTime as the first element of the array shows me that indeed, these instances were launched today.&lt;/p&gt;
+&lt;p&gt;In this example (now including the VPC ID), I want to write the output into a sentence:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[] | select(.State.Name == &amp;quot;running&amp;quot;) | &amp;quot;Instance \(.InstanceId) is \(.State.Name) and was launched at \(.LaunchTime). It has \(.PrivateIpAddress) private IP in \(.VpcId)&amp;quot;&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;Instance i-053667d4e26795541 is running and was launched at 2020-05-08T03:45:33.000Z. It has 172.16.2.26 private IP in vpc-0c092d552baffc13d&amp;quot;
+&amp;quot;Instance i-0a775b8c631e8ad27 is running and was launched at 2020-05-08T03:50:44.000Z. It has 172.16.2.15 private IP in vpc-0c092d552baffc13d&amp;quot;
+&amp;quot;Instance i-061b358b9cfc20505 is running and was launched at 2020-05-08T03:50:44.000Z. It has 172.16.1.13 private IP in vpc-0c092d552baffc13d&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now that&amp;rsquo;s verbose output!&lt;/p&gt;
+&lt;h2 id=&#34;lesson-9&#34;&gt;Lesson 9&lt;/h2&gt;
+&lt;h3 id=&#34;using-functions-and-also-stopping-the-pipe&#34;&gt;Using functions (and also stopping the pipe)&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;jq&lt;/em&gt; has a number of useful functions that can be applied to your output. Functions like ascii_downcase, map, join, mktime and many others. Using them though can be a challenge. The examples in the documentation don&amp;rsquo;t help a ton.&lt;/p&gt;
+&lt;p&gt;Suppose I wish to change the LaunchTime into UNIX time, how would I do that.&lt;/p&gt;
+&lt;p&gt;Certainly it seems like this might work:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;)|.InstanceId, .LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;But alas it doesn&amp;rsquo;t and produces this error:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq: error (at &amp;lt;stdin&amp;gt;:551): date &amp;quot;i-053667d4e26795541&amp;quot; does not match format &amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Of course. &lt;em&gt;jq&lt;/em&gt; is piping everything into mktime including the InstanceId; but that&amp;rsquo;s not a time. How do we stop that?&lt;/p&gt;
+&lt;p&gt;One way might be to enclose the time in it&amp;rsquo;s own array as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;)|.InstanceId, [.LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That does it, but it&amp;rsquo;s ugly. However it does give you a hint of what&amp;rsquo;s going on here. If you create a new field (in this case, I&amp;rsquo;ve created an array), that seems to stop the pipe in it&amp;rsquo;s tracks. Armed with that knowledge, we could try making it into a string with string interpolation as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;)|.InstanceId, &amp;quot;\(.LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime)&amp;quot;&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That&amp;rsquo;s right; we&amp;rsquo;re grabbing the .InstanceId, but the .LaunchTime we&amp;rsquo;re stringifying and pushing that through two functions: string-parse-time (strptime) and mktime to convert it to UNIX time.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;i-053667d4e26795541&amp;quot;
+&amp;quot;1588909533&amp;quot;
+&amp;quot;i-0a775b8c631e8ad27&amp;quot;
+&amp;quot;1588909844&amp;quot;
+&amp;quot;i-061b358b9cfc20505&amp;quot;
+&amp;quot;1588909844&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;That has however caused us to lose some of our functionality that we had before (everything on one line for one instance). To solve that, we can put this back into an array as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;)|[.InstanceId, &amp;quot;\(.LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime)&amp;quot;]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Of course, we now get an array back, but this can be solved using the add function (and a further &lt;em&gt;jq&lt;/em&gt; invocation):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;)|[.InstanceId, &amp;quot;\(.LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime)&amp;quot;]&#39;|jq &#39;add&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Notice how the &lt;strong&gt;add&lt;/strong&gt; in a separate &lt;em&gt;jq&lt;/em&gt; adds the elements of the array together:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;i-053667d4e267955411588909533&amp;quot;
+&amp;quot;i-0a775b8c631e8ad271588909844&amp;quot;
+&amp;quot;i-061b358b9cfc205051588909844&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Of course, this is still not ideal because we&amp;rsquo;ve now got a long sting and we would have to work out where the InstanceId stops and the UNIX timestamp starts.&lt;/p&gt;
+&lt;p&gt;A final change fixes that:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[].Instances[]|select(.State.Name == &amp;quot;running&amp;quot;) | [.InstanceId, &amp;quot;:&amp;quot;, &amp;quot;\(.LaunchTime|strptime(&amp;quot;%Y-%m-%dT%H:%M:%S.000Z&amp;quot;)|mktime)&amp;quot;]&#39; | jq &#39;add&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Including a colon ( : ) as a string in the array definition produces:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;i-053667d4e26795541:1588909533&amp;quot;
+&amp;quot;i-0a775b8c631e8ad27:1588909844&amp;quot;
+&amp;quot;i-061b358b9cfc20505:1588909844&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Adding a raw flag to the second &lt;em&gt;jq&lt;/em&gt; command fixes all the double-quotes too.&lt;/p&gt;
+&lt;p&gt;Until next time, happy &lt;em&gt;jq&lt;/em&gt;\ing.&lt;/p&gt;
+- https://cloud-fundis.github.io/lessons/jq/jq3/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>jq - lessons 3 to 6</title>
+        <link>https://cloud-fundis.github.io/lessons/jq/jq2/</link>
+        <pubDate>Tue, 05 May 2020 14:41:29 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/lessons/jq/jq2/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq/jq2/ -&lt;h1 id=&#34;previouslylessonsjqjq1-on-_jq_-&#34;&gt;&lt;a href=&#34;https://cloud-fundis.github.io/lessons/jq/jq1&#34;&gt;Previously&lt;/a&gt; on &lt;em&gt;jq&lt;/em&gt; &amp;hellip;&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[].Instances[] | keys&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;shows us all the keys for all the &lt;em&gt;Reservations&lt;/em&gt; for all the &lt;em&gt;Instances&lt;/em&gt; I have launched in AWS.&lt;/p&gt;
+&lt;p&gt;Perhaps we wish to know what the state of the instances are?&lt;/p&gt;
+&lt;p&gt;I see there&amp;rsquo;s a &lt;strong&gt;State&lt;/strong&gt; in the resulting keys. Perhaps that has the state of all instances.&lt;/p&gt;
+&lt;h2 id=&#34;lesson-3&#34;&gt;Lesson 3&lt;/h2&gt;
+&lt;h3 id=&#34;json-is-case-sensitive&#34;&gt;JSON is case sensitive&lt;/h3&gt;
+&lt;p&gt;JSON is case sensitive, so&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[].Instances[].state&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;returns nothing, while&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[].Instances[].State&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;returns&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Code&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;80&lt;/span&gt;,
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;stopped&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Ok. Cool. I only have one instance launched here, so this shows only one instance in a stopped state.&lt;/p&gt;
+&lt;p&gt;In &lt;em&gt;jq&lt;/em&gt; terminology, we&amp;rsquo;ve applied a filter to this data. First we applied a filter of all Reservations, then all Instances and finally a filter of &lt;em&gt;State&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;If I look in an account of one of our customers, then I see&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Code&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt;,
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;running&amp;#34;&lt;/span&gt;
+}
+{
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Code&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt;,
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;running&amp;#34;&lt;/span&gt;
+}
+{
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Code&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;80&lt;/span&gt;,
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;stopped&amp;#34;&lt;/span&gt;
+}
+{
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Code&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt;,
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;running&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Nice, though, that&amp;rsquo;s only partially useful, because I would like to know what the instanceId&amp;rsquo;s are of the running and stopped instances.&lt;/p&gt;
+&lt;h2 id=&#34;lesson-4&#34;&gt;Lesson 4&lt;/h2&gt;
+&lt;h3 id=&#34;retriving-more-than-a-single-key-at-once&#34;&gt;Retriving more than a single key at once&lt;/h3&gt;
+&lt;p&gt;We could loop through this and do the aws call multiple times, retrieving the instanceId first and then&amp;hellip;.BARF&amp;hellip;Urgh, just writing that sentence make me sick.&lt;/p&gt;
+&lt;p&gt;There &lt;strong&gt;MUST&lt;/strong&gt; be a better way?&lt;/p&gt;
+&lt;p&gt;Indeed. If we pipe ( | ) [we saw this used in an earlier lesson right?] the output of the &lt;em&gt;.Reservations[].Instances[]&lt;/em&gt; and &amp;lsquo;grab&amp;rsquo; the keys we&amp;rsquo;re interested in, then that would work:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[].Instances[] | .InstanceId,.State&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;results in:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;i-0a775b8c631e8ad27&amp;#34;&lt;/span&gt;
+{
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Code&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt;,
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;running&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;i-061b358b9cfc20505&amp;#34;&lt;/span&gt;
+{
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Code&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt;,
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;running&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we&amp;rsquo;re cooking.&lt;/p&gt;
+&lt;p&gt;NOTE: I&amp;rsquo;m going to leave out the aws cli command from here, since really, it&amp;rsquo;s adding no value to the learning and making the scroll-box on your browser ugly.&lt;/p&gt;
+&lt;h2 id=&#34;lesson-5&#34;&gt;Lesson 5&lt;/h2&gt;
+&lt;h3 id=&#34;is-there-a-way-to-only-get-the-name-and-not-the-code&#34;&gt;Is there a way to only get the &amp;lsquo;Name&amp;rsquo; and not the &amp;lsquo;Code&amp;rsquo;?&lt;/h3&gt;
+&lt;p&gt;Funny you should ask that. There sure is.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq &#39;.Reservations[].Instances[] | .InstanceId,.State.Name&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;    &amp;quot;i-0a775b8c631e8ad27&amp;quot;
+    &amp;quot;running&amp;quot;
+    &amp;quot;i-061b358b9cfc20505&amp;quot;
+    &amp;quot;running&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Ooooh&amp;hellip;that&amp;rsquo;s so much better! Simply adding the subkey to the key you want solve this nicely.&lt;/p&gt;
+&lt;p&gt;Finally, you may be wondering about the double-quotes. That&amp;rsquo;s going to hinder us later when we&amp;rsquo;re trying to do something useful with this - like put it in a script.&lt;/p&gt;
+&lt;p&gt;Using the &amp;lsquo;raw&amp;rsquo; flag ( -r ) for &lt;em&gt;jq&lt;/em&gt; solve that.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -r &#39;.Reservations[1,3].Instances[] | .InstanceId,.State.Name&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;NOTE: I slipped something into this last command I&amp;rsquo;ve not talked about. The selection of various elements of the &lt;em&gt;Reservations&lt;/em&gt; array. See it there: &lt;strong&gt;1,3&lt;/strong&gt;? That&amp;rsquo;s saying the second and the 4th elements of this array. Remember JSON arrays are indexed from 0.&lt;/p&gt;
+&lt;h2 id=&#34;lesson-6&#34;&gt;Lesson 6&lt;/h2&gt;
+&lt;h3 id=&#34;could-we-make-this-all-end-on-the-same-line&#34;&gt;Could we make this all end on the same line?&lt;/h3&gt;
+&lt;p&gt;Well, this is something I would like to be able to do.&lt;/p&gt;
+&lt;p&gt;There are a couple of ways of doing this. To begin, use the compact ( -c ) flag. This will compact the output, but still, without a little fancy footwork in your &lt;em&gt;jq&lt;/em&gt; expression, it&amp;rsquo;ll not have the desired results.&lt;/p&gt;
+&lt;p&gt;To understand this, you should know that the output after the pipe is writing two strings namely &lt;em&gt;InstanceId&lt;/em&gt; and then &lt;em&gt;State&lt;/em&gt;. What we really want to do is combine those outputs into a new string&lt;/p&gt;
+&lt;p&gt;We could try this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[1,3].Instances[] | &amp;quot;.InstanceId, .State.Name&amp;quot;&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;however that produces two strings with .InstanceId, .State.Name. Not quite what we want.&lt;/p&gt;
+&lt;p&gt;We could use an array to combine these strings into a new array as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[1,3].Instances[] | [.InstanceId, .State.Name]&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;which results in:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[&amp;quot;i-0a775b8c631e8ad27&amp;quot;,&amp;quot;running&amp;quot;]
+[&amp;quot;i-061b358b9cfc20505&amp;quot;,&amp;quot;running&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Better. However if we&amp;rsquo;re going to be generating this for some further processing, we&amp;rsquo;re THEN going to have to remove the square braces in the next stage of processing. Not ideal.&lt;/p&gt;
+&lt;p&gt;So we could try string interpolation as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -c &#39;.Reservations[1,3].Instances[] | &amp;quot;\(.InstanceId), \(.State.Name)&amp;quot;&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This encloses our values as a string. In &lt;em&gt;jq&lt;/em&gt; documentation, this is discussed under String interpolation. When we place our fields inside round braces, escaping the opening brace it forces &lt;em&gt;jq&lt;/em&gt; to interpolate them as a string.&lt;/p&gt;
+&lt;p&gt;The above command (almost) does what we want. Why almost? Because we&amp;rsquo;ve got the double-quote back again. But we know how to solve that; with the &amp;lsquo;raw&amp;rsquo; flag.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq -rc &#39;.Reservations[1,3].Instances[] | &amp;quot;\(.InstanceId), \(.State.Name)&amp;quot;&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;q &amp;lsquo;.Item&amp;rsquo; $i.putitem &amp;gt; new.json &amp;amp;&amp;amp; aws dynamodb put-item &amp;ndash;table-name scriptTable &amp;ndash;item file:///home/hadoop/new.json&lt;/p&gt;
+- https://cloud-fundis.github.io/lessons/jq/jq2/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>jq - lesson N - the N&#39;d game</title>
+        <link>https://cloud-fundis.github.io/lessons/jq/lesson-n/</link>
+        <pubDate>Tue, 05 May 2020 12:55:16 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/lessons/jq/lesson-n/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq/lesson-n/ -&lt;p&gt;After all your learnings and this series, we&amp;rsquo;re trying to get to understand and write &lt;em&gt;jq&lt;/em&gt; like the one below. It&amp;rsquo;s a culmination of our learnings:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;jq &#39;def dotkeys:
+	def stringify: map(tostring) | join(&amp;quot;.&amp;quot;);
+	. as $in
+	| reduce paths(scalars) as $p (null;
+		($in|getpath($p)) as $v
+		| setpath([$p|stringify]; $v));
+	def chain(key):
+	.[key] |= dotkeys ;
+   chain(&amp;quot;AParticularNestedKey&amp;quot;)&#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Yup, this looks terrible to me. Guess there&amp;rsquo;s a lot I need to learn here! So I&amp;rsquo;m on a quest and hopefully this&amp;rsquo;ll make more sense as these lessons progress.&lt;/p&gt;
+&lt;p&gt;But we&amp;rsquo;re not there yet.&lt;/p&gt;
+&lt;p&gt;Thanks @doug for this little bit of chicken-scratch.&lt;/p&gt;
+- https://cloud-fundis.github.io/lessons/jq/lesson-n/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>jq - first steps: a journey worth taking</title>
+        <link>https://cloud-fundis.github.io/lessons/jq/jq1/</link>
+        <pubDate>Mon, 04 May 2020 11:32:20 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/lessons/jq/jq1/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/lessons/jq/jq1/ -&lt;p&gt;When I started at AWS, I&amp;rsquo;d never heard of &lt;em&gt;jq&lt;/em&gt; before. Of course, I&amp;rsquo;d not been exposed to a lot of JSON either, so it&amp;rsquo;s not surprising I didn&amp;rsquo;t know it or how unbelievably powerful it is.&lt;/p&gt;
+&lt;p&gt;This is a series of indefinite length that focusts on &lt;em&gt;jq&lt;/em&gt;. Bascially, the man page is way too concise to be terribly helpful. This series will aim to fulfil two roles:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;To give practical examples of using &lt;em&gt;jq&lt;/em&gt;,&lt;/li&gt;
+&lt;li&gt;To act as a bit of a cookbook for &amp;lsquo;common&amp;rsquo; usecases.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We hope you find this useful.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What is &lt;em&gt;jq&lt;/em&gt;?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s a tool that allows us to manipulate JSON documents.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why is that so important?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;JSON seems to have been universally adopted by many to define configuration files, output to API calls among other uses.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;jq&lt;/em&gt; is a swiss-army knife for dealing with JSON. The better you know it, the easier your JSON life will be.&lt;/p&gt;
+&lt;p&gt;For the rest of this series, I&amp;rsquo;m going to be delving into the return information from the AWS CLI. If your CLI config files isn&amp;rsquo;t set to return JSON (instead it returns YAML or something else), then change that. You should use any JSON file you have on hand.&lt;/p&gt;
+&lt;p&gt;This is only for Linux. What about Windoze?
+I don&amp;rsquo;t care about Windoze. If you want to run &lt;em&gt;jq&lt;/em&gt; on Windoze, Google it.&lt;/p&gt;
+&lt;h3 id=&#34;lesson-1&#34;&gt;Lesson 1:&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;jq&lt;/em&gt; can be used on a file or part of a pipe.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;jq&lt;/em&gt; to pretty-print your JSON. The period ( . ) is the selector of all fields. In the example, this selects from the highest level of the JSON document.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This produces the instances in your account. Not terribly helpful because, of course if there are many of them, there is a lot of JSON returned.&lt;/p&gt;
+&lt;p&gt;It did (or should have), coloured your output - which is pretty if nothing else.&lt;/p&gt;
+&lt;h3 id=&#34;lesson-2&#34;&gt;Lesson 2:&lt;/h3&gt;
+&lt;p&gt;Finding the keys.&lt;/p&gt;
+&lt;p&gt;The JSON document is a set of key:value pairs. In our case, if we want to find the keys, we could:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;keys&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;which will return:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[
+    &amp;quot;Reservations&amp;quot;
+]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That&amp;rsquo;s telling me I have instances that are &amp;ldquo;reserved&amp;rdquo; for my use.&lt;/p&gt;
+&lt;p&gt;Of course, the converse is the values associated with the &amp;ldquo;Reservations&amp;rdquo; key and are the values (my instances).&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;values&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Still pretty useless, but at least it&amp;rsquo;s something.&lt;/p&gt;
+&lt;p&gt;What about using the Reservations key?&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;returns the same results (pretty much) as &amp;lsquo;values&amp;rsquo; above. But now we&amp;rsquo;re getting the hang of this, what about the &amp;lsquo;next&amp;rsquo; key (i.e. .Reservations.&lt;!-- raw HTML omitted --&gt;)?&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations | keys&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here the pipe character does what you expect it to do in the shell. It&amp;rsquo;s piping the output of .Reservations to the keys keyword. Interestingly, we get this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[
+    0
+]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What does that mean?&lt;/p&gt;
+&lt;p&gt;.Reservations is a zero indexed array and in this case, there&amp;rsquo;s only a single element - 0.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;jq&lt;/em&gt; understands the index, but it ALSO understands an empty array to mean every element in the array as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[0] | keys&#39;
+
+aws ec2 describe-instances |_jq_&#39;.Reservations[] | keys&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This means the zero&amp;rsquo;th element (in this case the .Reservations array only has a single element), or the empty brackets which means every element in the array. Both of these produce the same outcome:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[
+    &amp;quot;Groups&amp;quot;,
+    &amp;quot;Instances&amp;quot;,
+    &amp;quot;OwnerId&amp;quot;,
+    &amp;quot;ReservationId&amp;quot;
+]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There are four sub-keys under .Reservations, namely Groups, Instances, OwnerId and ReservationId.&lt;/p&gt;
+&lt;p&gt;Taking a flying guess here, I&amp;rsquo;m going to go with the Instances like so:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[].Instances&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This produces:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;[
+  {
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;AmiLaunchIndex&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;ImageId&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ami-02df9ea15c1778c9c&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;InstanceId&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;i-0b3dde7ff8612d7b5&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;InstanceType&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;t2.micro&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;KeyName&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hamish-cloudfundis-keypair&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;LaunchTime&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2020-01-02T13:47:08.000Z&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Monitoring&amp;#34;&lt;/span&gt;: {
+      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;State&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;disabled&amp;#34;&lt;/span&gt;
+    },
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Placement&amp;#34;&lt;/span&gt;: {
+      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;AvailabilityZone&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;eu-west-1c&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;GroupName&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Tenancy&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;default&amp;#34;&lt;/span&gt;
+      &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The square bracket ( [ ) as the first line gives us a clue that this too (Instances) is an array. How many elements are in this array? That&amp;rsquo;s right, in my case, 0. Let&amp;rsquo;s try that trick from before&amp;hellip;where we used the keys keyword:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws ec2 describe-instances | jq &#39;.Reservations[].Instances[] | keys&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And bingo we get something useful finally&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;    [
+      &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;AmiLaunchIndex&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Architecture&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;BlockDeviceMappings&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CapacityReservationSpecification&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ClientToken&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CpuOptions&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;EbsOptimized&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;EnaSupport&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;HibernationOptions&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I don&amp;rsquo;t have more time today, so that&amp;rsquo;s it for now. Next time, we look at getting values for these things.&lt;/p&gt;
+- https://cloud-fundis.github.io/lessons/jq/jq1/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>About</title>
+        <link>https://cloud-fundis.github.io/about/</link>
+        <pubDate>Wed, 29 Apr 2020 13:09:58 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/about/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/about/ -&lt;p&gt;This is a site for our blog posts. Started mostly it&amp;rsquo;s because I simply forget stuff. I&amp;rsquo;m not at nimble as I once was. Granted, even then I forgot things.&lt;/p&gt;
+&lt;p&gt;The official &lt;a href=&#34;https://www.cloud-fundis.co.za&#34;&gt;Cloud-Fundis website&lt;/a&gt; is elsewhere, but this is a companion site (hosted on GithubPages as you can see) and it&amp;rsquo;s mostly for me. However if you find anything here that&amp;rsquo;s wrong, don&amp;rsquo;t hesitate to contact the Cloud-Fundis people on info AT cloud-fundis dot coza.&lt;/p&gt;
+&lt;p&gt;Of course, we&amp;rsquo;re prepared to do other posts, so email us if there&amp;rsquo;s something you think may be especially helpful and we&amp;rsquo;ll see what time we have to do a post about it.&lt;/p&gt;
+&lt;p&gt;Happy dev-ops-sing&lt;/p&gt;
+- https://cloud-fundis.github.io/about/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>New blog posts ... tjoef tjaf</title>
+        <link>https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/</link>
+        <pubDate>Wed, 29 Apr 2020 11:33:32 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/ -&lt;p&gt;Yup, don&amp;rsquo;t have time to muck around. Need to be able to blog about things I learn so that I can use them later.&lt;/p&gt;
+&lt;p&gt;I think &lt;em&gt;tjoef-tjaf&lt;/em&gt; is an Afrikaans expression meaning roughly, quick-quick. Here on &lt;a href=&#34;https://en.wikipedia.org/wiki/List_of_South_African_slang_words&#34;&gt;Wikipedia&lt;/a&gt; are other &amp;lsquo;real Souf-Afrikan&amp;rsquo; words in common use - like &lt;em&gt;ja-nee&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;assumptions&#34;&gt;Assumptions&lt;/h2&gt;
+&lt;p&gt;In what follows, all my myBlogs live in ~/WorkDocs/cloudfundis/myBlog on my PC, and my githubpages repo is in ~/WorkDocs/cloudfundis/cloud-fundis.github.io - I&amp;rsquo;ll be pushing from here to github&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Your blog Hugo metadata and all that junk lives in ~/somedir/myBlog/&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;If not, then you can use hugo to create a new site in ~/somedir as follows&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;somedir $ hugo new site myBlog&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Set up an alias in ~/.bash_aliases to make uploading and deployment easier:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;alias buildblog=&amp;rsquo;(cd ~/WorkDocs/cloudfundis/myBlog/; hugo -d ../cloud-fundis.github.io/); (cd ~/WorkDocs/cloudfundis/cloud-fundis.github.io/ &amp;amp;&amp;amp; git add -A &amp;amp;&amp;amp; git commit -m &amp;ldquo;Blog update&amp;rdquo; &amp;amp;&amp;amp; git push)&amp;rsquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;.bash_aliases is read by .bashrc, so re-sourcing .bashrc sets this up.&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;Now, it&amp;rsquo;s time to write a post:&lt;/p&gt;
+&lt;h3 id=&#34;step-1&#34;&gt;Step 1&lt;/h3&gt;
+&lt;p&gt;Assuming you&amp;rsquo;re in the &lt;strong&gt;myBlog&lt;/strong&gt; directory on your local machine:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;hugo new post blog/tjoef-tjaf.md&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Creates the page (in content/blog/tjoef-tjaf.md) [I want tjoef-tjaf to be a new &lt;strong&gt;blog&lt;/strong&gt; post on the site]. Edit tjoef-tjaf.md.&lt;/p&gt;
+&lt;h3 id=&#34;step-2&#34;&gt;Step 2&lt;/h3&gt;
+&lt;p&gt;Save it and then, using your alias, rebuild the website using hugo and deploy to github with commit and push&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;$ buildblog&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Visit the site at cloud-fundis.github.io (actually, visit your own github pages site).&lt;/p&gt;
+&lt;h2 id=&#34;postscript&#34;&gt;Postscript&lt;/h2&gt;
+&lt;p&gt;What can happen is that, because you&amp;rsquo;re pushing new changes to the git regularly, old stuff that you may not still want there, will continue to linger. These problems are difficult to diagnose. As a result, you might just want to scrub everything on your github pagess site and start again. Do this with caution!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;git rm -rf &lt;!-- raw HTML omitted --&gt;
+git commit -m &amp;ldquo;Clean everything with bleach&amp;quot;&lt;!-- raw HTML omitted --&gt;
+git push&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+- https://cloud-fundis.github.io/blog/blog-recipe-tjoef-tjaf/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Visual Code Studio and Scala</title>
+        <link>https://cloud-fundis.github.io/blog/visual-code-and-scala/</link>
+        <pubDate>Wed, 29 Apr 2020 08:01:37 +0200</pubDate>
+        
+        <guid>https://cloud-fundis.github.io/blog/visual-code-and-scala/</guid>
+        <description>because there are just too many things to remember https://cloud-fundis.github.io/blog/visual-code-and-scala/ -&lt;p&gt;This week I am setting up my new laptop - moving off Mac finally and back onto Linux - YAY.&lt;/p&gt;
+&lt;p&gt;So one of the things I&amp;rsquo;m getting working is Visual Code Studio and Scala. Sounds easy doesn&amp;rsquo;t it?&lt;/p&gt;
+&lt;h3 id=&#34;step-2&#34;&gt;Step 2&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://scalameta.org/metals/&#34;&gt;Scalameta&lt;/a&gt; is the extension for Scala on vscode. Install it; but wait, that&amp;rsquo;s not all - there&amp;rsquo;s more.&lt;/p&gt;
+&lt;p&gt;Of course you went for &lt;em&gt;Step 1&lt;/em&gt; which was &amp;ldquo;aaah, this is easy, just download the extension and you&amp;rsquo;re done. How hard is that?&amp;quot;. It didn&amp;rsquo;t work, but at least you&amp;rsquo;ve completed Step 1. We&amp;rsquo;re starting at Step 2 because step 1 was a fail.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Have you got the correct verion of Java installed?
+I installed Java from the Ubuntu repo and while it was 11.0.7-10, it seemed it was giving issues. Despite futsing around with various Metal options, it seemed to not be loading Bloop.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Bloop. To the layman (yup, that&amp;rsquo;s me), this is another thing that flummoxed me. It seems it&amp;rsquo;s job is to automagically download the libraries from Maven.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;step-3&#34;&gt;Step 3&lt;/h2&gt;
+&lt;p&gt;Uninstall java from the Ubuntu repo&amp;rsquo;s and install it via &lt;a href=&#34;https://sdkman.io/&#34;&gt;SdkMan&lt;/a&gt;. That&amp;rsquo;s what the sbt recommends. Do it:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;install sdkman&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;curl -s &amp;ldquo;&lt;a href=&#34;https://get.sdkman.io&#34;&gt;https://get.sdkman.io&lt;/a&gt;&amp;rdquo; | bash&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Install Java&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;What I don&amp;rsquo;t understand is that this installs as your user, not system-wide; which I can see is going to bite me later!&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;sdk list java&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;sdk install java 11.0.7.hs-adpt (no, I don&amp;rsquo;t know what these (&lt;em&gt;adpt&lt;/em&gt; and &lt;em&gt;hs&lt;/em&gt;) things mean yet)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Test java: java -version&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Add JAVA_HOME to your .bashrc&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Remember to re-run your .bashrc (. ~/.bashrc)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;step-4&#34;&gt;Step 4&lt;/h2&gt;
+&lt;p&gt;When you open your .scala or .sbt files, Metal should create two directories namely .bloop and .metals. If .bloop is not created, my experience was that this is a Java problem and bloop is not starting up.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Check by running:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;ps -elf|grep bloop.Server|sed &amp;lsquo;s/-classpath [^ ]*//g&amp;rsquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Yeah, that classpath stuff just complicates life.&lt;/p&gt;
+&lt;p&gt;If bloop is not running, revisit the Java version. For this tut, I installed java 11.0.7.hs-adpt as above.&lt;/p&gt;
+&lt;h2 id=&#34;final-step&#34;&gt;Final step&lt;/h2&gt;
+&lt;p&gt;Now bloop is running, you&amp;rsquo;re still getting this error:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;INFO  [error] sbt.librarymanagement.ResolveException: Error downloading org.apache.spark:spark-graphx:2.4.4&lt;!-- raw HTML omitted --&gt;
+INFO  [error]   Not found&lt;!-- raw HTML omitted --&gt;
+INFO  [error]   Not found&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;What I found is that copying the sbt path from Maven didn&amp;rsquo;t work. What Maven suggested I put in my build.sbt was this (snippet):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;libraryDependencies += &amp;ldquo;org.apache.spark&amp;rdquo; % &amp;ldquo;spark-core&amp;rdquo; % &amp;ldquo;2.4.4&amp;rdquo;,&lt;!-- raw HTML omitted --&gt;
+libraryDependencies += &amp;ldquo;org.apache.spark&amp;rdquo; % &amp;ldquo;spark-sql&amp;rdquo; % &amp;ldquo;2.4.4&amp;quot;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Which is not a path because it&amp;rsquo;s being searched for here:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;INFO  [error]   not found: /home/hamish/.ivy2/local/org.apache.spark/spark-sql/2.4.4/ivys/ivy.xml&lt;!-- raw HTML omitted --&gt;
+INFO  [error]   not found: &lt;a href=&#34;https://repo1.maven.org/maven2/org/apache/spark/spark-sql/2.4.4/spark-sql-2.4.4.pom&#34;&gt;https://repo1.maven.org/maven2/org/apache/spark/spark-sql/2.4.4/spark-sql-2.4.4.pom&lt;/a&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Which, as you can see, is not found.&lt;/p&gt;
+&lt;p&gt;A bit of _curl_ing did the trick:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;curl &lt;a href=&#34;https://repo1.maven.org/maven2/org/apache/spark&#34;&gt;https://repo1.maven.org/maven2/org/apache/spark&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;showed me that the path was in fact not as I&amp;rsquo;ve put it in the dependencies, but rather&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;a href=&amp;quot;spark-core_2.10/&amp;quot; title=&amp;quot;spark-core_2.10/&amp;quot;&amp;gt;spark-core_2.10/&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;quot;spark-core_2.11/&amp;quot; title=&amp;quot;spark-core_2.11/&amp;quot;&amp;gt;spark-core_2.11/&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;quot;spark-core_2.12/&amp;quot; title=&amp;quot;spark-core_2.12/&amp;quot;&amp;gt;spark-core_2.12/&amp;lt;/a&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;So changing the path in the build.sbt to:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;libraryDependencies += &amp;ldquo;org.apache.spark&amp;rdquo; % &amp;ldquo;spark-core_2.12&amp;rdquo; % &amp;ldquo;2.4.4&amp;rdquo;,&lt;!-- raw HTML omitted --&gt;
+libraryDependencies += &amp;ldquo;org.apache.spark&amp;rdquo; % &amp;ldquo;spark-sql_2.12&amp;rdquo; % &amp;ldquo;2.4.4&amp;quot;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;fixed this.&lt;/p&gt;
+&lt;p&gt;Test by writing some Scala and autocomplete should work.&lt;/p&gt;
+&lt;p&gt;Time spent figuring this out: half-a-day + 2 hours&lt;/p&gt;
+- https://cloud-fundis.github.io/blog/visual-code-and-scala/ - </description>
+        </item>
+    
+    
+  </channel>
+</rss> 
