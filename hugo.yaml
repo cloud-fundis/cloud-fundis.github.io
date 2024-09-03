@@ -46,7 +46,7 @@ imaging:
 languages:
   en:
     languageName: English
-    title: Brighspark
+    title: Brightspark
     params:
       description: Cloud Fundi's Brightspark
 
