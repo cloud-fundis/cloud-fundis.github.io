@@ -19,10 +19,18 @@ all your Spark jobs, at a fraction of the price! {{% /blocks/lead %}}
 {{% blocks/feature icon="fa-piggy-bank" title="Massive savings!" %}} Up to 50%
 savings on AWS Glue jobs! {{% /blocks/feature %}}
 
-<img src="/favicons/cf-logo.png" alt="Cloud Fundis">
-
-{{% blocks/feature title="See our main website here!" url="https://www.cloud-fundis.co.za/" %}}
-Visit our main website for more details about us here! {{% /blocks/feature %}}
+<div class="col-lg-4 mb-5 mb-lg-0 text-center">
+<div class="mb-4 h1">
+  <i src="/favicons/cf-logo.png" alt="Cloud Fundis"></i>
+</div>
+<h4 class="h3">
+  {{- See our main website here! | markdownify -}}
+</h4>
+<div class="mb-0">
+Visit our main website for more details about us here!
+</div>
+<p><a href="https://www.cloud-fundis.co.za/">https://www.cloud-fundis.co.za/</a></p>{{ end }}
+</div>
 
 {{% blocks/feature icon="fab fa-twitter" title="Follow us on Twitter!" url="https://twitter.com/docsydocs" %}}
 For announcement of latest features etc. {{% /blocks/feature %}}
