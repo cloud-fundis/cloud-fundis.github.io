@@ -19,11 +19,9 @@ all your Spark jobs, at a fraction of the price! {{% /blocks/lead %}}
 {{% blocks/feature icon="fa-piggy-bank" title="Massive savings!" %}} Up to 50%
 savings on AWS Glue jobs! {{% /blocks/feature %}}
 
-<img src="/favicons/cf-logo.png" alt="Cloud Fundis">
-
 <div class="col-lg-4 mb-5 mb-lg-0 text-center">
 <div class="mb-4 h1">
-  <img src="/favicons/cf-logo.png" alt="Cloud Fundis">
+  <img src="/favicons/cf-logo.png" alt="Cloud Fundis" width="60" height="40">
 </div>
 <h4 class="h3">
   See our main website here!
