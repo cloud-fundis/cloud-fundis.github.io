@@ -29,7 +29,7 @@ savings on AWS Glue jobs! {{% /blocks/feature %}}
 <div class="mb-0">
 Visit our main website for more details about us here!
 </div>
-<p><a href="https://www.cloud-fundis.co.za/">https://www.cloud-fundis.co.za/</a></p>{{ end }}
+<p><a href="https://www.cloud-fundis.co.za/">Cloud Fundis</a></p>
 </div>
 {{% blocks/feature icon="fab fa-twitter" title="Follow us on Twitter!" url="https://twitter.com/docsydocs" %}}
 For announcement of latest features etc. {{% /blocks/feature %}}
