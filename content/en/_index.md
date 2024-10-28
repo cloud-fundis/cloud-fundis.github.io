@@ -21,7 +21,7 @@ savings on AWS Glue jobs! {{% /blocks/feature %}}
 
 <div class="col-lg-4 mb-5 mb-lg-0 text-center">
 <div class="mb-4 h1">
-  <img src="/favicons/cf-logo.png" alt="Cloud Fundis" width="60" height="40">
+  <img src="/favicons/cf-logo.png" alt="Cloud Fundis" width="80" height="60">
 </div>
 <h4 class="h3">
   See our main website here!
