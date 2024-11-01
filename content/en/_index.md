@@ -5,8 +5,8 @@ title: Brightspark
 {{< blocks/cover title="Welcome to Cloud Fundi's Brightspark Documentation!" image_anchor="top" height="full" >}}
 <a class="btn btn-lg btn-primary me-3 mb-4" href="/docs/"> Learn More
 <i class="fas fa-arrow-alt-circle-right ms-2"></i> </a>
-<a class="btn btn-lg btn-secondary me-3 mb-4" href="https://github.com/google/docsy-example">
-Download <i class="fab fa-github ms-2 "></i> </a>
+<a class="btn btn-lg btn-secondary me-3 mb-4" href="https://cloud-fundis.co.za/">
+Cloud Fundis <i class="fas fa-arrow-alt-circle-right ms-2 "></i> </a>
 
 <p class="lead mt-5">Cost effective Spark compute &mdash; in the cloud!</p>
 {{< blocks/link-down color="info" >}}
@@ -19,40 +19,7 @@ all your Spark jobs, at a fraction of the price! {{% /blocks/lead %}}
 {{% blocks/feature icon="fa-piggy-bank" title="Massive savings!" %}} Up to 50%
 savings on AWS Glue jobs! {{% /blocks/feature %}}
 
-<div class="col-lg-4 mb-5 mb-lg-0 text-center">
-<div class="mb-4 h1">
-  <img src="/favicons/cf-logo.png" alt="Cloud Fundis" width="80" height="60">
-</div>
-<h4 class="h3">
-  See our main website here!
-</h4>
-<div class="mb-0">
-Visit our main website for more details about us here!
-</div>
-<p><a href="https://www.cloud-fundis.co.za/">Cloud Fundis</a></p>
-</div>
-{{% blocks/feature icon="fab fa-twitter" title="Follow us on Twitter!" url="https://twitter.com/docsydocs" %}}
+{{% blocks/feature icon="fab fa-linkedin" title="Follow us on LinkedIn!" url="https://za.linkedin.com/company/cloud-fundis" %}}
 For announcement of latest features etc. {{% /blocks/feature %}}
 
-{{% /blocks/section %}}
-
-{{% blocks/section %}} This is the second section {.h1 .text-center}
-{{% /blocks/section %}}
-
-{{% blocks/section type="row" %}}
-
-{{% blocks/feature icon="fab fa-app-store-ios" title="Download **from AppStore**" %}}
-Get the Brightspark app! {{% /blocks/feature %}}
-
-{{% blocks/feature icon="fab fa-github" title="Contributions welcome!"
-    url="https://github.com/google/docsy-example" %}} We do a [Pull Request](https://github.com/google/docsy-example/pulls)
-contributions workflow on **GitHub**. New users are always welcome! {{% /blocks/feature %}}
-
-{{% blocks/feature icon="fab fa-twitter" title="Follow us on Twitter!"
-    url="https://twitter.com/GoHugoIO" %}} For announcement of latest features etc.
-{{% /blocks/feature %}}
-
-{{% /blocks/section %}}
-
-{{% blocks/section %}} This is the another section {.h1 .text-center}
 {{% /blocks/section %}}
