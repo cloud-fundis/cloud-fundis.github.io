@@ -19,7 +19,7 @@ all your Spark jobs, at a fraction of the price! {{% /blocks/lead %}}
 {{% blocks/feature icon="fa-piggy-bank" title="Massive savings!" %}} Up to 50%
 savings on AWS Glue jobs! {{% /blocks/feature %}}
 
-{{% blocks/feature icon="fab fa-linkedin" title="Follow us on LinkedIn!" url="https://za.linkedin.com/company/cloud-fundis" %}}
-For announcement of latest features etc. {{% /blocks/feature %}}
+{{% blocks/feature icon="fab fa-linkedin" title="Find us on LinkedIn!" url="https://za.linkedin.com/company/cloud-fundis" %}}
+For announcement of latest features and more! {{% /blocks/feature %}}
 
 {{% /blocks/section %}}
