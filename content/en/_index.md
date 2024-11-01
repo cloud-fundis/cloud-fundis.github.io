@@ -8,12 +8,16 @@ title: Brightspark
 <a class="btn btn-lg btn-secondary me-3 mb-4" href="https://cloud-fundis.co.za/">
 Cloud Fundis <i class="fas fa-arrow-alt-circle-right ms-2 "></i> </a>
 
-<p class="lead mt-5">Cost effective Spark compute &mdash; in the cloud!</p>
+<p class="lead mt-5">Transform your data operations with a cost-effective, secure, and flexible computing platform built on AWS.</p>
 {{< blocks/link-down color="info" >}}
 {{< /blocks/cover >}}
 
-{{% blocks/lead color="primary" %}} Brightspark provides a single service for
-all your Spark jobs, at a fraction of the price! {{% /blocks/lead %}}
+{{% blocks/lead color="primary" %}} BrightSpark is a cutting-edge data
+processing computing platform designed to significantly optimise your data
+workflows. Built on Amazon Web Services and infused with a special touch of
+custom innovation, BrightSpark empowers data professionals to complete
+processing, analytics, and development tasks more efficiently while keeping
+costs at an all-time low. {{% /blocks/lead %}}
 
 {{% blocks/section color="dark" type="row" %}}
 {{% blocks/feature icon="fa-piggy-bank" title="Massive savings!" %}} Up to 50%
