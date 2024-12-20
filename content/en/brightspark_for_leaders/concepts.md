@@ -11,6 +11,7 @@ This is a placeholder page that shows you how to use this template site.
 
 {{% /pageinfo %}}
 
-For many projects, users may not need much information beyond the information in the [Overview](/docs/overview/), so this section is **optional**. However if there are areas where your users will need a more detailed understanding of a given term or feature in order to do anything useful with your project (or to not make mistakes when using it) put that information in this section. For example, you may want to add some conceptual pages if you have a large project with many components and a complex architecture.
+### T-shirt sizes
+In BrightSpark, we define the concept of a t-shirt size to jobs. What this means is that jobs are categorized into small (S), medium (M), large (L), extra-large (XL), [and so forth] sized jobs. Running a job on a small t-shirt size might be 2 vCPUs and 8GB RAM while an XL may be 1 vCPUs and 128GB RAM. This allows one to define, in granular detail, the size of compute for a job.
 
-Remember to focus on what the user needs to know, not just what you think is interesting about your project! If they don’t need to understand your original design decisions to use or contribute to the project, don’t put them in, or include your design docs in your repo and link to them. Similarly, most users will probably need to know more about how features work when in use rather than how they are implemented. Consider a separate architecture page for more detailed implementation and system design information that potential project contributors can consult.
+Just like in other compute engines, specifying large compute for a small job, s wasteful of both compute and money. We encourage engineers to accurately specify their compute sizes.
