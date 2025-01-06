@@ -8,20 +8,26 @@ weight: 2
 
 {{% pageinfo %}}
 
-Real job runs and associated costs.
 {{% /pageinfo %}}
 
-In the following example jobs, we used approximately 20GB of S3 Storage Lens data. This encompassed about a years worth of data from a large datalake. We did some transformations of the data (such as anonymising the data) as well as computed averages, means, maxes, etc. 
+## TL&semi;DR
+For those not keen to wade through the bulk of this data, a summary is included below:
 
-The jobs were split into a single days worth of data, to a week, a month, 6-months and a years worth of data, each time performing the same jobs on BrightSpark and then on AWS Glue for comparison.
+* __For small jobs, choose Fargate or Fargate Spot, but at the expense of performance__
+* __For everything else, choose EC2 or EC2 Spot__
+* __If you choose EC2 Spot, ensure your jobs are idempotent__
 
-We ran these jobs many times and the graphs represent an average of runtimes.
+In the following example jobs, we used approximately 20GB of S3 Storage Lens data. This encompassed about a years worth of data from a large datalake. We did some transformations of the data (such as anonymising the data) as well as computing averages, means, maxes, medians, etc. 
+
+The jobs were split into a single days worth of data, a week, a month, 6-months and a years worth of data, each time performing the same jobs on BrightSpark and then on AWS Glue for comparison.
+
+We ran these jobs many times. The following graphs represent an average of runtimes.
 
 ## 1 day's worth of data
 
 This is a small job. It was run on a small BrightSpark [t-shirt size](/brightspark_for_leaders/concepts#T-shirt-sizes) size (2 vCPU, 8GB RAM containers). For AWS Glue, the job was run with the smallest DPUs available: 2 x G.1X.
 
-The data we used for the tests was about 7.5GB.
+The data we used for the tests was approximately 7.5GB.
 
 ![Runtime and cost vs different compute types](/brightspark_for_leaders/runtime_results/storage-lens-1day-1.png) ![Percentage savings and runtimes when compared with AWS Glue](/brightspark_for_leaders/runtime_results/storage-lens-1day-2.png) 
 
